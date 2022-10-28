@@ -19,9 +19,9 @@ public class TransactionEntryModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-//    @OneToOne
-//    @JoinColumn(name="batteries_id")
-//    BatteriesModel batteriesModel;
+    @OneToOne
+    @JoinColumn(name="batteries_id")
+    BatteryModel batteryModel;
 
     Integer quantity;
 

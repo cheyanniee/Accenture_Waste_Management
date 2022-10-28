@@ -28,9 +28,9 @@ public class TransactionModel {
     @JoinColumn(name="location_id")
     PeopleModel peopleModel;
 
-//    @OneToOne
-//    @JoinColumn(name="machine_id")
-//    MachineModel machineModel;
+    @OneToOne
+    @JoinColumn(name="machine_id")
+    MachineModel machineModel;
 
     @OneToMany
     @JoinColumn(name="transaction_entry_id")

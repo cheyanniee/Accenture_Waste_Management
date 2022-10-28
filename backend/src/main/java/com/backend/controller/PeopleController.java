@@ -18,8 +18,10 @@ import java.util.*;
 public class PeopleController {
 
     public HashMap <String, List<String>> district = new HashMap<>();
-    public HashMap <String, List<String>>region = new HashMap<>();
+    public HashMap <String, List<String>> region = new HashMap<>();
     public void createLists(){
+
+        //one table - 80 rows, pk = 01 postCode
         ArrayList<String> D1 = new ArrayList<String>(Arrays.asList("01", "02", "03", "04", "05", "06"));
         ArrayList<String> D2 = new ArrayList<String>(Arrays.asList("07","08"));
         ArrayList<String> D3 = new ArrayList<String>(Arrays.asList("14","15", "16"));
@@ -78,6 +80,7 @@ public class PeopleController {
         this.district.put("27", D27);
         this.district.put("28", D28);
 
+        //another table
         ArrayList<String> Central = new ArrayList<String>(Arrays.asList
                 ("1", "2", "3", "4", "6", "7", "8", "9", "10", "11", "12", "13", "14", "21", "26"));
         ArrayList<String> NorthEast = new ArrayList<String>(Arrays.asList
@@ -156,7 +159,7 @@ public class PeopleController {
         String districtCode ="";
         String regionName = "";
 
-            String postCode = peopleRequest.getLocationModel().getPostcode();
+            String postCode = peopleRequest.getPostcode();
             String first2digits = postCode.substring(0,2);
             System.out.println("The first two digits are: " + first2digits);
 
