@@ -181,7 +181,27 @@ public class PeopleService {
         if (peopleRequest.getOfficialId() != null && !peopleRequest.getOfficialId().equals("")) {
             people.setOfficialId(peopleRequest.getOfficialId());
         }
+
         peopleRepo.save(people);//update the data as it has Primary key
+
+        //updating location
+        LocationModel location = locationRepo.findById(people.getLocationModel().getId())
+                .orElseThrow(() -> new CustomException("Address is not found!"));
+
+        if(peopleRequest.getLocationModel().getAddress() != null && !peopleRequest.getLocationModel().getAddress().equals("")){
+            location.setAddress(peopleRequest.getLocationModel().getAddress());
+        }
+        if(peopleRequest.getLocationModel().getPostcode() != null && !peopleRequest.getLocationModel().getPostcode().equals("")){
+            location.setPostcode(peopleRequest.getLocationModel().getPostcode());
+        }
+        if(peopleRequest.getLocationModel().getAreaName() != null && !peopleRequest.getLocationModel().getAreaName().equals("")){
+            location.setAreaName(peopleRequest.getLocationModel().getAreaName());
+        }
+        if(peopleRequest.getLocationModel().getRegionName() != null && !peopleRequest.getLocationModel().getRegionName().equals("")){
+            location.setRegionName(peopleRequest.getLocationModel().getRegionName());
+        }
+
+        locationRepo.save(location);
         return true;
     }
 
