@@ -26,4 +26,7 @@ public class LocationController {
         return ResponseEntity.ok(new GeneralResponse("New Location Registered!"));
     }
 
+
+
+
 }

@@ -6,10 +6,11 @@ import com.backend.request.LocationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class LocationService {
+
 
     @Autowired
     LocationRepo locationRepo;
@@ -28,5 +29,7 @@ public class LocationService {
 
         locationRepo.save(locationNew);
     }
+
+
 
 }
