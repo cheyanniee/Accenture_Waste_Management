@@ -49,6 +49,7 @@ public class PeopleService {
         PeopleModel peopleNew = PeopleModel.builder()
                 .firstName(peopleRequest.getFirstName())
                 .lastName(peopleRequest.getLastName())
+                .locationModel(peopleRequest.getLocationModel()) //check if this is working
                 .email(peopleRequest.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(peopleRequest.getPassword()))
                 .phoneNumber(peopleRequest.getPhoneNumber())
@@ -66,9 +67,7 @@ public class PeopleService {
     }
 
     public boolean validateToken(String token, Long peopleId) throws Exception {
-//        PeopleModel user = peopleRepo.findById(peopleId).orElseThrow(
-//                () -> new Exception("UserID not found"));
-        PeopleModel user = peopleRepo.getPeopleByIdLong(peopleId).orElseThrow(
+        PeopleModel user = peopleRepo.findById(peopleId).orElseThrow(
                 () -> new Exception("UserID not found"));
         if (user.getToken().equals(token)) {
             return true;
@@ -96,7 +95,6 @@ public class PeopleService {
             String token = genJWT(people, 1, 0);
             updateTokenById(token, people.getId());
             people.setToken(token);
-
             ZoneId zid = ZoneId.of("Asia/Singapore");
             ZonedDateTime dtLogin = ZonedDateTime.now(zid);
             updateLastLoginById(dtLogin, people.getId());
@@ -140,11 +138,11 @@ public class PeopleService {
     }
 
     public PeopleModel getPeopleById(Long peopleId) throws Exception {
-        return peopleRepo.getPeopleByIdLong(peopleId).orElseThrow(() -> new Exception("UserID not found"));
+        return peopleRepo.findById(peopleId).orElseThrow(() -> new Exception("UserID not found"));
     }
 
     public boolean updatePeople(PeopleRequest peopleRequest, String token) throws CustomException {
-        PeopleModel people = peopleRepo.getPeopleByIdLong(getIdByToken(token)).orElseThrow(() -> new CustomException("User is not found!"));//get the data bases on primary key
+        PeopleModel people = peopleRepo.findById(getIdByToken(token)).orElseThrow(() -> new CustomException("User is not found!"));//get the data bases on primary key
 
         if (peopleRequest.getFirstName() != null && !peopleRequest.getFirstName().equals("")) {
             people.setFirstName(peopleRequest.getFirstName());
