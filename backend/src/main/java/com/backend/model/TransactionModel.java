@@ -32,7 +32,6 @@ public class TransactionModel {
 //    @JoinColumn(name="machine_id")
 //    MachineModel machineModel;
 
-    //check this mapping
     @OneToMany
     @JoinColumn(name="transaction_entry_id")
     List<TransactionEntryModel> transactionEntry = new ArrayList<>();
