@@ -36,6 +36,8 @@ public class PeopleModel {
     @JoinColumn(name="location_id")
     LocationModel locationModel;
 
+    String unitNumber;
+
     //    @Column(name = "last_name")
     String firstName;
 

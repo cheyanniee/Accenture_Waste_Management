@@ -10,7 +10,5 @@ import lombok.*;
 public class LocationRequest {
     String address;
     String postcode;
-    String regionName;
-    String areaName;
 
 }
