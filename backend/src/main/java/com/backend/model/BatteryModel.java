@@ -1,25 +1,25 @@
 package com.backend.model;
 
-
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
-@Table(name="location")
+@Table(name = "battery")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationModel {
+public class BatteryModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Integer id;
 
-    String address;
-    String postcode;
-    String regionName;
-    String areaName;
+    String type;
+    Float valuePerWeight;
+    LocalDate lastUpdate;
+
 }
