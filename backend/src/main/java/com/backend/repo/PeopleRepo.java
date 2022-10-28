@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-public interface PeopleRepo extends JpaRepository<PeopleModel, Integer> {
-
-    @Query("select people from PeopleModel people where id=?1")
-    Optional<PeopleModel> getPeopleByIdLong(Long id);
+public interface PeopleRepo extends JpaRepository<PeopleModel, Long> {
 
     @Query("select people from PeopleModel people where email=?1")
     Optional<PeopleModel> getPeopleByEmail(String email);
