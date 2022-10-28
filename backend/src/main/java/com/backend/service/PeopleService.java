@@ -1,7 +1,9 @@
 package com.backend.service;
 
 import com.backend.configuration.CustomException;
+import com.backend.model.LocationModel;
 import com.backend.model.PeopleModel;
+import com.backend.repo.LocationRepo;
 import com.backend.repo.PeopleRepo;
 import com.backend.request.PeopleRequest;
 import io.jsonwebtoken.Claims;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.xml.stream.Location;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -24,6 +27,9 @@ public class PeopleService {
 
     @Autowired
     PeopleRepo peopleRepo;
+
+    @Autowired
+    LocationRepo locationRepo;
 
     @Autowired
     Environment environment;
@@ -45,10 +51,21 @@ public class PeopleService {
             throw new Exception("Official ID already exists.");
         }
 
+        //create locationModel from address details input by user
+        LocationModel locationNew = LocationModel.builder()
+                .address(peopleRequest.getLocationModel().getAddress())
+                .postcode(peopleRequest.getLocationModel().getPostcode())
+                .regionName(peopleRequest.getLocationModel().getRegionName())
+                .areaName(peopleRequest.getLocationModel().getAreaName())
+                .build();
+        locationRepo.save(locationNew);
+
+
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         PeopleModel peopleNew = PeopleModel.builder()
                 .firstName(peopleRequest.getFirstName())
                 .lastName(peopleRequest.getLastName())
+                .locationModel(locationNew) //check if this is working
                 .email(peopleRequest.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(peopleRequest.getPassword()))
                 .phoneNumber(peopleRequest.getPhoneNumber())
@@ -66,9 +83,7 @@ public class PeopleService {
     }
 
     public boolean validateToken(String token, Long peopleId) throws Exception {
-//        PeopleModel user = peopleRepo.findById(peopleId).orElseThrow(
-//                () -> new Exception("UserID not found"));
-        PeopleModel user = peopleRepo.getPeopleByIdLong(peopleId).orElseThrow(
+        PeopleModel user = peopleRepo.findById(peopleId).orElseThrow(
                 () -> new Exception("UserID not found"));
         if (user.getToken().equals(token)) {
             return true;
@@ -96,7 +111,6 @@ public class PeopleService {
             String token = genJWT(people, 1, 0);
             updateTokenById(token, people.getId());
             people.setToken(token);
-
             ZoneId zid = ZoneId.of("Asia/Singapore");
             ZonedDateTime dtLogin = ZonedDateTime.now(zid);
             updateLastLoginById(dtLogin, people.getId());
@@ -140,11 +154,11 @@ public class PeopleService {
     }
 
     public PeopleModel getPeopleById(Long peopleId) throws Exception {
-        return peopleRepo.getPeopleByIdLong(peopleId).orElseThrow(() -> new Exception("UserID not found"));
+        return peopleRepo.findById(peopleId).orElseThrow(() -> new Exception("UserID not found"));
     }
 
     public boolean updatePeople(PeopleRequest peopleRequest, String token) throws CustomException {
-        PeopleModel people = peopleRepo.getPeopleByIdLong(getIdByToken(token)).orElseThrow(() -> new CustomException("User is not found!"));//get the data bases on primary key
+        PeopleModel people = peopleRepo.findById(getIdByToken(token)).orElseThrow(() -> new CustomException("User is not found!"));//get the data bases on primary key
 
         if (peopleRequest.getFirstName() != null && !peopleRequest.getFirstName().equals("")) {
             people.setFirstName(peopleRequest.getFirstName());
