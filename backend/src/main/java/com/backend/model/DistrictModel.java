@@ -19,4 +19,5 @@ public class DistrictModel {
 
     String postalSector;
     Integer districtNum;
+    String region;
 }
