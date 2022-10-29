@@ -20,6 +20,8 @@ const BatteryUpdate = () => {
   const [errMsg, setErrMsg] = useState();
 
   const [batteryID, setBatteryID] = useState("New");
+  const [batteryType, setBatteryType] = useState("Type");
+  const [batteryPoints, setBatteryPoints] = useState("Points");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,20 +56,71 @@ const BatteryUpdate = () => {
       : setData([{ type: "No result for " + inputText }]);
   };
 
-  const handleUpdate = (id) => {
+  const handleUpdate = (id, type, valuePerWeight) => {
     console.log("Task: ", id, moment().format("DD-MM-YYYY HH:mm:ss"));
+    resetMsg();
+    resetForm();
     setBatteryID(id);
+    setBatteryType(type);
+    setBatteryPoints(valuePerWeight);
   };
+
+  const resetMsg = () => {
+    setFormErrMsg("");
+    setErrMsg("");
+    setSuccessMsg("");
+  }
 
   const onReset = () => {
     console.log("Resetting");
     resetForm();
     setBatteryID("New");
+    setBatteryType("Type");
+    setBatteryPoints("Points");
   }
 
   const onSubmit = async (values, actions) => {
-    console.log("Submitting");
-    actions.resetForm();
+    const endpoint = (batteryID === "New")
+      ? BATTERY_ENDPOINTS.Create
+      : BATTERY_ENDPOINTS.Update
+
+    resetMsg();
+
+    const updatedFieldKeys = Object.keys(values).filter(
+      (key) => values[key] !== ""
+    );
+
+    if (updatedFieldKeys.length === 0) return;
+
+    const params = updatedFieldKeys.reduce((acc, key) => {
+          return { ...acc, [key]: values[key] };
+        }, {});
+
+    params.id = (batteryID !== "New")
+      ? batteryID : "";
+
+    if (!(params.id) && !(params.type && params.valuePerWeight)) {
+      setFormErrMsg("Invalid Input");
+      return;
+    }
+
+    console.log("Params: ", params);
+
+    try {
+      console.log("url: ", endpoint);
+      const response = await axios.post(
+        endpoint,
+        params,
+        config({ token: auth.token })
+      );
+      console.log(response.data);
+      onReset();
+      setSuccessMsg("Successful!");
+    } catch (error) {
+      console.log("Error: ", error.response);
+      setFormErrMsg(error.response.data.message);
+    }
+    onReset();
   }
 
   const {
@@ -149,7 +202,7 @@ const BatteryUpdate = () => {
                         : "form-control form-control-lg light-300"
                     }
                     id="type"
-                    placeholder="Type"
+                    placeholder={batteryType}
                     value={values.type}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -170,7 +223,7 @@ const BatteryUpdate = () => {
                         : "form-control form-control-lg light-300"
                     }
                     id="valuePerWeight"
-                    placeholder="Points"
+                    placeholder={batteryPoints}
                     value={values.valuePerWeight}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -185,8 +238,6 @@ const BatteryUpdate = () => {
                 <em className="text-error px-3">{formErrMsg}</em>
                 <em className="text-success px-3">{successMsg}</em>
                   <div className="col-2">
-                    <em className="text-error px-3">{errMsg}</em>
-                    <em className="text-success px-3">{successMsg}</em>
                     <button
                       disabled={isSubmitting}
                       type="submit"
@@ -216,7 +267,7 @@ const BatteryUpdate = () => {
                       <Link>
                         <i
                           className="bx bx-pencil bx-sm"
-                          onClick={() => handleUpdate(id)}
+                          onClick={() => handleUpdate(id, type, valuePerWeight)}
                         />
                       </Link>
                     )}

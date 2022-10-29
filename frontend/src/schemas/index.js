@@ -210,6 +210,7 @@ export const registerMachineSchema = yup.object().shape({
 });
 
 export const registerBatterySchema = yup.object().shape({
-  type: yup.string().required("Required"),
-  valuePerWeight: yup.string().required("Required"),
+  id: yup.string(),
+  type: yup.string(),
+  valuePerWeight: yup.string(),
 });
