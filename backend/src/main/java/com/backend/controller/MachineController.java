@@ -42,9 +42,6 @@ public class MachineController {
         System.out.println("machine id: " + machineId);
         return ResponseEntity.ok(machineService.getMachineById(Integer.valueOf(machineId)));
     }
-    // machine status - faultiness (changing)
-    // current storage/capacity = %
-    // machine to mark as collected
 
     // create machines
     @PostMapping("/add")
@@ -57,8 +54,18 @@ public class MachineController {
     }
 
     // update status
+    @PostMapping("/update")
+    public ResponseEntity<GeneralResponse> machineUpdate(@RequestHeader String token,
+            @RequestBody MachineRequest machineRequest) throws CustomException {
+        machineService.getAdminByToken(token);
+        machineService.updateMachineStatus(machineRequest);
+        return ResponseEntity.ok(new GeneralResponse("Update success!"));
+    }
     // delete machine
     // update currentLoad(from vending machine side)
     // send email notifications if current load reach 80%
+    // machine status - faultiness (changing)
+    // current storage/capacity = %
+    // machine to mark as collected
 
 }
