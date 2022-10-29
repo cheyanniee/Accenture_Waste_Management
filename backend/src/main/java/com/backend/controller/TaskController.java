@@ -19,4 +19,14 @@ public class TaskController {
     public ResponseEntity<?> listAll() {
         return ResponseEntity.ok(taskService.listAllTask());
     }
+
+    //
+
+    //create task - assign to collectors
+
+    //collectors to view tasks assigned to them
+
+    //collectors to mark as delivered
+
+
 }

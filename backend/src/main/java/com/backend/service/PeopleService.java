@@ -83,6 +83,20 @@ public class PeopleService {
         peopleRepo.save(peopleNew);
     }
 
+    public void createCollector(PeopleRequest peopleRequest) throws Exception {
+        createUser(peopleRequest);
+        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
+        peopleNew.setRole(PeopleModel.Role.collector);
+        peopleRepo.save(peopleNew);
+    }
+
+    public void createAdmin(PeopleRequest peopleRequest) throws Exception {
+        createUser(peopleRequest);
+        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
+        peopleNew.setRole(PeopleModel.Role.admin);
+        peopleRepo.save(peopleNew);
+    }
+
     public Jws<Claims> validateJWT(String token) {
         return Jwts.parser().setSigningKey(environment.getProperty("JWT_SECRET")).parseClaimsJws(token);
 //        return true;
@@ -190,6 +204,12 @@ public class PeopleService {
         if (peopleRequest.getUnitNumber() != null && !peopleRequest.getUnitNumber().equals("")) {
             people.setUnitNumber(peopleRequest.getUnitNumber());
         }
+
+
+        //for location updating
+        //when can location change? When the postal code changes. Unit is independent
+
+
 
 //        if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
 //            if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
