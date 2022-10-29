@@ -83,6 +83,12 @@ public class MachineService {
         return true;
     }
 
+    public boolean deleteMachine(int machineId) throws CustomException {
+        MachineModel machine = getMachineById(machineId);
+        machineRepo.delete(machine);
+        return true;
+    }
+
     public PeopleModel getAdminByToken(String token) throws CustomException {
         PeopleModel admin = peopleService.findPeople(peopleService.getIdByToken(token))
                 .orElseThrow(() -> new CustomException("Admin not found!"));

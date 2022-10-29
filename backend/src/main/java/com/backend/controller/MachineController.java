@@ -2,7 +2,6 @@ package com.backend.controller;
 
 import com.backend.configuration.CustomException;
 import com.backend.model.MachineModel;
-import com.backend.request.LocationRequest;
 import com.backend.request.MachineRequest;
 import com.backend.response.GeneralResponse;
 import com.backend.service.LocationService;
@@ -12,6 +11,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +61,15 @@ public class MachineController {
         machineService.updateMachineStatus(machineRequest);
         return ResponseEntity.ok(new GeneralResponse("Update success!"));
     }
+
     // delete machine
+    @DeleteMapping("/delete/{machineId}")
+    public ResponseEntity<GeneralResponse> deleteMachine(@RequestHeader String token, @PathVariable String machineId)
+            throws NumberFormatException, CustomException {
+        machineService.getAdminByToken(token);
+        machineService.deleteMachine(Integer.valueOf(machineId));
+        return ResponseEntity.ok(new GeneralResponse("Machine Deleted!"));
+    }
     // update currentLoad(from vending machine side)
     // send email notifications if current load reach 80%
     // machine status - faultiness (changing)
