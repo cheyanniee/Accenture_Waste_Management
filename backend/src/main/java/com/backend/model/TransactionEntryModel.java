@@ -20,7 +20,7 @@ public class TransactionEntryModel {
     Long id;
 
     @OneToOne
-    @JoinColumn(name="batteries_id")
+    @JoinColumn(name="battery_id")
     BatteryModel batteryModel;
 
     Integer quantity;
