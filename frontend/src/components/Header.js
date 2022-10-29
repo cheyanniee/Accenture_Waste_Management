@@ -64,9 +64,21 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     className="nav-link btn-outline-primary rounded-pill px-3"
-                    to="/userCovidStatus"
+                    to="/reportMachine"
                   >
-                    COVID-19 Test
+                    Report Machine
+                  </Link>
+                </li>
+              ) : (
+                ""
+              )}
+              {auth?.role === ROLES.User ? (
+                <li className="nav-item">
+                  <Link
+                    className="nav-link btn-outline-primary rounded-pill px-3"
+                    to="/points"
+                  >
+                    Points
                   </Link>
                 </li>
               ) : (
@@ -76,9 +88,21 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     className="nav-link btn-outline-primary rounded-pill px-3"
-                    to="/doctorSearch"
+                    to="/reportMachine"
                   >
-                    Vaccination
+                    Report Machine
+                  </Link>
+                </li>
+              ) : (
+                ""
+              )}
+              {auth?.role === ROLES.Collector ? (
+                <li className="nav-item">
+                  <Link
+                    className="nav-link btn-outline-primary rounded-pill px-3"
+                    to="/viewTask"
+                  >
+                    Assigned Task
                   </Link>
                 </li>
               ) : (

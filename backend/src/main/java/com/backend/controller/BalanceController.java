@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,15 +31,14 @@ public class BalanceController {
     }
 
     @GetMapping("find")
-    public ResponseEntity<?> listBalanceByPeopleId(@RequestBody BalanceRequest balanceRequest)  {
-
+    public ResponseEntity<?> listBalanceByPeopleId(@RequestHeader String Token)  {
         try{
-            PeopleModel peopleModel = peopleService.getPeopleById(balanceRequest.getPeopleId());
+            Long id = peopleService.getIdByToken(Token);
+            PeopleModel peopleModel = peopleService.getPeopleById(id);
             return ResponseEntity.ok(balanceService.getBalanceByPeopleId(peopleModel));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
-
     }
 
 

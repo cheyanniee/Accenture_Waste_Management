@@ -6,7 +6,7 @@ import axios, { config } from "../api/axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
-import { PEOPLE_ENDPOINTS, ROLES } from "../helper/Constant";
+import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, ROLES } from "../helper/Constant";
 
 const AssignTask = () => {
   const { auth } = useAuth();
@@ -16,6 +16,7 @@ const AssignTask = () => {
   const [errMsg, setErrMsg] = useState();
 
   const [machine, setMachine] = useState("");
+  const [machineList, setMachineList] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +34,22 @@ const AssignTask = () => {
         console.log("Error: ", error);
       }
     };
+
+    const fetchMachines = async () => {
+      try {
+        const response = await axios.get(
+          MACHINE_ENDPOINTS.GetAll,
+          config({ token: auth.token })
+        );
+        setMachineList(response?.data);
+        console.log("Machines: ", response?.data);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    };
+
     fetchData();
+    fetchMachines();
   }, [auth.token]);
 
   const handleFilter = (e) => {
@@ -54,8 +70,7 @@ const AssignTask = () => {
 
   const handleUpdate = async (id) => {
 
-    console.log("TimeStamp: ", moment().format("DD-MM-YYYY HH:mm:ss"));
-
+    console.log("Task: ", id, machine, moment().format("DD-MM-YYYY HH:mm:ss"));
 
   };
 
@@ -118,7 +133,9 @@ const AssignTask = () => {
                         onChange={(e) => setMachine(e.target.value)}
                       >
                         <option>Select Machine</option>
-
+                        {machineList.map((unit) => (
+                          <option key={unit.id}>{unit.name}</option>
+                        ))}
                       </select>
                     )}
                   </div>
