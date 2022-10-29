@@ -23,12 +23,9 @@ const RegisterUsers = () => {
     values = { ...values, dateOfBirth: moment(values.dateOfBirth).format("DD/MM/YYYY"), unitNumber: unitNumberTemp };
     console.log("params: ", values);
 
-    var endpoint = "";
-    if (values.role === ROLES.Collector) {
-        endpoint = PEOPLE_ENDPOINTS.RegisterCollector;
-    } else if (values.role === ROLES.Admin) {
-        endpoint = PEOPLE_ENDPOINTS.RegisterAdmin;
-    }
+    const endpoint = (values.role === ROLES.Collector)
+        ? PEOPLE_ENDPOINTS.RegisterCollector
+        : PEOPLE_ENDPOINTS.RegisterAdmin;
 
     try {
       console.log("url: ", endpoint);

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class MachineService {
@@ -55,6 +54,32 @@ public class MachineService {
                 .build();
 
         machineRepo.save(newMachine);
+        return true;
+    }
+
+    public boolean updateMachineStatus(MachineRequest machineRequest) throws CustomException {
+        MachineModel machine = getMachineById(machineRequest.getMachineId());
+
+        if (machineRequest.getName() != null && !machineRequest.getName().equals(""))
+            machine.setName(machineRequest.getName());
+        if (machineRequest.getCurrentLoad() != null && !machineRequest.getCurrentLoad().isNaN())
+            machine.setCurrentLoad(machineRequest.getCurrentLoad());
+        if (machineRequest.getCapacity() != null && !machineRequest.getCapacity().isNaN())
+            machine.setCapacity(machineRequest.getCapacity());
+        if (machineRequest.getStatus() != null && !machineRequest.getStatus().equals(""))
+            machine.setStatus(machineRequest.getStatus());
+        if (machineRequest.getUnitNumber() != null && !machineRequest.getUnitNumber().equals(""))
+            machine.setUnitNumber(machineRequest.getUnitNumber());
+        if ((machineRequest.getPostcode() != null && !machineRequest.getPostcode().equals("")) &&
+                (machineRequest.getAddress() != null && !machineRequest.getAddress().equals(""))) {
+            LocationRequest locationRequest = LocationRequest.builder()
+                    .address(machineRequest.getAddress())
+                    .postcode(machineRequest.getPostcode())
+                    .build();
+            machine.setMachinelocation(locationService.bindLocation(locationRequest));
+        }
+
+        machineRepo.save(machine);
         return true;
     }
 

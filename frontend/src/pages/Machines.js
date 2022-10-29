@@ -35,7 +35,21 @@ const Machines = () => {
       }
     };
 
+    const getCurrentPercentage = () => {
+        var newData = [];
+        data.map((machine) => {
+            const percentage = (machine.currentLoad / machine.capacity) * 100;
+            console.log("Calc: ", machine.name, percentage.toFixed());
+            machine.percentage = percentage.toFixed();
+            console.log("Save: ", machine.name,  machine.percentage);
+            newData.push(machine);
+        });
+        setData(newData);
+        console.log("Add %: ", data);
+    }
+
     fetchMachines();
+    getCurrentPercentage();
   }, [auth.token]);
 
   const handleFilter = (e) => {
@@ -213,32 +227,24 @@ const Machines = () => {
         <div className="row align-items-start ">
           <div className=" col-lg-10 m-auto text-left justify-content-center">
             <div className="row align-items-start text-primary fs-4 mb-3">
+              <div className="col-2">ID</div>
               <div className="col-2">Name</div>
+              <div className="col-2">Capacity</div>
               <div className="col-2">Region</div>
               <div className="col-2">Status</div>
-              <div className="col-1">Assign</div>
+              <div className="col-1">Details</div>
             </div>
             {data.map((machines) => {
-              const { id, name, locationModel } = machines;
+              const { id, name, locationModel, status, percentage } = machines;
               return (
                 <div key={id} className="row align-items-start mb-2">
+                  <div className="col-2">{id}</div>
                   <div className="col-2">{name}</div>
+                  <div className="col-2">{percentage}</div>
                   <div className="col-2">
                     {locationModel.districtModel.region}
                   </div>
-                  <div className="col-2">
-                    {id && (
-                      <select
-                        className="form-select"
-                        onChange={(e) => setStatus(e.target.value)}
-                      >
-                        <option>Select Machine</option>
-                        {MACHINE_STATUS.map((status) => (
-                          <option key={status}>{status}</option>
-                        ))}
-                      </select>
-                    )}
-                  </div>
+                  <div className="col-2">{status}</div>
                   <div className="col-2">
                     {id && (
                       <Link>
