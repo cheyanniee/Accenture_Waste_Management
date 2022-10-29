@@ -10,8 +10,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PeopleRequest {
-    Long id;
-    LocationModel locationModel; //check this one
+
+    //to create locationModel
+    String address;
+    String postcode;
+    String regionName;
+    String areaName;
+
+    //for peopleModel
     String firstName;
     String lastName;
     String email;
@@ -20,6 +26,5 @@ public class PeopleRequest {
     String dateOfBirth;
     PeopleModel.Role role;
     String officialId;
-
 
 }

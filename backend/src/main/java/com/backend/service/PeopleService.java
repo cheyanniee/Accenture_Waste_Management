@@ -5,6 +5,7 @@ import com.backend.model.LocationModel;
 import com.backend.model.PeopleModel;
 import com.backend.repo.LocationRepo;
 import com.backend.repo.PeopleRepo;
+import com.backend.request.LocationRequest;
 import com.backend.request.PeopleRequest;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -29,7 +30,7 @@ public class PeopleService {
     PeopleRepo peopleRepo;
 
     @Autowired
-    LocationRepo locationRepo;
+    LocationService locationService;
 
     @Autowired
     Environment environment;
@@ -51,21 +52,22 @@ public class PeopleService {
             throw new Exception("Official ID already exists.");
         }
 
-        //create locationModel from address details input by user
-        LocationModel locationNew = LocationModel.builder()
-                .address(peopleRequest.getLocationModel().getAddress())
-                .postcode(peopleRequest.getLocationModel().getPostcode())
-                .regionName(peopleRequest.getLocationModel().getRegionName())
-                .areaName(peopleRequest.getLocationModel().getAreaName())
-                .build();
-        locationRepo.save(locationNew);
 
+        //creating locationRequest from peopleRequest field
+        LocationRequest locationRequest = LocationRequest.builder()
+                .address(peopleRequest.getAddress())
+                .postcode(peopleRequest.getPostcode())
+                .regionName(peopleRequest.getRegionName())
+                .areaName(peopleRequest.getAreaName())
+                .build();
+
+        locationService.createLocation(locationRequest);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         PeopleModel peopleNew = PeopleModel.builder()
                 .firstName(peopleRequest.getFirstName())
                 .lastName(peopleRequest.getLastName())
-                .locationModel(locationNew) //check if this is working
+                .locationModel() //please help with this, really sorry
                 .email(peopleRequest.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(peopleRequest.getPassword()))
                 .phoneNumber(peopleRequest.getPhoneNumber())
@@ -181,7 +183,27 @@ public class PeopleService {
         if (peopleRequest.getOfficialId() != null && !peopleRequest.getOfficialId().equals("")) {
             people.setOfficialId(peopleRequest.getOfficialId());
         }
+
         peopleRepo.save(people);//update the data as it has Primary key
+
+        //updating location
+//        LocationModel location = locationRepo.findById(people.getLocationModel().getId())
+//                .orElseThrow(() -> new CustomException("Address is not found!"));
+//
+//        if(peopleRequest.getLocationModel().getAddress() != null && !peopleRequest.getLocationModel().getAddress().equals("")){
+//            location.setAddress(peopleRequest.getLocationModel().getAddress());
+//        }
+//        if(peopleRequest.getLocationModel().getPostcode() != null && !peopleRequest.getLocationModel().getPostcode().equals("")){
+//            location.setPostcode(peopleRequest.getLocationModel().getPostcode());
+//        }
+//        if(peopleRequest.getLocationModel().getAreaName() != null && !peopleRequest.getLocationModel().getAreaName().equals("")){
+//            location.setAreaName(peopleRequest.getLocationModel().getAreaName());
+//        }
+//        if(peopleRequest.getLocationModel().getRegionName() != null && !peopleRequest.getLocationModel().getRegionName().equals("")){
+//            location.setRegionName(peopleRequest.getLocationModel().getRegionName());
+//        }
+//
+//        locationRepo.save(location);
         return true;
     }
 
