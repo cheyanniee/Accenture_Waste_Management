@@ -1,5 +1,5 @@
 import axios, { config } from "../api/axios";
-import { ENDPOINTS } from "../helper/Constant";
+import { PEOPLE_ENDPOINTS } from "../helper/Constant";
 import useAuth from "./useAuth";
 
 const useLogout = () => {
@@ -8,7 +8,7 @@ const useLogout = () => {
   const logout = async () => {
     try {
       const response = await axios.get(
-        ENDPOINTS.Logout,
+        PEOPLE_ENDPOINTS.Logout,
         config({ token: auth?.token })
       );
       console.log(response.data);
