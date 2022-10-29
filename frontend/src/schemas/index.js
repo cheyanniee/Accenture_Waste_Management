@@ -37,15 +37,16 @@ export const INITIAL_REGISTER_USERS_FORM_VALUES = {
 };
 
 export const INITIAL_MACHINE_FORM_VALUES = {
+  id: "New",
   name: "",
-  capacity: "",
   currentLoad: "",
+  capacity: "",
+  status: "",
   postcode: "",
   address: "",
   unitNumber: "",
   floor: "",
   unit: "",
-  status: "",
 }
 
 export const INITIAL_BATTERY_FORM_VALUES = {
@@ -183,15 +184,22 @@ export const userDetailsSchema = yup.object().shape({
 });
 
 export const registerMachineSchema = yup.object().shape({
-  name: yup.string().required("Required"),
-  address: yup.string().required("Required"),
+  name: yup.string(),
+  currentLoad: yup
+   .number()
+   .positive(),
+  capacity: yup
+    .number()
+    .positive(),
+  status: yup.string(),
+  address: yup.string(),
   postcode: yup
     .number()
     .positive()
     .integer()
     .min(10000, "Postal code must be exactly 6 digits")
-    .max(1000000, "Postal code must be at exactly 6 digits")
-    .required("Required"),
+    .max(1000000, "Postal code must be at exactly 6 digits"),
+  unitNumber: yup.string(),
   floor: yup
     .number()
     .positive()
@@ -200,16 +208,10 @@ export const registerMachineSchema = yup.object().shape({
     .number()
     .positive()
     .integer(),
-  unitNumber: yup.string(),
-  capacity: yup
-    .number()
-    .positive()
-    .integer()
-    .required("Required"),
-  status: yup.string().required("Required"),
 });
 
 export const registerBatterySchema = yup.object().shape({
-  type: yup.string().required("Required"),
-  valuePerWeight: yup.string().required("Required"),
+  id: yup.string(),
+  type: yup.string(),
+  valuePerWeight: yup.string(),
 });

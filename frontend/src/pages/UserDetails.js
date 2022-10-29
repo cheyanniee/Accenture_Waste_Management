@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import moment from "moment";
+import axios from "axios";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
-import axios, { config } from "../api/axios";
+import { default as myAxios, config } from "../api/axios";
 import { PEOPLE_ENDPOINTS } from "../helper/Constant";
 import { INITIAL_REGISTER_FORM_VALUES, userDetailsSchema } from "../schemas";
 
@@ -57,7 +58,7 @@ const UserDetails = () => {
     }, {});
     console.log("Params: ", params);
     try {
-      const response = await axios.post(
+      const response = await myAxios.post(
         PEOPLE_ENDPOINTS.UpdateDetails,
         params,
         config({ token: auth.token })
