@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
+import './App.css';
 
 import { ROLES } from "./helper/Constant";
 
@@ -9,21 +9,22 @@ import Unauthorized from "./components/Unauthorized";
 import PersistLogin from "./components/PersistLogin";
 import Missing from "./components/Missing";
 import RequireAuth from "./components/RequireAuth";
-<<<<<<< HEAD
-import Login from "./components/Login";
-import GoogleLogin from "./components/GoogleLogin";
-=======
 
 import Register from "./pages/Register";
 import LocationsPage from "./pages/LocationsPage";
 import Home from "./pages/Home";
+
+import ReportMachine from "./pages/ReportMachine";
+import Points from "./pages/Points";
+import ViewTask from "./pages/ViewTask";
 
 import AssignTask from "./pages/AssignTask";
 import Machines from "./pages/Machines";
 import BatteryUpdate from "./pages/BatteryUpdate";
 import RegisterUsers from "./pages/RegisterUsers";
 
->>>>>>> master
+import UserDetails from "./pages/UserDetails";
+
 
 function App() {
   return (
@@ -31,23 +32,29 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
+
             {/* public routes */}
             <Route path="/login" element={<Login />}></Route>
             <Route path="/register" element={<Register />}></Route>
             <Route path="/locations" element={<LocationsPage />}></Route>
             <Route path="/unauthorized" element={<Unauthorized />}></Route>
-            <Route path="/googleLogin" element={<GoogleLogin />}></Route>
 
             {/* protected routes */}
             <Route element={<PersistLogin />}>
               <Route path="/" element={<Home />}></Route>
-<<<<<<< HEAD
-=======
 
               {/* Users Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                <Route path="/reportMachine" element={<ReportMachine />}></Route>
+                <Route path="/points" element={<Points />}></Route>
+              </Route>
 
 
               {/* Collector Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.Collector]} />}>
+                <Route path="/reportMachine" element={<ReportMachine />}></Route>
+                <Route path="/viewTask" element={<ViewTask />}></Route>
+              </Route>
 
 
               {/* Admin Route */}
@@ -58,7 +65,10 @@ function App() {
                 <Route path="/registerUsers" element={<RegisterUsers />}></Route>
               </Route>
 
->>>>>>> master
+              {/* General Protected Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Collector, ROLES.Admin]} />}>
+                <Route path="/userDetails" element={<UserDetails />}></Route>
+              </Route>
             </Route>
 
             {/* catch all */}
