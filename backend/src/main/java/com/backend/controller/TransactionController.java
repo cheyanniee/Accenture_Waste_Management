@@ -19,12 +19,10 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.listTransaction());
     }
 
-    //link to balance
+    // link to balance
 
-    //machine must be able to add to transaction
+    // machine must be able to add to transaction
 
-    //view transaction details by Id
-
-
+    // view transaction details by Id
 
 }

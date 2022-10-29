@@ -25,3 +25,11 @@ spring.servlet.multipart.max-file-size=10MB
 # Max request size.
 spring.servlet.multipart.max-request-size=10MB
 
+## Google Login
+spring.security.oauth2.client.registration.google.client-id=${env.GOOGLE_CLIENT_ID}
+spring.security.oauth2.client.registration.google.client-secret=${env.GOOGLE_CLIENT_SECRET}
+
+#Github Login
+spring.security.oauth2.client.registration.github.client-id=${env.GITHUB_CLIENT_ID}
+spring.security.oauth2.client.registration.github.client-secret=${env.GITHUB_CLIENT_SECRET}
+
