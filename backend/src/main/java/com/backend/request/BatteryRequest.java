@@ -1,25 +1,18 @@
-package com.backend.model;
+package com.backend.request;
 
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.ZonedDateTime;
 
-@Entity
-@Table(name = "battery")
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BatteryModel {
+@Builder
+public class BatteryRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
-
     String type;
     Float valuePerWeight;
     ZonedDateTime lastUpdate;
-
 }
