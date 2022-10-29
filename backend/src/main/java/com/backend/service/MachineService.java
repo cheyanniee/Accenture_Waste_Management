@@ -6,6 +6,7 @@ import com.backend.model.MachineModel;
 import com.backend.model.PeopleModel;
 import com.backend.model.PeopleModel.Role;
 import com.backend.repo.MachineRepo;
+import com.backend.request.LocationRequest;
 import com.backend.request.MachineRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,12 @@ public class MachineService {
 
     public boolean addMachine(MachineRequest machineRequest)
             throws CustomException, NumberFormatException {
-        LocationModel machineLocation = findMachineLocationById(machineRequest.getLocationId());
+        LocationRequest location = LocationRequest.builder()
+                .address(machineRequest.getAddress())
+                .postcode(machineRequest.getPostcode())
+                .build();
+        LocationModel machineLocation = locationService.bindLocation(location);
+
         MachineModel newMachine = MachineModel.builder()
                 .name(machineRequest.getName())
                 .currentLoad(machineRequest.getCurrentLoad())
@@ -61,12 +67,12 @@ public class MachineService {
         return admin;
     }
 
-    private LocationModel findMachineLocationById(Long locationId) throws CustomException {
+    public LocationModel findMachineLocationById(Long locationId) throws CustomException {
         List<LocationModel> locationList = locationService.listAllLocation();
         return locationList.stream()
                 .filter(location -> Objects.equals(location.getId(), locationId))
                 .findAny()
                 .orElseThrow(() -> new CustomException("Location not found"));
-
     }
+
 }
