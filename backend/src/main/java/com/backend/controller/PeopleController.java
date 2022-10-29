@@ -186,6 +186,5 @@ public class PeopleController {
         return ResponseEntity.ok(peopleService.findPeopleByOfficialId(officialId));
     }
 
-    //people collector endpoint
 
 }
