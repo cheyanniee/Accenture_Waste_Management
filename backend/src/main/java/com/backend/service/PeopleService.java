@@ -1,7 +1,6 @@
 package com.backend.service;
 
 import com.backend.configuration.CustomException;
-import com.backend.model.DistrictModel;
 import com.backend.model.LocationModel;
 import com.backend.model.PeopleModel;
 import com.backend.repo.PeopleRepo;
@@ -16,7 +15,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -69,13 +67,14 @@ public class PeopleService {
 
 //        locationService.createLocation(locationRequest);
 
-        LocationModel locationNew;
-        try {
-            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
-        } catch (Exception e) {
-            locationService.createLocation(locationRequest);
-            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
-        }
+//        LocationModel locationNew;
+//        try {
+//            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
+//        } catch (Exception e) {
+//            locationService.createLocation(locationRequest);
+//            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
+//        }
+        LocationModel locationNew = locationService.bindLocation(locationRequest);
 
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -224,14 +223,19 @@ public class PeopleService {
         //update location
         if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
             if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
-                LocationModel location = people.getLocationModel();
-                location.setPostcode(peopleRequest.getPostcode());
-                location.setAddress(peopleRequest.getAddress());
-
-                //updating districtModel
-                String postCode = peopleRequest.getPostcode().substring(0,2);
-                DistrictModel districtModel = districtService.findDistrictByPostalSector(postCode);
-                people.getLocationModel().setDistrictModel(districtModel);
+//                LocationModel location = people.getLocationModel();
+//                location.setPostcode(peopleRequest.getPostcode());
+//                location.setAddress(peopleRequest.getAddress());
+//
+//                //updating districtModel
+//                String postCode = peopleRequest.getPostcode().substring(0,2);
+//                DistrictModel districtModel = districtService.findDistrictByPostalSector(postCode);
+//                people.getLocationModel().setDistrictModel(districtModel);
+                LocationRequest locationRequest = LocationRequest.builder()
+                        .address(peopleRequest.getAddress())
+                        .postcode(peopleRequest.getPostcode())
+                        .build();
+                people.setLocationModel(locationService.bindLocation(locationRequest));
             }
         }
         peopleRepo.save(people);//update the data as it has Primary key
