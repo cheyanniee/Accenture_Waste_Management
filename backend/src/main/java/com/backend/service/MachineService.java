@@ -36,7 +36,7 @@ public class MachineService {
                 .orElseThrow(() -> new CustomException("No Machine with id: " + machineId + " found"));
     }
 
-    public boolean addMachine(PeopleModel admin, MachineRequest machineRequest)
+    public boolean addMachine(MachineRequest machineRequest)
             throws CustomException, NumberFormatException {
         LocationModel machineLocation = findMachineLocationById(machineRequest.getLocationId());
         MachineModel newMachine = MachineModel.builder()

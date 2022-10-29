@@ -47,7 +47,9 @@ public class MachineController {
     @PostMapping("/add")
     public ResponseEntity<GeneralResponse> postMethodName(@RequestHeader String token,
             @RequestBody MachineRequest machineRequest) throws CustomException {
-        machineService.addMachine(machineService.getAdminByToken(token), machineRequest);
+        // check if it's admin
+        machineService.getAdminByToken(token);
+        machineService.addMachine(machineRequest);
         return ResponseEntity.ok(new GeneralResponse("Machine Added!"));
     }
 
