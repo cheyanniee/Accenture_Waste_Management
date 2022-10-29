@@ -3,7 +3,7 @@ package com.backend.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "task")
@@ -18,9 +18,9 @@ public class TaskModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    LocalDateTime assignedTime;
-    LocalDateTime collectedTime;
-    LocalDateTime deliveredTime;
+    ZonedDateTime assignedTime;
+    ZonedDateTime collectedTime;
+    ZonedDateTime deliveredTime;
 
     @OneToOne
     @JoinColumn(name = "people_id")

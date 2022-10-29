@@ -1,6 +1,5 @@
 package com.backend.request;
 
-import com.backend.model.LocationModel;
 import com.backend.model.PeopleModel;
 import lombok.*;
 
@@ -14,8 +13,8 @@ public class PeopleRequest {
     //to create locationModel
     String address;
     String postcode;
-    String regionName;
-    String areaName;
+    String unitNumber;
+//    String areaName;
 
     //for peopleModel
     String firstName;
