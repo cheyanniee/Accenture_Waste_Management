@@ -45,9 +45,11 @@ export const ROLES = {
   Admin: "admin",
 };
 
+export const FAULTY_MACHINE = "FAULTY";
+
 export const MACHINE_STATUS = [
   "NORMAL",
-  "FAULTY",
+  FAULTY_MACHINE,
 ];
 
 export const REGIONS = [
