@@ -18,4 +18,8 @@ public class BatteryController {
     public ResponseEntity<?> listAll() {
         return ResponseEntity.ok(batteryService.listAllBattery());
     }
+
+    //update endpoint
+
+
 }

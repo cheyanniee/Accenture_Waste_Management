@@ -18,4 +18,11 @@ public class MachineController {
     public ResponseEntity<?> listAll() {
         return ResponseEntity.ok(machineService.listAllMachine());
     }
+
+    //machine status - faultiness (changing)
+
+    //current storage/capacity = %
+
+    //machine to mark as collected
+
 }
