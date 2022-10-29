@@ -19,6 +19,8 @@ import Machines from "./pages/Machines";
 import BatteryUpdate from "./pages/BatteryUpdate";
 import RegisterUsers from "./pages/RegisterUsers";
 
+import UserDetails from "./pages/UserDetails";
+
 
 function App() {
   return (
@@ -51,6 +53,10 @@ function App() {
                 <Route path="/registerUsers" element={<RegisterUsers />}></Route>
               </Route>
 
+              {/* General Protected Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Collector, ROLES.Admin]} />}>
+                <Route path="/userDetails" element={<UserDetails />}></Route>
+              </Route>
             </Route>
 
             {/* catch all */}
