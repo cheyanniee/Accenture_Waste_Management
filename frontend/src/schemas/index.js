@@ -14,6 +14,9 @@ export const INITIAL_REGISTER_FORM_VALUES = {
   phoneNumber: "",
   address: "",
   postcode: "",
+  floor: "",
+  unit: "",
+  unitNumber: "",
 };
 
 export const INITIAL_REGISTER_USERS_FORM_VALUES = {
@@ -28,6 +31,9 @@ export const INITIAL_REGISTER_USERS_FORM_VALUES = {
   address: "",
   postcode: "",
   role: "",
+  floor: "",
+  unit: "",
+  unitNumber: "",
 };
 
 export const registerSchema = yup.object().shape({
@@ -54,7 +60,7 @@ export const registerSchema = yup.object().shape({
     .integer()
     .min(80000000, "Mobile must be an 8 digit number starting with 8/9")
     .max(100000000, "Mobile must be an 8 digit number starting with 8/9")
-    .required("Please enter valid phone number"),
+    .required("Required"),
   address: yup.string().required("Required"),
   postcode: yup
     .number()
@@ -62,7 +68,16 @@ export const registerSchema = yup.object().shape({
     .integer()
     .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits")
-    .required("Please enter valid postal code"),
+    .required("Required"),
+  floor: yup
+    .number()
+    .positive()
+    .integer(),
+  unit: yup
+    .number()
+    .positive()
+    .integer(),
+  unitNumber: yup.string(),
 });
 
 export const registerUsersSchema = yup.object().shape({
@@ -89,7 +104,7 @@ export const registerUsersSchema = yup.object().shape({
     .integer()
     .min(80000000, "Mobile must be an 8 digit number starting with 8/9")
     .max(100000000, "Mobile must be an 8 digit number starting with 8/9")
-    .required("Please enter valid phone number"),
+    .required("Required"),
   address: yup.string().required("Required"),
   postcode: yup
     .number()
@@ -97,6 +112,15 @@ export const registerUsersSchema = yup.object().shape({
     .integer()
     .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits")
-    .required("Please enter valid postal code"),
+    .required("Required"),
   role: yup.string().required("Required"),
+  floor: yup
+    .number()
+    .positive()
+    .integer(),
+  unit: yup
+    .number()
+    .positive()
+    .integer(),
+  unitNumber: yup.string(),
 });
