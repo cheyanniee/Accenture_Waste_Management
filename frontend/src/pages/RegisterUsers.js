@@ -4,46 +4,44 @@ import { useFormik } from "formik";
 import moment from "moment";
 import axios from "axios";
 
-import { default as myAxios } from "../api/axios";
+import { default as myAxios, config } from "../api/axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-<<<<<<< HEAD
-import { INITIAL_FORM_VALUES, registerSchema } from "../schemas";
-import { ENDPOINTS } from "../helper/Constant";
-<<<<<<< HEAD
-=======
-import jwt_decode from "jwt-decode";
-=======
-import { INITIAL_REGISTER_FORM_VALUES, registerSchema } from "../schemas";
-import { PEOPLE_ENDPOINTS } from "../helper/Constant";
->>>>>>> master
->>>>>>> master
+import useAuth from "../hooks/useAuth";
+import { INITIAL_REGISTER_USERS_FORM_VALUES, registerUsersSchema } from "../schemas";
+import { PEOPLE_ENDPOINTS, ROLES } from "../helper/Constant";
 
-const Register = () => {
+const RegisterUsers = () => {
+  const { auth } = useAuth();
   const [errMsg, setErrMsg] = useState("");
   const [addressLabel, setAddressLabel] = useState("");
-  const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
     values = { ...values, dateOfBirth: moment(values.dateOfBirth).format("DD/MM/YYYY") };
     console.log("params: ", values);
-<<<<<<< HEAD
-=======
+
+    var endpoint = "";
+    if (values.role === ROLES.Collector) {
+        endpoint = PEOPLE_ENDPOINTS.RegisterCollector;
+    } else if (values.role === ROLES.Admin) {
+        endpoint = PEOPLE_ENDPOINTS.RegisterAdmin;
+    }
 
     try {
-      const response = await myAxios.post(PEOPLE_ENDPOINTS.Register, values);
+      console.log("url: ", endpoint);
+      const response = await myAxios.post(
+        endpoint,
+        values,
+        config({ token: auth.token })
+      );
       console.log(response.data);
       actions.resetForm();
       alert("Registration Successful!");
-      navigate("/login", {
-        state: { message: "Registration successful! Please Login to continue" },
-      });
     } catch (error) {
       alert("Registration failed.");
       console.log(error.response);
       setErrMsg(error.response.data.message);
     }
->>>>>>> master
   };
 
   const loadAddress = async () => {
@@ -77,23 +75,11 @@ const Register = () => {
     handleBlur,
     handleSubmit,
   } = useFormik({
-    initialValues: INITIAL_REGISTER_FORM_VALUES,
-    validationSchema: registerSchema,
+    initialValues: INITIAL_REGISTER_USERS_FORM_VALUES,
+    validationSchema: registerUsersSchema,
     onSubmit,
   });
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
-  const handleCallbackResponse = (response) => {
-    console.log("Encoded JWT ID Token:" + response.credential);
-
-    const userObject = jwt_decode(response.credential);
-    console.log(userObject);
-  };
-=======
->>>>>>> master
->>>>>>> master
   useEffect(() => {
     inputRef.current.focus();
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -108,7 +94,7 @@ const Register = () => {
           Registration Form
         </h1>
         <h2 className="col-12 col-xl-8 h4 text-left regular-400">
-          For General Public
+          For Registration of Collectors & Admins
         </h2>
         <p className="col-12 col-xl-8 text-left text-muted pb-5 light-300">
           Kindly fill in all required fields
@@ -360,8 +346,8 @@ const Register = () => {
                 </div>
               </div>
               {/* End Input Postal code */}
-              <div className="col-8">
-                <div className="form-floating mb-4">
+              <div className="col-lg-4 mb-4">
+                <div className="form-floating">
                   <input
                     type="text"
                     className={
@@ -383,6 +369,31 @@ const Register = () => {
                 </div>
               </div>
               {/* End Input Address */}
+              <div className="col-lg-4 mb-4">
+                <div className="form-floating">
+                  <select
+                    className={
+                      errors.role && touched.role
+                        ? "form-control form-control-lg-error light-300-error"
+                        : "form-control form-control-lg light-300"
+                    }
+                    id="role"
+                    placeholder="Role"
+                    value={values.role}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  >
+                    <option value="" label="Select a Role" />
+                    <option value={ROLES.Collector} label="Collector" />
+                    <option value={ROLES.Admin} label="Admin" />
+                  </select>
+                  <label htmlFor="address light-300">Role</label>
+                  {errors.address && touched.address && (
+                    <em className="text-error">{errors.address}</em>
+                  )}
+                </div>
+              </div>
+              {/* End Input Role */}
               <div className="col-md-12 col-12 m-auto text-end">
                 <em className="text-error px-3">{errMsg}</em>
                 <button
@@ -404,4 +415,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterUsers;

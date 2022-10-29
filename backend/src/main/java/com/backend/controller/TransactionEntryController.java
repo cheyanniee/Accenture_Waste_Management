@@ -20,4 +20,8 @@ public class TransactionEntryController {
         return ResponseEntity.ok(transactionEntryService.listTransaction());
     }
 
+    //must be able to get transaction
+
+    //list all transaction by id then pass back
+
 }

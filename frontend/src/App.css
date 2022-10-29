@@ -18,3 +18,9 @@
 button:disabled {
   opacity: 0.35;
 }
+
+.spanLink {
+  text-decoration: underline;
+  color: #0000FF;
+  font-size: 14px;
+}

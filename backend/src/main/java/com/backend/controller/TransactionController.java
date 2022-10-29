@@ -18,9 +18,21 @@ public class TransactionController {
     public ResponseEntity<?> listTransaction() {
         return ResponseEntity.ok(transactionService.listTransaction());
     }
+<<<<<<< HEAD
     //
     // create tasks - assign to collectors
     // collectors to view tasks where colletctors id = self
     // collectors to mark as delivered
     // machine to mark as collected
+=======
+
+    //link to balance
+
+    //machine must be able to add to transaction
+
+    //view transaction details by Id
+
+
+
+>>>>>>> master
 }

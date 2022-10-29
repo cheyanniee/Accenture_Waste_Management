@@ -1,5 +1,5 @@
 import axios, { config } from "../api/axios";
-import { ENDPOINTS } from "../helper/Constant";
+import { PEOPLE_ENDPOINTS } from "../helper/Constant";
 import useAuth from "./useAuth";
 
 const useRefreshToken = ({ token }) => {
@@ -7,7 +7,7 @@ const useRefreshToken = ({ token }) => {
 
   const refresh = async () => {
     const response = await axios.get(
-      ENDPOINTS.RefreshToken,
+      PEOPLE_ENDPOINTS.RefreshToken,
       config({ token: token })
     );
     const userDetails = response?.data || {};

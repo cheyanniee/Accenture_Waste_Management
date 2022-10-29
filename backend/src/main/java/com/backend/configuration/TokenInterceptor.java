@@ -23,7 +23,8 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (request.getMethod().equals("OPTIONS")) {
             return true;
         }
-        if (currentURL.endsWith("people/login") || currentURL.endsWith("people/register")) {
+        if (currentURL.endsWith("people/login") || currentURL.endsWith("people/register")
+                || currentURL.endsWith("people/register/admin") || currentURL.endsWith("people/register/collector")) {
             return true;
         }
 
