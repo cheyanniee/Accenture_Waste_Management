@@ -6,23 +6,22 @@ import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name="transaction_entry")
+@Table(name = "forgot_password")
 @Builder
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionEntryModel {
-
+public class ForgotPasswordModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @OneToOne
-    @JoinColumn(name="batteries_id")
-    BatteryModel batteryModel;
+    String encryptedOtp;
+    ZonedDateTime requested_time;
 
-    Integer quantity;
+    @OneToOne
+    @JoinColumn(name = "people_id")
+    PeopleModel peopleModel;
 
 }

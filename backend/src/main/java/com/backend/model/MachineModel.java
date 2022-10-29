@@ -1,28 +1,29 @@
 package com.backend.model;
 
-
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "location")
+@Table(name = "machine")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationModel {
+public class MachineModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Integer id;
 
-    String address;
-    String postcode;
+    String name;
+    Float currentLoad;
+    Float capacity;
+    String status;
 
     @OneToOne
-    @JoinColumn(name = "district_id")
-    DistrictModel districtModel;
+    @JoinColumn(name = "location_id")
+    LocationModel locationModel;
 
 }

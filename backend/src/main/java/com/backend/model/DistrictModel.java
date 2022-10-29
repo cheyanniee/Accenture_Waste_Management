@@ -6,23 +6,18 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "location")
+@Table(name="district")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationModel {
-
+public class DistrictModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Integer id;
 
-    String address;
-    String postcode;
-
-    @OneToOne
-    @JoinColumn(name = "district_id")
-    DistrictModel districtModel;
-
+    String postalSector;
+    Integer districtNum;
+    String region;
 }
