@@ -23,8 +23,7 @@ const BatteryUpdate = () => {
   const [batteryType, setBatteryType] = useState("Type");
   const [batteryPoints, setBatteryPoints] = useState("Points");
 
-  useEffect(() => {
-    const fetchData = async () => {
+const fetchData = async () => {
       try {
         const response = await axios.get(
           BATTERY_ENDPOINTS.GetAll,
@@ -39,6 +38,7 @@ const BatteryUpdate = () => {
       }
     };
 
+  useEffect(() => {
     fetchData();
   }, [auth.token]);
 
@@ -115,6 +115,7 @@ const BatteryUpdate = () => {
       );
       console.log(response.data);
       onReset();
+      fetchData();
       setSuccessMsg("Successful!");
     } catch (error) {
       console.log("Error: ", error.response);
