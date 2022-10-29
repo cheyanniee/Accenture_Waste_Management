@@ -11,4 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface TaskRepo extends JpaRepository<TaskModel, Long> {
   @Query("SELECT tasks from TaskModel tasks WHERE collector_id=?1")
   List<TaskModel> getTaskByCollectorId(Long collectorId);
+
+  @Query("SELECT task from TaskModel task WHERE id=?1")
+  Optional<TaskModel> getTaskById(Long taskId);
 }

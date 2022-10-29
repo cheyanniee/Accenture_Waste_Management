@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -79,5 +80,11 @@ public class TaskService {
             throw new CustomException(NO_RIGHTS);
 
         return admin;
+    }
+
+    public boolean deleteTask(Long taskId) throws CustomException {
+        TaskModel task = taskRepo.getTaskById(taskId).orElseThrow(() -> new CustomException("Task not found"));
+        taskRepo.delete(task);
+        return true;
     }
 }
