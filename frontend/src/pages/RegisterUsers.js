@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import moment from "moment";
 import axios from "axios";
@@ -15,17 +15,17 @@ const RegisterUsers = () => {
   const { auth } = useAuth();
   const [errMsg, setErrMsg] = useState("");
   const [addressLabel, setAddressLabel] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const onSubmit = async (values, actions) => {
-    values = { ...values, dateOfBirth: moment(values.dateOfBirth).format("DD/MM/YYYY") };
+    setSuccessMsg("");
+    const unitNumberTemp = values.floor + "-" + values.unit;
+    values = { ...values, dateOfBirth: moment(values.dateOfBirth).format("DD/MM/YYYY"), unitNumber: unitNumberTemp };
     console.log("params: ", values);
 
-    var endpoint = "";
-    if (values.role === ROLES.Collector) {
-        endpoint = PEOPLE_ENDPOINTS.RegisterCollector;
-    } else if (values.role === ROLES.Admin) {
-        endpoint = PEOPLE_ENDPOINTS.RegisterAdmin;
-    }
+    const endpoint = (values.role === ROLES.Collector)
+        ? PEOPLE_ENDPOINTS.RegisterCollector
+        : PEOPLE_ENDPOINTS.RegisterAdmin;
 
     try {
       console.log("url: ", endpoint);
@@ -36,9 +36,8 @@ const RegisterUsers = () => {
       );
       console.log(response.data);
       actions.resetForm();
-      alert("Registration Successful!");
+      setSuccessMsg("Registration Successful!");
     } catch (error) {
-      alert("Registration failed.");
       console.log(error.response);
       setErrMsg(error.response.data.message);
     }
@@ -277,7 +276,7 @@ const RegisterUsers = () => {
                 </div>
               </div>
               {/* End Input Email */}
-              <div className="col-lg-6 mb-4">
+              <div className="col-lg-4 mb-4">
                 <div className="form-floating">
                   <input
                     type="date"
@@ -299,7 +298,7 @@ const RegisterUsers = () => {
                 </div>
               </div>
               {/* End Input Date of Birth */}
-              <div className="col-lg-6 mb-4">
+              <div className="col-lg-4 mb-4">
                 <div className="form-floating">
                   <input
                     type="number"
@@ -321,6 +320,50 @@ const RegisterUsers = () => {
                 </div>
               </div>
               {/* End Input phoneNumber */}
+              <div className="col-lg-2 mb-4">
+                <div className="form-floating">
+                  <input
+                    type="number"
+                    className={
+                      errors.floor && touched.floor
+                        ? "form-control form-control-lg-error light-300-error"
+                        : "form-control form-control-lg light-300"
+                    }
+                    id="floor"
+                    placeholder="floor"
+                    value={values.floor}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <label htmlFor="phone light-300">Floor</label>
+                  {errors.floor && touched.floor && (
+                    <em className="text-error">{errors.floor}</em>
+                  )}
+                </div>
+              </div>
+              {/* End Input floor */}
+              <div className="col-lg-2 mb-4">
+                <div className="form-floating">
+                  <input
+                    type="number"
+                    className={
+                      errors.unit && touched.unit
+                        ? "form-control form-control-lg-error light-300-error"
+                        : "form-control form-control-lg light-300"
+                    }
+                    id="unit"
+                    placeholder="unit"
+                    value={values.unit}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <label htmlFor="phone light-300">Unit</label>
+                  {errors.unit && touched.unit && (
+                    <em className="text-error">{errors.unit}</em>
+                  )}
+                </div>
+              </div>
+              {/* End Input unit */}
               <div className="col-lg-4 mb-4">
                 <div className="form-floating">
                   <input
@@ -396,6 +439,7 @@ const RegisterUsers = () => {
               {/* End Input Role */}
               <div className="col-md-12 col-12 m-auto text-end">
                 <em className="text-error px-3">{errMsg}</em>
+                <em className="text-success">{successMsg}</em>
                 <button
                   disabled={isSubmitting}
                   type="submit"

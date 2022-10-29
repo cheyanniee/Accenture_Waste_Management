@@ -14,6 +14,9 @@ export const INITIAL_REGISTER_FORM_VALUES = {
   phoneNumber: "",
   address: "",
   postcode: "",
+  floor: "",
+  unit: "",
+  unitNumber: "",
 };
 
 export const INITIAL_REGISTER_USERS_FORM_VALUES = {
@@ -28,7 +31,28 @@ export const INITIAL_REGISTER_USERS_FORM_VALUES = {
   address: "",
   postcode: "",
   role: "",
+  floor: "",
+  unit: "",
+  unitNumber: "",
 };
+
+export const INITIAL_MACHINE_FORM_VALUES = {
+  name: "",
+  capacity: "",
+  currentLoad: "",
+  postcode: "",
+  address: "",
+  unitNumber: "",
+  floor: "",
+  unit: "",
+  status: "",
+}
+
+export const INITIAL_BATTERY_FORM_VALUES = {
+  id: "",
+  type: "",
+  valuePerWeight: "",
+}
 
 export const registerSchema = yup.object().shape({
   firstName: yup.string().required("Required"),
@@ -54,7 +78,7 @@ export const registerSchema = yup.object().shape({
     .integer()
     .min(80000000, "Mobile must be an 8 digit number starting with 8/9")
     .max(100000000, "Mobile must be an 8 digit number starting with 8/9")
-    .required("Please enter valid phone number"),
+    .required("Required"),
   address: yup.string().required("Required"),
   postcode: yup
     .number()
@@ -62,7 +86,16 @@ export const registerSchema = yup.object().shape({
     .integer()
     .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits")
-    .required("Please enter valid postal code"),
+    .required("Required"),
+  floor: yup
+    .number()
+    .positive()
+    .integer(),
+  unit: yup
+    .number()
+    .positive()
+    .integer(),
+  unitNumber: yup.string(),
 });
 
 export const registerUsersSchema = yup.object().shape({
@@ -89,7 +122,7 @@ export const registerUsersSchema = yup.object().shape({
     .integer()
     .min(80000000, "Mobile must be an 8 digit number starting with 8/9")
     .max(100000000, "Mobile must be an 8 digit number starting with 8/9")
-    .required("Please enter valid phone number"),
+    .required("Required"),
   address: yup.string().required("Required"),
   postcode: yup
     .number()
@@ -97,6 +130,86 @@ export const registerUsersSchema = yup.object().shape({
     .integer()
     .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits")
-    .required("Please enter valid postal code"),
+    .required("Required"),
   role: yup.string().required("Required"),
+  floor: yup
+    .number()
+    .positive()
+    .integer(),
+  unit: yup
+    .number()
+    .positive()
+    .integer(),
+  unitNumber: yup.string(),
+});
+
+export const userDetailsSchema = yup.object().shape({
+  firstName: yup.string(),
+  lastName: yup.string(),
+  officialId: yup.string(),
+  email: yup.string().email("Please enter a valid email"),
+  password: yup
+    .string()
+    .min(5)
+    .matches(passwordRules, { message: "Please enter stronger password" }),
+  confirm_password: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Password must match"),
+  dateOfBirth: yup
+    .date("Please enter valid date")
+    .typeError("Please enter valid date"),
+  phoneNumber: yup
+    .number()
+    .positive()
+    .integer()
+    .min(80000000, "Mobile must be an 8 digit number starting with 8/9")
+    .max(100000000, "Mobile must be an 8 digit number starting with 8/9"),
+  address: yup.string(),
+  postcode: yup
+    .number()
+    .positive()
+    .integer()
+    .min(10000, "Postal code must be exactly 6 digits")
+    .max(1000000, "Postal code must be at exactly 6 digits"),
+  floor: yup
+    .number()
+    .positive()
+    .integer(),
+  unit: yup
+    .number()
+    .positive()
+    .integer(),
+  unitNumber: yup.string(),
+});
+
+export const registerMachineSchema = yup.object().shape({
+  name: yup.string().required("Required"),
+  address: yup.string().required("Required"),
+  postcode: yup
+    .number()
+    .positive()
+    .integer()
+    .min(10000, "Postal code must be exactly 6 digits")
+    .max(1000000, "Postal code must be at exactly 6 digits")
+    .required("Required"),
+  floor: yup
+    .number()
+    .positive()
+    .integer(),
+  unit: yup
+    .number()
+    .positive()
+    .integer(),
+  unitNumber: yup.string(),
+  capacity: yup
+    .number()
+    .positive()
+    .integer()
+    .required("Required"),
+  status: yup.string().required("Required"),
+});
+
+export const registerBatterySchema = yup.object().shape({
+  type: yup.string().required("Required"),
+  valuePerWeight: yup.string().required("Required"),
 });

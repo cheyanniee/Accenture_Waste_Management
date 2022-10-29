@@ -14,10 +14,16 @@ import Register from "./pages/Register";
 import LocationsPage from "./pages/LocationsPage";
 import Home from "./pages/Home";
 
+import ReportMachine from "./pages/ReportMachine";
+import Points from "./pages/Points";
+import ViewTask from "./pages/ViewTask";
+
 import AssignTask from "./pages/AssignTask";
 import Machines from "./pages/Machines";
 import BatteryUpdate from "./pages/BatteryUpdate";
 import RegisterUsers from "./pages/RegisterUsers";
+
+import UserDetails from "./pages/UserDetails";
 
 
 function App() {
@@ -38,9 +44,17 @@ function App() {
               <Route path="/" element={<Home />}></Route>
 
               {/* Users Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+                <Route path="/reportMachine" element={<ReportMachine />}></Route>
+                <Route path="/points" element={<Points />}></Route>
+              </Route>
 
 
               {/* Collector Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.Collector]} />}>
+                <Route path="/reportMachine" element={<ReportMachine />}></Route>
+                <Route path="/viewTask" element={<ViewTask />}></Route>
+              </Route>
 
 
               {/* Admin Route */}
@@ -51,6 +65,10 @@ function App() {
                 <Route path="/registerUsers" element={<RegisterUsers />}></Route>
               </Route>
 
+              {/* General Protected Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Collector, ROLES.Admin]} />}>
+                <Route path="/userDetails" element={<UserDetails />}></Route>
+              </Route>
             </Route>
 
             {/* catch all */}

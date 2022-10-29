@@ -1,12 +1,18 @@
 package com.backend.request;
 
 import com.backend.model.PeopleModel;
+import lombok.*;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BalanceRequest {
 
-    Long id;
-    PeopleModel peopleModel;
+  //  PeopleModel peopleModel;
+    Long peopleId;
     Integer currentBalance;
 }
