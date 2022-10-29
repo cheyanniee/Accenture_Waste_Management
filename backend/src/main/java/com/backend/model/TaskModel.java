@@ -23,10 +23,14 @@ public class TaskModel {
     ZonedDateTime deliveredTime;
 
     @OneToOne
-    @JoinColumn(name = "people_id")
+    @JoinColumn(name = "collectorId")
     PeopleModel collector;
 
     @OneToOne
-    @JoinColumn(name = "machine_id")
+    @JoinColumn(name = "assignedByAdminId")
+    PeopleModel admin;
+
+    @OneToOne
+    @JoinColumn(name = "machineId")
     MachineModel machine;
 }

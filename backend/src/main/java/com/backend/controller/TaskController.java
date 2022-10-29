@@ -30,12 +30,14 @@ public class TaskController {
         return ResponseEntity.ok(taskService.listAllTask());
     }
 
-<<<<<<< HEAD
     // create tasks - assign to collectors
     @PostMapping("/create")
     public ResponseEntity<GeneralResponse> createTask(@RequestBody TaskRequest taskRequest,
             @RequestHeader String token) throws CustomException {
-        taskService.createTask(taskRequest.getCollectorEmail(), taskRequest.getMachineId());
+        taskService.createTask(
+                taskRequest.getCollectorEmail(),
+                taskRequest.getMachineId(),
+                taskService.getAdminByToken(token));
         return ResponseEntity.ok(new GeneralResponse("Tasks created successfully!"));
     }
 
@@ -48,15 +50,4 @@ public class TaskController {
     // collectors to mark as delivered
     // machine to mark as collected
     // delete task
-=======
-    //
-
-    //create task - assign to collectors
-
-    //collectors to view tasks assigned to them
-
-    //collectors to mark as delivered
-
-
->>>>>>> master
 }
