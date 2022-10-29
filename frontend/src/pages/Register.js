@@ -8,7 +8,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { INITIAL_FORM_VALUES, registerSchema } from "../schemas";
 import { ENDPOINTS } from "../helper/Constant";
-import jwt_decode from "jwt-decode";
 
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
@@ -31,26 +30,9 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit,
   });
-
-  const handleCallbackResponse = (response) => {
-    console.log("Encoded JWT ID Token:" + response.credential);
-
-    const userObject = jwt_decode(response.credential);
-    console.log(userObject);
-  };
   useEffect(() => {
     inputRef.current.focus();
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-      callback: handleCallbackResponse,
-    });
-
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
-    });
   }, []);
 
   return (
@@ -80,7 +62,6 @@ const Register = () => {
                 <li className="text-muted">General Enquiries</li>
                 <li className="text-muted">1800 333 9999</li>
               </ul>
-              <div id="signInDiv"></div>
             </div>
             <div className="contact row mb-4">
               <div className="contact-icon col-lg-3 col-3">

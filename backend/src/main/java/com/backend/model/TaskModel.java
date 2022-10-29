@@ -24,9 +24,9 @@ public class TaskModel {
 
     @OneToOne
     @JoinColumn(name = "people_id")
-    PeopleModel peopleModel;
+    PeopleModel collector;
 
     @OneToOne
     @JoinColumn(name = "machine_id")
-    MachineModel machineModel;
+    MachineModel machine;
 }
