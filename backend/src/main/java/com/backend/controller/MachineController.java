@@ -2,13 +2,13 @@ package com.backend.controller;
 
 import com.backend.configuration.CustomException;
 import com.backend.model.MachineModel;
+import com.backend.request.LocationRequest;
 import com.backend.request.MachineRequest;
 import com.backend.response.GeneralResponse;
+import com.backend.service.LocationService;
 import com.backend.service.MachineService;
 
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +26,9 @@ public class MachineController {
 
     @Autowired
     MachineService machineService;
+
+    @Autowired
+    LocationService locationService;
 
     @GetMapping("listall")
     public ResponseEntity<List<MachineModel>> listAll() {

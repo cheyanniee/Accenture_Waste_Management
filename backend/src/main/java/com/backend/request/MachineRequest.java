@@ -19,5 +19,7 @@ public class MachineRequest {
   Float capacity;
   MachineModel.Status status;
   Long locationId;
+  String address;
+  String postcode;
   String unitNumber;
 }
