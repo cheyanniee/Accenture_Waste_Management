@@ -38,7 +38,6 @@ public class BalanceController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
-
     }
 
 
