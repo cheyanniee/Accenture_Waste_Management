@@ -3,7 +3,7 @@ package com.backend.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "forgot_password")
@@ -18,7 +18,7 @@ public class ForgotPasswordModel {
     Long id;
 
     String encryptedOtp;
-    LocalDateTime requested_time;
+    ZonedDateTime requested_time;
 
     @OneToOne
     @JoinColumn(name = "people_id")

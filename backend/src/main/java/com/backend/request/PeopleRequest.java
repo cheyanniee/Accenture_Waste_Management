@@ -1,6 +1,5 @@
 package com.backend.request;
 
-import com.backend.model.LocationModel;
 import com.backend.model.PeopleModel;
 import lombok.*;
 
@@ -10,8 +9,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PeopleRequest {
-    Long id;
-    LocationModel locationModel; //check this one
+
+    //to create locationModel
+    String address;
+    String postcode;
+    String unitNumber;
+//    String areaName;
+
+    //for peopleModel
     String firstName;
     String lastName;
     String email;
@@ -20,6 +25,5 @@ public class PeopleRequest {
     String dateOfBirth;
     PeopleModel.Role role;
     String officialId;
-
 
 }

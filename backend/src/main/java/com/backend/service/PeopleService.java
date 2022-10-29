@@ -3,21 +3,18 @@ package com.backend.service;
 import com.backend.configuration.CustomException;
 import com.backend.model.LocationModel;
 import com.backend.model.PeopleModel;
-import com.backend.repo.LocationRepo;
 import com.backend.repo.PeopleRepo;
+import com.backend.request.LocationRequest;
 import com.backend.request.PeopleRequest;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.xml.stream.Location;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -29,7 +26,7 @@ public class PeopleService {
     PeopleRepo peopleRepo;
 
     @Autowired
-    LocationRepo locationRepo;
+    LocationService locationService;
 
     @Autowired
     Environment environment;
@@ -47,25 +44,34 @@ public class PeopleService {
         }
 
         Optional<PeopleModel> officialIdExist = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId().toUpperCase());
-        if(officialIdExist.isPresent()){
+        if (officialIdExist.isPresent()) {
             throw new Exception("Official ID already exists.");
         }
 
-        //create locationModel from address details input by user
-        LocationModel locationNew = LocationModel.builder()
-                .address(peopleRequest.getLocationModel().getAddress())
-                .postcode(peopleRequest.getLocationModel().getPostcode())
-                .regionName(peopleRequest.getLocationModel().getRegionName())
-                .areaName(peopleRequest.getLocationModel().getAreaName())
+
+        //creating locationRequest from peopleRequest field
+        LocationRequest locationRequest = LocationRequest.builder()
+                .address(peopleRequest.getAddress())
+                .postcode(peopleRequest.getPostcode())
                 .build();
-        locationRepo.save(locationNew);
+
+//        locationService.createLocation(locationRequest);
+
+        LocationModel locationNew;
+        try {
+            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
+        } catch (Exception e) {
+            locationService.createLocation(locationRequest);
+            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
+        }
 
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         PeopleModel peopleNew = PeopleModel.builder()
                 .firstName(peopleRequest.getFirstName())
                 .lastName(peopleRequest.getLastName())
-                .locationModel(locationNew) //check if this is working
+                .locationModel(locationNew) //please help with this, really sorry
+                .unitNumber(peopleRequest.getUnitNumber())
                 .email(peopleRequest.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(peopleRequest.getPassword()))
                 .phoneNumber(peopleRequest.getPhoneNumber())
@@ -103,9 +109,9 @@ public class PeopleService {
 
     public PeopleModel loginValidate(String email, String password) throws Exception {
 //        Optional<PeopleModel> peopleOpt = peopleRepo.getPeopleByEmailAndPassword(email.toLowerCase(), password);
-        PeopleModel people = peopleRepo.getPeopleByEmail(email.toLowerCase()).orElseThrow(()->new Exception("Please provide correct Email and Password."));
+        PeopleModel people = peopleRepo.getPeopleByEmail(email.toLowerCase()).orElseThrow(() -> new Exception("Please provide correct Email and Password."));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (passwordEncoder.matches(password,people.getPassword())) {
+        if (passwordEncoder.matches(password, people.getPassword())) {
 //            PeopleModel people = peopleOpt.get();
 //            String token = genTokenForEmail(email);
             String token = genJWT(people, 1, 0);
@@ -132,7 +138,7 @@ public class PeopleService {
                 .setId(String.valueOf(people.getId()))
                 .setIssuedAt(new Date())
                 .setExpiration(cal.getTime())
-                .claim("role",people.getRole())
+                .claim("role", people.getRole())
                 .signWith(SignatureAlgorithm.HS512, environment.getProperty("JWT_SECRET"))
                 .compact();
     }
@@ -181,27 +187,38 @@ public class PeopleService {
         if (peopleRequest.getOfficialId() != null && !peopleRequest.getOfficialId().equals("")) {
             people.setOfficialId(peopleRequest.getOfficialId());
         }
+        if (peopleRequest.getUnitNumber() != null && !peopleRequest.getUnitNumber().equals("")) {
+            people.setUnitNumber(peopleRequest.getUnitNumber());
+        }
+
+//        if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
+//            if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
+//                LocationModel location = people.getLocationModel();
+//                people.setAddress(peopleRequest.getAddress());
+//            }
+//        }
+
 
         peopleRepo.save(people);//update the data as it has Primary key
 
         //updating location
-        LocationModel location = locationRepo.findById(people.getLocationModel().getId())
-                .orElseThrow(() -> new CustomException("Address is not found!"));
-
-        if(peopleRequest.getLocationModel().getAddress() != null && !peopleRequest.getLocationModel().getAddress().equals("")){
-            location.setAddress(peopleRequest.getLocationModel().getAddress());
-        }
-        if(peopleRequest.getLocationModel().getPostcode() != null && !peopleRequest.getLocationModel().getPostcode().equals("")){
-            location.setPostcode(peopleRequest.getLocationModel().getPostcode());
-        }
-        if(peopleRequest.getLocationModel().getAreaName() != null && !peopleRequest.getLocationModel().getAreaName().equals("")){
-            location.setAreaName(peopleRequest.getLocationModel().getAreaName());
-        }
-        if(peopleRequest.getLocationModel().getRegionName() != null && !peopleRequest.getLocationModel().getRegionName().equals("")){
-            location.setRegionName(peopleRequest.getLocationModel().getRegionName());
-        }
-
-        locationRepo.save(location);
+//        LocationModel location = locationRepo.findById(people.getLocationModel().getId())
+//                .orElseThrow(() -> new CustomException("Address is not found!"));
+//
+//        if(peopleRequest.getLocationModel().getAddress() != null && !peopleRequest.getLocationModel().getAddress().equals("")){
+//            location.setAddress(peopleRequest.getLocationModel().getAddress());
+//        }
+//        if(peopleRequest.getLocationModel().getPostcode() != null && !peopleRequest.getLocationModel().getPostcode().equals("")){
+//            location.setPostcode(peopleRequest.getLocationModel().getPostcode());
+//        }
+//        if(peopleRequest.getLocationModel().getAreaName() != null && !peopleRequest.getLocationModel().getAreaName().equals("")){
+//            location.setAreaName(peopleRequest.getLocationModel().getAreaName());
+//        }
+//        if(peopleRequest.getLocationModel().getRegionName() != null && !peopleRequest.getLocationModel().getRegionName().equals("")){
+//            location.setRegionName(peopleRequest.getLocationModel().getRegionName());
+//        }
+//
+//        locationRepo.save(location);
         return true;
     }
 

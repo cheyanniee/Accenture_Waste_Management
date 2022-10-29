@@ -1,5 +1,6 @@
 package com.backend.controller;
 
+import com.backend.configuration.CustomException;
 import com.backend.request.LocationRequest;
 import com.backend.response.GeneralResponse;
 import com.backend.service.LocationService;
@@ -21,9 +22,12 @@ public class LocationController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<?> registerLocation(@RequestBody LocationRequest locationRequest) {
+    public ResponseEntity<?> registerLocation(@RequestBody LocationRequest locationRequest) throws CustomException {
         locationService.createLocation(locationRequest);
         return ResponseEntity.ok(new GeneralResponse("New Location Registered!"));
     }
+
+
+
 
 }
