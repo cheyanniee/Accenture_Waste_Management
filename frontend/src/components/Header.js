@@ -64,18 +64,6 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     className="nav-link btn-outline-primary rounded-pill px-3"
-                    to="/userVaccination"
-                  >
-                    Vaccination
-                  </Link>
-                </li>
-              ) : (
-                ""
-              )}
-              {auth?.role === ROLES.User ? (
-                <li className="nav-item">
-                  <Link
-                    className="nav-link btn-outline-primary rounded-pill px-3"
                     to="/userCovidStatus"
                   >
                     COVID-19 Test
@@ -96,13 +84,13 @@ const Header = () => {
               ) : (
                 ""
               )}
-              {auth?.role === ROLES.Collector ? (
+              {auth?.role === ROLES.Admin ? (
                 <li className="nav-item">
                   <Link
                     className="nav-link btn-outline-primary rounded-pill px-3"
-                    to="/doctorTest"
+                    to="/assignTask"
                   >
-                    COVID-19 Test
+                    Assign Task
                   </Link>
                 </li>
               ) : (
@@ -112,9 +100,9 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     className="nav-link btn-outline-primary rounded-pill px-3"
-                    to="/adminSearch"
+                    to="/machines"
                   >
-                    Search Users
+                    Machines
                   </Link>
                 </li>
               ) : (
@@ -124,9 +112,9 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     className="nav-link btn-outline-primary rounded-pill px-3"
-                    to="/adminUpdate"
+                    to="/batteryUpdate"
                   >
-                    Infected Areas
+                    Batteries Update
                   </Link>
                 </li>
               ) : (
@@ -136,9 +124,9 @@ const Header = () => {
                 <li className="nav-item">
                   <Link
                     className="nav-link btn-outline-primary rounded-pill px-3"
-                    to="/createDoctor"
+                    to="/registerUsers"
                   >
-                    Create Doctor
+                    Register User
                   </Link>
                 </li>
               ) : (

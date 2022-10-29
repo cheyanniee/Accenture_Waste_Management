@@ -1,16 +1,24 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
 
-import Home from "./pages/Home";
-import LocationsPage from "./pages/LocationsPage";
-import Register from "./pages/Register";
+import { ROLES } from "./helper/Constant";
 
 import Layout from "./components/Layout";
+import Login from "./components/Login";
+import Unauthorized from "./components/Unauthorized";
 import PersistLogin from "./components/PersistLogin";
 import Missing from "./components/Missing";
-import Unauthorized from "./components/Unauthorized";
 import RequireAuth from "./components/RequireAuth";
-import Login from "./components/Login";
+
+import Register from "./pages/Register";
+import LocationsPage from "./pages/LocationsPage";
+import Home from "./pages/Home";
+
+import AssignTask from "./pages/AssignTask";
+import Machines from "./pages/Machines";
+import BatteryUpdate from "./pages/BatteryUpdate";
+import RegisterUsers from "./pages/RegisterUsers";
+
 
 function App() {
   return (
@@ -28,6 +36,20 @@ function App() {
             {/* protected routes */}
             <Route element={<PersistLogin />}>
               <Route path="/" element={<Home />}></Route>
+
+              {/* Users Route */}
+
+
+              {/* Collector Route */}
+
+
+              {/* Admin Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+                <Route path="/assignTask" element={<AssignTask />}></Route>
+                <Route path="/machines" element={<Machines />}></Route>
+                <Route path="/batteryUpdate" element={<BatteryUpdate />}></Route>
+                <Route path="/registerUsers" element={<RegisterUsers />}></Route>
+              </Route>
 
             </Route>
 
