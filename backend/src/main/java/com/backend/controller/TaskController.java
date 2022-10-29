@@ -30,6 +30,7 @@ public class TaskController {
         return ResponseEntity.ok(taskService.listAllTask());
     }
 
+<<<<<<< HEAD
     // create tasks - assign to collectors
     @PostMapping("/create")
     public ResponseEntity<GeneralResponse> createTask(@RequestBody TaskRequest taskRequest,
@@ -47,4 +48,15 @@ public class TaskController {
     // collectors to mark as delivered
     // machine to mark as collected
     // delete task
+=======
+    //
+
+    //create task - assign to collectors
+
+    //collectors to view tasks assigned to them
+
+    //collectors to mark as delivered
+
+
+>>>>>>> master
 }

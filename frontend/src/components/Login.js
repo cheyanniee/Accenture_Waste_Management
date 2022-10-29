@@ -1,13 +1,15 @@
 import { useRef, useState, useEffect } from "react";
-import useAuth from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import useInput from "../hooks/useInput";
-import useToggle from "../hooks/useToggle";
-import Footer from "./Footer";
-import Header from "./Header";
 
 import axios from "../api/axios";
-import { ENDPOINTS } from "../helper/Constant";
+import { PEOPLE_ENDPOINTS } from "../helper/Constant";
+
+import Header from "./Header";
+import Footer from "./Footer";
+
+import useAuth from "../hooks/useAuth";
+import useInput from "../hooks/useInput";
+import useToggle from "../hooks/useToggle";
 
 const Login = () => {
   const { setAuth } = useAuth();
@@ -39,7 +41,37 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFromMessage("");
-
+    try {
+      console.log("params");
+      const response = await axios.post(
+        PEOPLE_ENDPOINTS.Login,
+        JSON.stringify({ email, password }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      const token = response?.data?.token;
+      localStorage.getItem("persist") === "true"
+        ? localStorage.setItem("token", token)
+        : localStorage.removeItem("token");
+      console.log("User details: ", response?.data);
+      setAuth(response.data);
+      resetEmail();
+      setpassword("");
+      navigate(from, { replace: true });
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Wrong Email or password");
+      } else if (err.response?.status === 401) {
+        setErrMsg("Unauthorized");
+      } else {
+        setErrMsg("Login Failed");
+      }
+      errRef.current.focus();
+    }
   };
   return (
     <>
