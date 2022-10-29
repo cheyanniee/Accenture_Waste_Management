@@ -29,11 +29,18 @@ public class PeopleService {
     LocationService locationService;
 
     @Autowired
+    DistrictService districtService;
+
+    @Autowired
     Environment environment;
 
 
     public List<PeopleModel> listPeople() {
         return peopleRepo.findAll();
+    }
+
+    public Optional<PeopleModel> findPeople(Long id){
+        return peopleRepo.findById(id);
     }
 
     public void createUser(PeopleRequest peopleRequest) throws Exception {
@@ -57,13 +64,14 @@ public class PeopleService {
 
 //        locationService.createLocation(locationRequest);
 
-        LocationModel locationNew;
-        try {
-            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
-        } catch (Exception e) {
-            locationService.createLocation(locationRequest);
-            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
-        }
+//        LocationModel locationNew;
+//        try {
+//            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
+//        } catch (Exception e) {
+//            locationService.createLocation(locationRequest);
+//            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
+//        }
+        LocationModel locationNew = locationService.bindLocation(locationRequest);
 
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -80,6 +88,20 @@ public class PeopleService {
                 .officialId(peopleRequest.getOfficialId().toUpperCase())
                 .build();
 
+        peopleRepo.save(peopleNew);
+    }
+
+    public void createCollector(PeopleRequest peopleRequest) throws Exception {
+        createUser(peopleRequest);
+        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
+        peopleNew.setRole(PeopleModel.Role.collector);
+        peopleRepo.save(peopleNew);
+    }
+
+    public void createAdmin(PeopleRequest peopleRequest) throws Exception {
+        createUser(peopleRequest);
+        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
+        peopleNew.setRole(PeopleModel.Role.admin);
         peopleRepo.save(peopleNew);
     }
 
@@ -191,14 +213,24 @@ public class PeopleService {
             people.setUnitNumber(peopleRequest.getUnitNumber());
         }
 
-//        if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
-//            if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
+        //update location
+        if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
+            if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
 //                LocationModel location = people.getLocationModel();
-//                people.setAddress(peopleRequest.getAddress());
-//            }
-//        }
-
-
+//                location.setPostcode(peopleRequest.getPostcode());
+//                location.setAddress(peopleRequest.getAddress());
+//
+//                //updating districtModel
+//                String postCode = peopleRequest.getPostcode().substring(0,2);
+//                DistrictModel districtModel = districtService.findDistrictByPostalSector(postCode);
+//                people.getLocationModel().setDistrictModel(districtModel);
+                LocationRequest locationRequest = LocationRequest.builder()
+                        .address(peopleRequest.getAddress())
+                        .postcode(peopleRequest.getPostcode())
+                        .build();
+                people.setLocationModel(locationService.bindLocation(locationRequest));
+            }
+        }
         peopleRepo.save(people);//update the data as it has Primary key
 
         //updating location

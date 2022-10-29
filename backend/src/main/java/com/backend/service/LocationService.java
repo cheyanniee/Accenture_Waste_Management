@@ -40,5 +40,13 @@ public class LocationService {
         return locationRepo.getLocationByPostcode(postcode).orElseThrow(()-> new CustomException("District's postal not exists."));
     }
 
+    public LocationModel bindLocation(LocationRequest locationRequest) throws CustomException {
+        try{
+            return findLocationByPostcode(locationRequest.getPostcode());
+        }catch (Exception e){
+            createLocation(locationRequest);
+            return findLocationByPostcode(locationRequest.getPostcode());
+        }
+    }
 
 }

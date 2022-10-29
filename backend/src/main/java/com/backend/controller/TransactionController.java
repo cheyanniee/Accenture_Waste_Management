@@ -18,4 +18,13 @@ public class TransactionController {
     public ResponseEntity<?> listTransaction() {
         return ResponseEntity.ok(transactionService.listTransaction());
     }
+
+    //link to balance
+
+    //machine must be able to add to transaction
+
+    //view transaction details by Id
+
+
+
 }
