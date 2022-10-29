@@ -34,7 +34,10 @@ public class TaskController {
     @PostMapping("/create")
     public ResponseEntity<GeneralResponse> createTask(@RequestBody TaskRequest taskRequest,
             @RequestHeader String token) throws CustomException {
-        taskService.createTask(taskRequest.getCollectorEmail(), taskRequest.getMachineId());
+        taskService.createTask(
+                taskRequest.getCollectorEmail(),
+                taskRequest.getMachineId(),
+                taskService.getAdminByToken(token));
         return ResponseEntity.ok(new GeneralResponse("Tasks created successfully!"));
     }
 

@@ -21,7 +21,7 @@ public class MachineModel {
     Float currentLoad;
     Float capacity;
     String status;
-    String unit_number;
+    String unitNumber;
 
     @OneToOne
     @JoinColumn(name = "location_id")
