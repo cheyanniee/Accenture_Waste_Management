@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Builder
 public class BalanceRequest {
 
-  //  PeopleModel peopleModel;
+    //PeopleModel peopleModel;
     Long peopleId;
     Integer currentBalance;
 }

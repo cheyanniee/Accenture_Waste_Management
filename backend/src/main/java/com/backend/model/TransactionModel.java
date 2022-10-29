@@ -25,16 +25,16 @@ public class TransactionModel {
 
     //foreign key with people and machine
     @OneToOne
-    @JoinColumn(name="location_id")
+    @JoinColumn(name="people_id")
     PeopleModel peopleModel;
 
     @OneToOne
     @JoinColumn(name="machine_id")
     MachineModel machineModel;
 
-    @OneToMany
-    @JoinColumn(name="transaction_entry_id")
-    List<TransactionEntryModel> transactionEntry = new ArrayList<>();
+//    @OneToMany
+//    @JoinColumn(name="transaction_entry_id")
+//    List<TransactionEntryModel> transactionEntry = new ArrayList<>();
 
     Integer balanceChange;
 

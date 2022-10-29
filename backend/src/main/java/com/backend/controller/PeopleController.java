@@ -105,8 +105,17 @@ public class PeopleController {
 
 
     @GetMapping("listall")
-    public ResponseEntity<?> listPeople() {
-        return ResponseEntity.ok(peopleService.listPeople());
+    public ResponseEntity<?> listPeople(@RequestHeader String token) {
+        try{
+            PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
+            if (!peopleModel.getRole().equals(PeopleModel.Role.admin)){
+                return ResponseEntity.badRequest().body(new GeneralResponse("User does not have rights to acccess page"));
+            }else{
+                return ResponseEntity.ok(peopleService.listPeople()); // keep this
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
+        }
     }
 
     @PostMapping("register")
