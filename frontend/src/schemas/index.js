@@ -10,8 +10,8 @@ export const INITIAL_FORM_VALUES = {
   email: "",
   password: "",
   confirm_password: "",
-  dob: "",
-  phone: "",
+  dateOfBirth: "",
+  phoneNumber: "",
   address: "",
   postcode: "",
 };
@@ -30,11 +30,11 @@ export const registerSchema = yup.object().shape({
     .string()
     .oneOf([yup.ref("password"), null], "Password must match")
     .required("Required"),
-  dob: yup
+  dateOfBirth: yup
     .date("Please enter valid date")
     .typeError("Please enter valid date")
     .required("Required"),
-  phone: yup
+  phoneNumber: yup
     .number()
     .positive()
     .integer()
@@ -46,7 +46,7 @@ export const registerSchema = yup.object().shape({
     .number()
     .positive()
     .integer()
-    .min(100000, "Postal code must be exactly 6 digits")
+    .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits")
     .required("Please enter valid postal code"),
 });

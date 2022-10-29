@@ -1,23 +1,60 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import moment from "moment";
+import axios from "axios";
 
-import axios from "../api/axios";
+import { default as myAxios } from "../api/axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { INITIAL_FORM_VALUES, registerSchema } from "../schemas";
-import { ENDPOINTS } from "../helper/Constant";
+import { PEOPLE_ENDPOINTS } from "../helper/Constant";
 
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
+  const [addressLabel, setAddressLabel] = useState("");
   const navigate = useNavigate();
-  const onSubmit = async (values, actions) => {
-    values = { ...values, dob: moment(values.dob).format("DD/MM/YYYY") };
-    console.log("params: ", values);
 
+  const onSubmit = async (values, actions) => {
+    values = { ...values, dateOfBirth: moment(values.dateOfBirth).format("DD/MM/YYYY") };
+    console.log("params: ", values);
+    try {
+      const response = await myAxios.post(PEOPLE_ENDPOINTS.Register, values);
+      console.log(response.data);
+      actions.resetForm();
+      alert("Registration Successful!");
+      navigate("/login", {
+        state: { message: "Registration successful! Please Login to continue" },
+      });
+    } catch (error) {
+      alert("Registration failed.");
+      console.log(error.response);
+      setErrMsg(error.response.data.message);
+    }
   };
+
+  const loadAddress = async () => {
+    try {
+      console.log("postcode: ", values.postcode);
+      const url = "https://developers.onemap.sg/commonapi/search?searchVal=" + values.postcode + "&returnGeom=N&getAddrDetails=Y&pageNum=1";
+      console.log("url: ", url);
+      const response = await axios.get(url);
+      console.log("data: ", response.data);
+      const add = response.data.results[0].BLK_NO + " " + response.data.results[0].ROAD_NAME;
+      values.address = add;
+      setAddressLabel(add);
+    } catch (error) {
+      console.log("error: ", error.response);
+      setAddressLabel("No address found!");
+    }
+  }
+
+  const resetAddress = async () => {
+    values.address = "";
+  }
+
   const inputRef = useRef();
+
   const {
     values,
     errors,
@@ -31,6 +68,7 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit,
   });
+
   useEffect(() => {
     inputRef.current.focus();
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -232,19 +270,19 @@ const Register = () => {
                   <input
                     type="date"
                     className={
-                      errors.dob && touched.dob
+                      errors.dateOfBirth && touched.dateOfBirth
                         ? "form-control form-control-lg-error light-300-error"
                         : "form-control form-control-lg light-300"
                     }
-                    id="dob"
-                    placeholder="dob"
-                    value={values.dob}
+                    id="dateOfBirth"
+                    placeholder="dateOfBirth"
+                    value={values.dateOfBirth}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
                   <label htmlFor="dob light-300">Date of Birth</label>
-                  {errors.dob && touched.dob && (
-                    <em className="text-error">{errors.dob}</em>
+                  {errors.dateOfBirth && touched.dateOfBirth && (
+                    <em className="text-error">{errors.dateOfBirth}</em>
                   )}
                 </div>
               </div>
@@ -254,45 +292,23 @@ const Register = () => {
                   <input
                     type="number"
                     className={
-                      errors.phone && touched.phone
+                      errors.phoneNumber && touched.phoneNumber
                         ? "form-control form-control-lg-error light-300-error"
                         : "form-control form-control-lg light-300"
                     }
-                    id="phone"
+                    id="phoneNumber"
                     placeholder="Mobile Number"
-                    value={values.phone}
+                    value={values.phoneNumber}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
                   <label htmlFor="phone light-300">Mobile Number</label>
-                  {errors.phone && touched.phone && (
-                    <em className="text-error">{errors.phone}</em>
+                  {errors.phoneNumber && touched.phoneNumber && (
+                    <em className="text-error">{errors.phoneNumber}</em>
                   )}
                 </div>
               </div>
-              {/* End Input phone */}
-              <div className="col-8">
-                <div className="form-floating mb-4">
-                  <input
-                    type="text"
-                    className={
-                      errors.address && touched.address
-                        ? "form-control form-control-lg-error light-300-error"
-                        : "form-control form-control-lg light-300"
-                    }
-                    id="address"
-                    placeholder="Address"
-                    value={values.address}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <label htmlFor="address light-300">Address</label>
-                  {errors.address && touched.address && (
-                    <em className="text-error">{errors.address}</em>
-                  )}
-                </div>
-              </div>
-              {/* End Input Address */}
+              {/* End Input phoneNumber */}
               <div className="col-lg-4 mb-4">
                 <div className="form-floating">
                   <input
@@ -305,16 +321,42 @@ const Register = () => {
                     id="postcode"
                     placeholder="Postal Code"
                     value={values.postcode}
-                    onChange={handleChange}
+                    onChange={e => {handleChange(e); resetAddress(e);}}
                     onBlur={handleBlur}
                   />
                   <label htmlFor="postcode light-300">Postal Code</label>
                   {errors.postcode && touched.postcode && (
                     <em className="text-error">{errors.postcode}</em>
                   )}
+                  <Link className="spanLink" onClick={loadAddress}>
+                    Load Address
+                  </Link>
                 </div>
               </div>
               {/* End Input Postal code */}
+              <div className="col-8">
+                <div className="form-floating mb-4">
+                  <input
+                    type="text"
+                    className={
+                      errors.address && touched.address
+                        ? "form-control form-control-lg-error light-300-error"
+                        : "form-control form-control-lg light-300"
+                    }
+                    id="address"
+                    placeholder="Address"
+                    value={addressLabel}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    disabled
+                  />
+                  <label htmlFor="address light-300">Address</label>
+                  {errors.address && touched.address && (
+                    <em className="text-error">{errors.address}</em>
+                  )}
+                </div>
+              </div>
+              {/* End Input Address */}
               <div className="col-md-12 col-12 m-auto text-end">
                 <em className="text-error px-3">{errMsg}</em>
                 <button
