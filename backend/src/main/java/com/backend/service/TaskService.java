@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -29,6 +30,8 @@ public class TaskService {
 
     @Autowired
     MachineRepo machineRepo;
+
+    private static final String NO_RIGHTS = "User do not have enough access rights to perform this operation!";
 
     // Listing all Tasks
     public List<TaskModel> listAllTask() {
@@ -49,6 +52,19 @@ public class TaskService {
         return true;
     }
 
+    public List<TaskModel> listTasksByCollectorId(Long collectorId, String token)
+            throws NumberFormatException, CustomException {
+        PeopleModel user = peopleService.findPeople(peopleService.getIdByToken(token))
+                .orElseThrow(() -> new CustomException("User not found!"));
+
+        if (user.getRole() == Role.collector)
+            return taskRepo.getTaskByCollectorId(user.getId());
+        if (user.getRole() == Role.admin)
+            return taskRepo.getTaskByCollectorId(collectorId);
+
+        throw new CustomException(NO_RIGHTS);
+    }
+
     private PeopleModel getCollectorByEmail(String collectorEmail) throws CustomException {
         PeopleModel collector = peopleRepo.getPeopleByEmail(collectorEmail.toLowerCase())
                 .orElseThrow(() -> new CustomException("Collector not found!"));
@@ -61,8 +77,14 @@ public class TaskService {
         PeopleModel admin = peopleService.findPeople(peopleService.getIdByToken(token))
                 .orElseThrow(() -> new CustomException("Admin not found!"));
         if (admin.getRole() != Role.admin)
-            throw new CustomException("User do not have enough access rights to perform this operation!");
+            throw new CustomException(NO_RIGHTS);
 
         return admin;
+    }
+
+    public boolean deleteTask(Long taskId) throws CustomException {
+        TaskModel task = taskRepo.getTaskById(taskId).orElseThrow(() -> new CustomException("Task not found"));
+        taskRepo.delete(task);
+        return true;
     }
 }

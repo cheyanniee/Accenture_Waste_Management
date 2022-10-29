@@ -10,7 +10,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -41,13 +43,27 @@ public class TaskController {
         return ResponseEntity.ok(new GeneralResponse("Tasks created successfully!"));
     }
 
-    @GetMapping("/mytasks")
-    public ResponseEntity<?> listMyTask(@RequestHeader String token) {
-
-        return ResponseEntity.ok("");
+    @GetMapping("/collector/{collectorId}")
+    public ResponseEntity<List<TaskModel>> listCollectorTasks(@RequestHeader String token,
+            @PathVariable String collectorId) throws NumberFormatException, CustomException {
+        return ResponseEntity.ok(taskService.listTasksByCollectorId(Long.valueOf(collectorId), token));
     }
+
     // collectors to view tasks where colletctors id = self
+    @GetMapping("/collector")
+    public ResponseEntity<List<TaskModel>> listMyTask(@RequestHeader String token)
+            throws NumberFormatException, CustomException {
+        return ResponseEntity.ok(taskService.listTasksByCollectorId(0L, token));
+    }
+
     // collectors to mark as delivered
     // machine to mark as collected
     // delete task
+    @DeleteMapping("/delete/{taskId}")
+    public ResponseEntity<GeneralResponse> deleteTask(@RequestHeader String token, @PathVariable String taskId)
+            throws NumberFormatException, CustomException {
+        taskService.getAdminByToken(token);
+        taskService.deleteTask(Long.valueOf(taskId));
+        return ResponseEntity.ok(new GeneralResponse("Task deleted!"));
+    }
 }
