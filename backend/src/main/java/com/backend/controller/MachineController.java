@@ -72,7 +72,6 @@ public class MachineController {
     }
     // update currentLoad(from vending machine side)
     // send email notifications if current load reach 80%
-    // machine status - faultiness (changing)
     // current storage/capacity = %
     // machine to mark as collected
 
