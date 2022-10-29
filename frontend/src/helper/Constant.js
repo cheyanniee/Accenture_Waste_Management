@@ -1,4 +1,5 @@
-export const BASE_URL = "http://localhost:8081";
+export const BASE_URL = "http://localhost:8080";
+//export const BASE_URL = "https://localhost";
 
 export const PEOPLE_ENDPOINTS = {
   GetAll: "/dev/v1/people/listall",
@@ -36,8 +37,8 @@ export const ROLES = {
 };
 
 export const MACHINE_STATUS = [
-  "Working",
-  "Faulty",
+  "NORMAL",
+  "FAULTY",
 ];
 
 export const REGIONS = [

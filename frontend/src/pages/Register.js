@@ -7,17 +7,9 @@ import axios from "axios";
 import { default as myAxios } from "../api/axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-<<<<<<< HEAD
-import { INITIAL_FORM_VALUES, registerSchema } from "../schemas";
-import { ENDPOINTS } from "../helper/Constant";
-<<<<<<< HEAD
-=======
-import jwt_decode from "jwt-decode";
-=======
 import { INITIAL_REGISTER_FORM_VALUES, registerSchema } from "../schemas";
 import { PEOPLE_ENDPOINTS } from "../helper/Constant";
->>>>>>> master
->>>>>>> master
+import jwt_decode from "jwt-decode";
 
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
@@ -28,8 +20,6 @@ const Register = () => {
     const unitNumberTemp = values.floor + "-" + values.unit;
     values = { ...values, dateOfBirth: moment(values.dateOfBirth).format("DD/MM/YYYY"), unitNumber: unitNumberTemp };
     console.log("params: ", values);
-<<<<<<< HEAD
-=======
 
     try {
       const response = await myAxios.post(PEOPLE_ENDPOINTS.Register, values);
@@ -42,7 +32,6 @@ const Register = () => {
       console.log(error.response);
       setErrMsg(error.response.data.message);
     }
->>>>>>> master
   };
 
   const loadAddress = async () => {
@@ -80,19 +69,13 @@ const Register = () => {
     validationSchema: registerSchema,
     onSubmit,
   });
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
   const handleCallbackResponse = (response) => {
     console.log("Encoded JWT ID Token:" + response.credential);
 
     const userObject = jwt_decode(response.credential);
     console.log(userObject);
   };
-=======
->>>>>>> master
->>>>>>> master
   useEffect(() => {
     inputRef.current.focus();
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
