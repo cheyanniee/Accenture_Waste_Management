@@ -63,3 +63,5 @@ VALUES (
 ALTER TABLE machine ADD COLUMN unit_number VARCHAR;
 
 ALTER TABLE machine RENAME COLUMN unit_number unitNumber;
+
+CREATE TYPE status_type AS ENUM('FAULTY', 'NORMAL');
