@@ -33,6 +33,11 @@ export const BATTERY_ENDPOINTS = {
   Update: "/dev/v1/battery/update",
 }
 
+export const TASK_ENDPOINTS = {
+  GetAll: "/dev/v1/task/listall",
+  Create: "/dev/v1/task/create",
+}
+
 
 export const ROLES = {
   User: "user",
