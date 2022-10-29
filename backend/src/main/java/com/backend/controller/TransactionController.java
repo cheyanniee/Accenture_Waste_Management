@@ -21,8 +21,19 @@ public class TransactionController {
     PeopleService peopleService;
 
     @GetMapping("listall")
-    public ResponseEntity<?> listTransaction() {
-        return ResponseEntity.ok(transactionService.listTransaction());
+    public ResponseEntity<?> listTransaction(@RequestHeader String token) {
+
+        try{
+            PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
+            if (!peopleModel.getRole().equals(PeopleModel.Role.admin)){
+                return ResponseEntity.badRequest().body(new GeneralResponse("User does not have rights to acccess page"));
+            }else{
+                return ResponseEntity.ok(transactionService.listTransaction()); // keep this
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
+        }
+
     }
 
     @GetMapping("find")
