@@ -124,3 +124,42 @@ export const registerUsersSchema = yup.object().shape({
     .integer(),
   unitNumber: yup.string(),
 });
+
+export const userDetailsSchema = yup.object().shape({
+  firstName: yup.string(),
+  lastName: yup.string(),
+  officialId: yup.string(),
+  email: yup.string().email("Please enter a valid email"),
+  password: yup
+    .string()
+    .min(5)
+    .matches(passwordRules, { message: "Please enter stronger password" }),
+  confirm_password: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Password must match"),
+  dateOfBirth: yup
+    .date("Please enter valid date")
+    .typeError("Please enter valid date"),
+  phoneNumber: yup
+    .number()
+    .positive()
+    .integer()
+    .min(80000000, "Mobile must be an 8 digit number starting with 8/9")
+    .max(100000000, "Mobile must be an 8 digit number starting with 8/9"),
+  address: yup.string(),
+  postcode: yup
+    .number()
+    .positive()
+    .integer()
+    .min(10000, "Postal code must be exactly 6 digits")
+    .max(1000000, "Postal code must be at exactly 6 digits"),
+  floor: yup
+    .number()
+    .positive()
+    .integer(),
+  unit: yup
+    .number()
+    .positive()
+    .integer(),
+  unitNumber: yup.string(),
+});
