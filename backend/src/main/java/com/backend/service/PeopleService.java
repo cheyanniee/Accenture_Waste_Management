@@ -1,6 +1,7 @@
 package com.backend.service;
 
 import com.backend.configuration.CustomException;
+import com.backend.model.DistrictModel;
 import com.backend.model.LocationModel;
 import com.backend.model.PeopleModel;
 import com.backend.repo.PeopleRepo;
@@ -15,6 +16,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -29,11 +31,18 @@ public class PeopleService {
     LocationService locationService;
 
     @Autowired
+    DistrictService districtService;
+
+    @Autowired
     Environment environment;
 
 
     public List<PeopleModel> listPeople() {
         return peopleRepo.findAll();
+    }
+
+    public Optional<PeopleModel> findPeople(Long id){
+        return peopleRepo.findById(id);
     }
 
     public void createUser(PeopleRequest peopleRequest) throws Exception {
@@ -205,20 +214,19 @@ public class PeopleService {
             people.setUnitNumber(peopleRequest.getUnitNumber());
         }
 
+        //update location
+        if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
+            if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
+                LocationModel location = people.getLocationModel();
+                location.setPostcode(peopleRequest.getPostcode());
+                location.setAddress(peopleRequest.getAddress());
 
-        //for location updating
-        //when can location change? When the postal code changes. Unit is independent
-
-
-
-//        if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
-//            if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
-//                LocationModel location = people.getLocationModel();
-//                people.setAddress(peopleRequest.getAddress());
-//            }
-//        }
-
-
+                //updating districtModel
+                String postCode = peopleRequest.getPostcode().substring(0,2);
+                DistrictModel districtModel = districtService.findDistrictByPostalSector(postCode);
+                people.getLocationModel().setDistrictModel(districtModel);
+            }
+        }
         peopleRepo.save(people);//update the data as it has Primary key
 
         //updating location
