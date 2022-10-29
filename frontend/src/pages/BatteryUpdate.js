@@ -23,7 +23,7 @@ const BatteryUpdate = () => {
   const [batteryType, setBatteryType] = useState("Type");
   const [batteryPoints, setBatteryPoints] = useState("Points");
 
-const fetchData = async () => {
+  const fetchData = async () => {
       try {
         const response = await axios.get(
           BATTERY_ENDPOINTS.GetAll,
@@ -93,8 +93,8 @@ const fetchData = async () => {
     if (updatedFieldKeys.length === 0) return;
 
     const params = updatedFieldKeys.reduce((acc, key) => {
-          return { ...acc, [key]: values[key] };
-        }, {});
+      return { ...acc, [key]: values[key] };
+    }, {});
 
     params.id = (batteryID !== "New")
       ? batteryID : "";
