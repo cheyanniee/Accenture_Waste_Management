@@ -34,6 +34,9 @@ public class PeopleService {
     DistrictService districtService;
 
     @Autowired
+    BalanceService balanceService;
+
+    @Autowired
     Environment environment;
 
 
@@ -90,6 +93,7 @@ public class PeopleService {
                 .build();
 
         peopleRepo.save(peopleNew);
+        balanceService.createBalance(peopleNew);
     }
 
     public void createCollector(PeopleRequest peopleRequest) throws Exception {
@@ -97,6 +101,7 @@ public class PeopleService {
         PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
         peopleNew.setRole(PeopleModel.Role.collector);
         peopleRepo.save(peopleNew);
+        balanceService.deleteBalance(peopleNew);
     }
 
     public void createAdmin(PeopleRequest peopleRequest) throws Exception {
@@ -104,6 +109,8 @@ public class PeopleService {
         PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
         peopleNew.setRole(PeopleModel.Role.admin);
         peopleRepo.save(peopleNew);
+        balanceService.deleteBalance(peopleNew);
+
     }
 
     public Jws<Claims> validateJWT(String token) {
@@ -257,4 +264,8 @@ public class PeopleService {
     public PeopleModel findPeopleByOfficialId(String officialId) throws CustomException {
         return peopleRepo.getPeopleByOfficialId(officialId).orElseThrow(() -> new CustomException("No user with this Official ID."));
     }
+
 }
+
+
+

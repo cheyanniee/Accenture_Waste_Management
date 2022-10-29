@@ -103,6 +103,7 @@ public class PeopleController {
     @Autowired
     PeopleService peopleService;
 
+
     @GetMapping("listall")
     public ResponseEntity<?> listPeople() {
         return ResponseEntity.ok(peopleService.listPeople());
@@ -185,6 +186,5 @@ public class PeopleController {
     public ResponseEntity<?> findPeopleByOfficialId(@RequestParam String officialId) throws CustomException {
         return ResponseEntity.ok(peopleService.findPeopleByOfficialId(officialId));
     }
-
 
 }
