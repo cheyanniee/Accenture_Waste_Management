@@ -112,10 +112,6 @@ const Machines = () => {
       : setData([{ officialId: "No result for " + inputText }]);
   };
 
-  const repopulateStatusOptions = () => {
-
-  }
-
   const onReset = async (values, actions) => {
     console.log("Resetting");
     resetLabels();
