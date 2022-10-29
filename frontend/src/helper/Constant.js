@@ -24,7 +24,7 @@ export const TRANSACTION_ENDPOINTS = {
 export const MACHINE_ENDPOINTS = {
   GetAll: "/dev/v1/machine/listall",
   Create: "/dev/v1/machine/add",
-  Update: "/dev/v1/machine/listall",
+  Update: "/dev/v1/machine/update",
 }
 
 export const BATTERY_ENDPOINTS = {
