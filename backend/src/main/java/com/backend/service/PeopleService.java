@@ -37,12 +37,11 @@ public class PeopleService {
     @Autowired
     Environment environment;
 
-
     public List<PeopleModel> listPeople() {
         return peopleRepo.findAll();
     }
 
-    public Optional<PeopleModel> findPeople(Long id){
+    public Optional<PeopleModel> findPeople(Long id) {
         return peopleRepo.findById(id);
     }
 
@@ -53,35 +52,35 @@ public class PeopleService {
             throw new Exception("Email already exists.");
         }
 
-        Optional<PeopleModel> officialIdExist = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId().toUpperCase());
+        Optional<PeopleModel> officialIdExist = peopleRepo
+                .getPeopleByOfficialId(peopleRequest.getOfficialId().toUpperCase());
         if (officialIdExist.isPresent()) {
             throw new Exception("Official ID already exists.");
         }
 
-
-        //creating locationRequest from peopleRequest field
+        // creating locationRequest from peopleRequest field
         LocationRequest locationRequest = LocationRequest.builder()
                 .address(peopleRequest.getAddress())
                 .postcode(peopleRequest.getPostcode())
                 .build();
-
-//        locationService.createLocation(locationRequest);
-
-//        LocationModel locationNew;
-//        try {
-//            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
-//        } catch (Exception e) {
-//            locationService.createLocation(locationRequest);
-//            locationNew = locationService.findLocationByPostcode(locationRequest.getPostcode());
-//        }
+                
+        // locationService.createLocation(locationRequest);
+        // LocationModel locationNew;
+        // try {
+        // locationNew =
+        // locationService.findLocationByPostcode(locationRequest.getPostcode());
+        // } catch (Exception e) {
+        // locationService.createLocation(locationRequest);
+        // locationNew =
+        // locationService.findLocationByPostcode(locationRequest.getPostcode());
+        // }
         LocationModel locationNew = locationService.bindLocation(locationRequest);
-
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         PeopleModel peopleNew = PeopleModel.builder()
                 .firstName(peopleRequest.getFirstName())
                 .lastName(peopleRequest.getLastName())
-                .locationModel(locationNew) //please help with this, really sorry
+                .locationModel(locationNew) // please help with this, really sorry
                 .unitNumber(peopleRequest.getUnitNumber())
                 .email(peopleRequest.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(peopleRequest.getPassword()))
@@ -97,7 +96,8 @@ public class PeopleService {
 
     public void createCollector(PeopleRequest peopleRequest) throws Exception {
         createUser(peopleRequest);
-        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
+        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId())
+                .orElseThrow(() -> new Exception("Unable to find user"));
         peopleNew.setRole(PeopleModel.Role.collector);
         peopleRepo.save(peopleNew);
         balanceService.deleteBalance(peopleNew);
@@ -105,7 +105,8 @@ public class PeopleService {
 
     public void createAdmin(PeopleRequest peopleRequest) throws Exception {
         createUser(peopleRequest);
-        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId()).orElseThrow(() -> new Exception("Unable to find user"));
+        PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId())
+                .orElseThrow(() -> new Exception("Unable to find user"));
         peopleNew.setRole(PeopleModel.Role.admin);
         peopleRepo.save(peopleNew);
         balanceService.deleteBalance(peopleNew);
@@ -114,7 +115,7 @@ public class PeopleService {
 
     public Jws<Claims> validateJWT(String token) {
         return Jwts.parser().setSigningKey(environment.getProperty("JWT_SECRET")).parseClaimsJws(token);
-//        return true;
+        // return true;
     }
 
     public boolean validateToken(String token, Long peopleId) throws Exception {
@@ -137,12 +138,14 @@ public class PeopleService {
     }
 
     public PeopleModel loginValidate(String email, String password) throws Exception {
-//        Optional<PeopleModel> peopleOpt = peopleRepo.getPeopleByEmailAndPassword(email.toLowerCase(), password);
-        PeopleModel people = peopleRepo.getPeopleByEmail(email.toLowerCase()).orElseThrow(() -> new Exception("Please provide correct Email and Password."));
+        // Optional<PeopleModel> peopleOpt =
+        // peopleRepo.getPeopleByEmailAndPassword(email.toLowerCase(), password);
+        PeopleModel people = peopleRepo.getPeopleByEmail(email.toLowerCase())
+                .orElseThrow(() -> new Exception("Please provide correct Email and Password."));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (passwordEncoder.matches(password, people.getPassword())) {
-//            PeopleModel people = peopleOpt.get();
-//            String token = genTokenForEmail(email);
+            // PeopleModel people = peopleOpt.get();
+            // String token = genTokenForEmail(email);
             String token = genJWT(people, 1, 0);
             updateTokenById(token, people.getId());
             people.setToken(token);
@@ -193,7 +196,8 @@ public class PeopleService {
     }
 
     public boolean updatePeople(PeopleRequest peopleRequest, String token) throws CustomException {
-        PeopleModel people = peopleRepo.findById(getIdByToken(token)).orElseThrow(() -> new CustomException("User is not found!"));//get the data bases on primary key
+        PeopleModel people = peopleRepo.findById(getIdByToken(token))
+                .orElseThrow(() -> new CustomException("User is not found!"));// get the data bases on primary key
 
         if (peopleRequest.getFirstName() != null && !peopleRequest.getFirstName().equals("")) {
             people.setFirstName(peopleRequest.getFirstName());
@@ -220,17 +224,19 @@ public class PeopleService {
             people.setUnitNumber(peopleRequest.getUnitNumber());
         }
 
-        //update location
+        // update location
         if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
             if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
-//                LocationModel location = people.getLocationModel();
-//                location.setPostcode(peopleRequest.getPostcode());
-//                location.setAddress(peopleRequest.getAddress());
-//
-//                //updating districtModel
-//                String postCode = peopleRequest.getPostcode().substring(0,2);
-//                DistrictModel districtModel = districtService.findDistrictByPostalSector(postCode);
-//                people.getLocationModel().setDistrictModel(districtModel);
+                // LocationModel location = people.getLocationModel();
+                // location.setPostcode(peopleRequest.getPostcode());
+                // location.setAddress(peopleRequest.getAddress());
+                //
+                // //updating districtModel
+                // String postCode = peopleRequest.getPostcode().substring(0,2);
+                // DistrictModel districtModel =
+                // districtService.findDistrictByPostalSector(postCode);
+                // people.getLocationModel().setDistrictModel(districtModel);
+                
                 LocationRequest locationRequest = LocationRequest.builder()
                         .address(peopleRequest.getAddress())
                         .postcode(peopleRequest.getPostcode())
@@ -238,26 +244,31 @@ public class PeopleService {
                 people.setLocationModel(locationService.bindLocation(locationRequest));
             }
         }
-        peopleRepo.save(people);//update the data as it has Primary key
+        peopleRepo.save(people);// update the data as it has Primary key
 
-        //updating location
-//        LocationModel location = locationRepo.findById(people.getLocationModel().getId())
-//                .orElseThrow(() -> new CustomException("Address is not found!"));
-//
-//        if(peopleRequest.getLocationModel().getAddress() != null && !peopleRequest.getLocationModel().getAddress().equals("")){
-//            location.setAddress(peopleRequest.getLocationModel().getAddress());
-//        }
-//        if(peopleRequest.getLocationModel().getPostcode() != null && !peopleRequest.getLocationModel().getPostcode().equals("")){
-//            location.setPostcode(peopleRequest.getLocationModel().getPostcode());
-//        }
-//        if(peopleRequest.getLocationModel().getAreaName() != null && !peopleRequest.getLocationModel().getAreaName().equals("")){
-//            location.setAreaName(peopleRequest.getLocationModel().getAreaName());
-//        }
-//        if(peopleRequest.getLocationModel().getRegionName() != null && !peopleRequest.getLocationModel().getRegionName().equals("")){
-//            location.setRegionName(peopleRequest.getLocationModel().getRegionName());
-//        }
-//
-//        locationRepo.save(location);
+        // updating location
+        // LocationModel location =
+        // locationRepo.findById(people.getLocationModel().getId())
+        // .orElseThrow(() -> new CustomException("Address is not found!"));
+        //
+        // if(peopleRequest.getLocationModel().getAddress() != null &&
+        // !peopleRequest.getLocationModel().getAddress().equals("")){
+        // location.setAddress(peopleRequest.getLocationModel().getAddress());
+        // }
+        // if(peopleRequest.getLocationModel().getPostcode() != null &&
+        // !peopleRequest.getLocationModel().getPostcode().equals("")){
+        // location.setPostcode(peopleRequest.getLocationModel().getPostcode());
+        // }
+        // if(peopleRequest.getLocationModel().getAreaName() != null &&
+        // !peopleRequest.getLocationModel().getAreaName().equals("")){
+        // location.setAreaName(peopleRequest.getLocationModel().getAreaName());
+        // }
+        // if(peopleRequest.getLocationModel().getRegionName() != null &&
+        // !peopleRequest.getLocationModel().getRegionName().equals("")){
+        // location.setRegionName(peopleRequest.getLocationModel().getRegionName());
+        // }
+        //
+        // locationRepo.save(location);
         return true;
     }
 
@@ -266,7 +277,8 @@ public class PeopleService {
     }
 
     public PeopleModel findPeopleByOfficialId(String officialId) throws CustomException {
-        return peopleRepo.getPeopleByOfficialId(officialId).orElseThrow(() -> new CustomException("No user with this Official ID."));
+        return peopleRepo.getPeopleByOfficialId(officialId)
+                .orElseThrow(() -> new CustomException("No user with this Official ID."));
     }
 
 }

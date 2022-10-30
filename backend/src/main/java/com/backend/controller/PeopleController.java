@@ -5,6 +5,9 @@ import com.backend.model.PeopleModel;
 import com.backend.request.PeopleRequest;
 import com.backend.response.GeneralResponse;
 import com.backend.service.PeopleService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -103,6 +106,7 @@ public class PeopleController {
     @Autowired
     PeopleService peopleService;
 
+
     @GetMapping("listall")
     public ResponseEntity<?> listPeople(@RequestHeader String token) {
         try{
@@ -165,7 +169,8 @@ public class PeopleController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody PeopleRequest peopleRequest) {
         try {
-            return ResponseEntity.ok(peopleService.loginValidate(peopleRequest.getEmail(), peopleRequest.getPassword()));
+            return ResponseEntity
+                    .ok(peopleService.loginValidate(peopleRequest.getEmail(), peopleRequest.getPassword()));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
@@ -178,9 +183,11 @@ public class PeopleController {
     }
 
     @PostMapping("update")
-    public ResponseEntity<?> updatePeople(@RequestBody PeopleRequest peopleRequest, @RequestHeader String token) throws CustomException {
+    public ResponseEntity<?> updatePeople(@RequestBody PeopleRequest peopleRequest, @RequestHeader String token)
+            throws CustomException {
         peopleService.updatePeople(peopleRequest, token);
-        return ResponseEntity.ok(new GeneralResponse("User " + peopleRequest.getFirstName() + " " + peopleRequest.getLastName() + " update successfully!"));
+        return ResponseEntity.ok(new GeneralResponse(
+                "User " + peopleRequest.getFirstName() + " " + peopleRequest.getLastName() + " update successfully!"));
 
     }
 
