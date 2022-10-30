@@ -21,6 +21,11 @@ const Locations = () => {
         response?.data.map((machine) => {
             const percentage = (machine.currentLoad / machine.capacity) * 100;
             machine.percentage = percentage.toFixed().toString() + "%";
+
+            const fullAddress = machine.machinelocation.address
+                + ((machine.unitNumber) ? " #" + machine.unitNumber : " ")
+                + " Singapore " + machine.machinelocation.postcode;
+            machine.fullAddress = fullAddress;
             newData.push(machine);
         });
         setMachineList(newData);
@@ -98,7 +103,7 @@ const Locations = () => {
         <div className="row gx-5 gx-sm-3 gx-lg-5 gy-lg-5 gy-3 pb-3 projects">
           {/* Start Recent Work */}
           {filterList.map((machine) => {
-            const { id, name, machinelocation, unitNumber, status, percentage } = machine;
+            const { id, name, fullAddress, status, percentage } = machine;
             return (
               <div
                 key={id}
@@ -119,9 +124,7 @@ const Locations = () => {
                         {name}
                       </span>
                       <p className="card-text">
-                        {machinelocation.address}
-                        {unitNumber ? " #" + unitNumber : " "}
-                        {" S("+machinelocation.postcode+")"}
+                        {fullAddress}
                       </p>
                       <p className="card-text">
                         Status: {status}
