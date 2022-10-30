@@ -23,13 +23,9 @@ const UserDetails = () => {
     setErrMsg("");
     setSuccessMsg("");
 
-    if (values.floor > 0 && values.unit > 0) {
-        values.unitNumber = values.floor + "-" + values.unit;
-    } else if (values.floor > 0) {
-        values.unitNumber = values.floor + "-" + unitUnit;
-    } else if (values.unit > 0) {
-        values.unitNumber =  unitFloor + "-" + values.unit;
-    }
+    const updateFloor = (values.floor > 0) ? values.floor : (values.floor === 0) ? "" : unitFloor;
+    const updateUnit = (values.unit > 0) ? values.unit : (values.unit === 0) ? "" : unitUnit;
+    values.unitNumber =  updateFloor + "-" + updateUnit;
 
     const updatedFieldKeys = Object.keys(values).filter(
       (key) => values[key] !== ""
@@ -120,9 +116,8 @@ const UserDetails = () => {
   useEffect(() => {
     setErrMsg("");
     setSuccessMsg("");
-    setUnitFloor(auth?.unitNumber.split("-")[0]);
-    setUnitUnit(auth?.unitNumber.split("-")[1]);
-
+    setUnitFloor(auth?.unitNumber?.split("-")[0]);
+    setUnitUnit(auth?.unitNumber?.split("-")[1]);
   }, []);
 
   return (
@@ -382,6 +377,9 @@ const UserDetails = () => {
                     <em className="text-error">{errors.floor}</em>
                   )}
                 </div>
+                  <label className="spanLabel">
+                    Put 0 to Remove
+                  </label>
               </div>
               {/* End Input floor */}
               <div className="col-lg-2 mb-4">
