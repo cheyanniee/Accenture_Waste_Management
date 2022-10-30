@@ -42,8 +42,7 @@ public class TaskService {
 
     // Creating tasks and assigning collector to machine
     public boolean createTask(String collectorEmail, Integer machineId, PeopleModel admin) throws CustomException {
-        MachineModel machine = machineRepo.getMachineById(machineId)
-                .orElseThrow(() -> new CustomException("Machine not Found!"));
+        MachineModel machine = machineService.getMachineById(machineId);
         TaskModel newTask = TaskModel.builder()
                 .assignedTime(ZonedDateTime.now(ZoneId.of("Asia/Singapore")))
                 .collector(getCollectorByEmail(collectorEmail))

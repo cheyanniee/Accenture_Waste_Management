@@ -70,9 +70,23 @@ public class MachineController {
         machineService.deleteMachine(Integer.valueOf(machineId));
         return ResponseEntity.ok(new GeneralResponse("Machine Deleted!"));
     }
+
     // update currentLoad(from vending machine side)
+    @PostMapping("/update/currentload")
+    public ResponseEntity<GeneralResponse> updateCurrentLoad(@RequestHeader String token,
+            @RequestBody MachineRequest machineRequest) throws CustomException {
+        machineService.updateCurrentLoad(machineRequest);
+        return ResponseEntity.ok(new GeneralResponse("Current Load Updated!"));
+    }
+
+    // update machine Status
+    @PostMapping("/update/status")
+    public ResponseEntity<GeneralResponse> updateStatus(@RequestHeader String token,
+            @RequestBody MachineRequest machineRequest) throws CustomException {
+        machineService.updateStatus(machineRequest);
+        return ResponseEntity.ok(new GeneralResponse("Status updated!"));
+    }
     // send email notifications if current load reach 80%
     // current storage/capacity = %
-    // machine to mark as collected
 
 }
