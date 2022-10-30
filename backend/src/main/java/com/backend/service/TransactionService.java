@@ -85,7 +85,7 @@ public class TransactionService {
     }
 
     //rework into updating
-    public void updateTransactionByYes (TransactionRequest transactionRequest, Long id) throws Exception {
+    public ResponseEntity<?> updateTransactionByYes (TransactionRequest transactionRequest, Long id) throws Exception {
 
         TransactionModel transactionModel = getTransaction(id);
 
@@ -100,18 +100,23 @@ public class TransactionService {
 
         Float balanceChange = 0F;
         for (TransactionEntryModel teM: transactionEntryModelList) {
-            Float pointsOne = teM.getBatteryModel().getValuePerWeight() * teM.getQuantity();
-            balanceChange += pointsOne;
+            if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
+                Float pointsOne = teM.getBatteryModel().getValuePerWeight() * teM.getQuantity();
+                balanceChange += pointsOne;
+            }
+            if(transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
+                Float exchangeOne = teM.getRateModel().getPointsPerUnit() * teM.getQuantity();
+                balanceChange += exchangeOne;
+            }
         }
 
         transactionModel.setPeopleModel(peopleModel);
         transactionModel.setMachineModel(machineModel);
         transactionModel.setBalanceChange(balanceChange);
         transactionModel.setChoose(transactionRequest.getChooseType());
-        saveChooseType(transactionModel); //???
+        saveChooseType(transactionModel);
         transactionModel.setDateAndTime(ZonedDateTime.now(zid));
         transactionRepo.save(transactionModel);
-
 
         //pass the updated balance to updateBalance as a new TransactionRequest.
         TransactionRequest transUpdate = TransactionRequest.builder()
@@ -119,11 +124,15 @@ public class TransactionService {
                 .chooseType(transactionRequest.getChooseType())
                 .balanceChange(transactionModel.getBalanceChange())
                 .build();
-        try{
-            balanceService.updateBalanceByTransaction(transUpdate);
-        }catch (Exception e){
-            e.getMessage();
-        }
+
+            if(transUpdate.getChooseType().equals(TransactionModel.Choose.exchange) && !balanceService.checkBalanceForExchange(transUpdate)){
+                deleteTransactionByNo(transactionModel.getId());
+                throw new CustomException("You do not have enough balance");
+            }else {
+                balanceService.updateBalanceByTransaction(transUpdate);
+            }
+
+        return ResponseEntity.ok(new GeneralResponse("Update successful"));
     }
 
 //    public void createTransactionBackupCopy (TransactionRequest transactionRequest) throws Exception {
@@ -159,8 +168,10 @@ public class TransactionService {
     }
 
 
+    //manual update Transaction if needed
+    //to add in Admin token verification
     public void updateTransaction(TransactionRequest transactionRequest, Long id) throws Exception{
-        TransactionModel transactionModel = transactionRepo.findById(id).orElseThrow(() -> new CustomException("Transaction not found!"));//get the data bases on primary key
+        TransactionModel transactionModel = transactionRepo.findById(id).orElseThrow(() -> new CustomException("Transaction not found."));//get the data bases on primary key
 
         if (transactionRequest.getPeopleId() != null) {
             transactionModel.setPeopleModel(peopleService.getPeopleById(transactionRequest.getPeopleId()));
@@ -175,10 +186,5 @@ public class TransactionService {
             transactionModel.setChoose(transactionRequest.getChooseType());
         }
     }
-
-
-    Float balanceChange;
-    ZonedDateTime dateAndTime;
-    String serviceType;
 
 }

@@ -6,10 +6,14 @@ import com.backend.model.PeopleModel;
 import com.backend.model.TransactionModel;
 import com.backend.repo.BalanceRepo;
 import com.backend.repo.PeopleRepo;
+import com.backend.repo.TransactionRepo;
+import com.backend.request.BalanceRequest;
 import com.backend.request.PeopleRequest;
 import com.backend.request.TransactionRequest;
+import com.backend.response.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,13 +46,24 @@ public class BalanceService {
 
     //manual delete balance
     public void deleteBalance (PeopleModel peopleModel) throws Exception {
-
         BalanceModel balanceModel = balanceRepo.getBalanceByPeopleId(peopleModel.getId()).orElseThrow(() -> new Exception("Unable to find balance of user"));
         balanceRepo.delete(balanceModel);
     }
 
-    public void updateBalanceByTransaction (TransactionRequest transactionRequest) throws CustomException{
 
+    //ensure there is enough amount for exchange
+    public boolean checkBalanceForExchange(TransactionRequest transactionRequest) throws Exception {
+        Float balanceChange = transactionRequest.getBalanceChange();
+        BalanceModel balanceModel = balanceRepo.getBalanceByPeopleId(transactionRequest.getPeopleId()).orElseThrow(()-> new CustomException("No balance found with user"));
+        Float currentBalance = balanceModel.getCurrentBalance();
+        if (balanceChange > currentBalance){
+            return false;
+        }
+        return true;
+    }
+
+    //update by machine
+    public void updateBalanceByTransaction (TransactionRequest transactionRequest) throws Exception{
         Float balanceChange = transactionRequest.getBalanceChange();
         BalanceModel balanceModel = balanceRepo.getBalanceByPeopleId(transactionRequest.getPeopleId()).orElseThrow(()-> new CustomException("No balance found with user"));
         Float currentBalance = balanceModel.getCurrentBalance();
@@ -65,5 +80,14 @@ public class BalanceService {
         balanceModel.setCurrentBalance(newBalance);
         balanceRepo.updateBalanceById(newBalance, balanceModel.getId());
         balanceRepo.save(balanceModel);
+    }
+
+    //update balance manually
+    public void updateBalance(BalanceRequest balanceRequest, Long id) throws Exception{
+        BalanceModel balanceModel = balanceRepo.findById(id).orElseThrow(() -> new CustomException("Balance not found!"));//get the data bases on primary key
+
+        if (balanceRequest.getCurrentBalance() !=null) {
+            balanceModel.setCurrentBalance(balanceRequest.getCurrentBalance());
+        }
     }
 }
