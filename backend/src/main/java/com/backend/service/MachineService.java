@@ -6,14 +6,19 @@ import com.backend.model.MachineModel;
 import com.backend.model.PeopleModel;
 import com.backend.model.PeopleModel.Role;
 import com.backend.repo.MachineRepo;
+import com.backend.request.EmailRequest;
 import com.backend.request.LocationRequest;
 import com.backend.request.MachineRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+
+import javax.mail.MessagingException;
 
 @Service
 public class MachineService {
@@ -26,6 +31,14 @@ public class MachineService {
 
     @Autowired
     LocationService locationService;
+
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    private Environment env;
+
+    private static final Float WARNING_FULL = 80F;
 
     public List<MachineModel> listAllMachine() {
         return machineRepo.findAll();
@@ -57,13 +70,15 @@ public class MachineService {
         return true;
     }
 
-    public boolean updateMachineStatus(MachineRequest machineRequest) throws CustomException {
+    public boolean updateMachineStatus(MachineRequest machineRequest) throws CustomException, MessagingException {
         MachineModel machine = getMachineById(machineRequest.getMachineId());
 
         if (machineRequest.getName() != null && !machineRequest.getName().equals(""))
             machine.setName(machineRequest.getName());
-        if (machineRequest.getCurrentLoad() != null && !machineRequest.getCurrentLoad().isNaN())
+        if (machineRequest.getCurrentLoad() != null && !machineRequest.getCurrentLoad().isNaN()) {
             machine.setCurrentLoad(machineRequest.getCurrentLoad());
+            checkBalanceCapacity(machine);
+        }
         if (machineRequest.getCapacity() != null && !machineRequest.getCapacity().isNaN())
             machine.setCapacity(machineRequest.getCapacity());
         if (machineRequest.getStatus() != null && !machineRequest.getStatus().equals(""))
@@ -106,13 +121,15 @@ public class MachineService {
                 .orElseThrow(() -> new CustomException("Location not found"));
     }
 
-    public boolean updateCurrentLoad(MachineRequest machineRequest) throws CustomException {
+    public boolean updateCurrentLoad(MachineRequest machineRequest) throws CustomException, MessagingException {
         MachineModel machine = getMachineById(machineRequest.getMachineId());
         Float inputLoad = machineRequest.getCurrentLoad();
         if (machine.getCapacity() < machine.getCurrentLoad() + inputLoad) {
             throw new CustomException("Machine will be overloaded!");
         }
-        machineRepo.updateCurrentLoad(inputLoad, machine.getId());
+        machine.setCurrentLoad(inputLoad + machine.getCurrentLoad());
+        machineRepo.updateCurrentLoad(machine.getCurrentLoad(), machine.getId());
+        checkBalanceCapacity(machine);
         return true;
     }
 
@@ -120,6 +137,26 @@ public class MachineService {
     public boolean updateStatus(MachineRequest machineRequest) throws CustomException {
         MachineModel machine = getMachineById(machineRequest.getMachineId());
         machineRepo.updateStatus(machineRequest.getStatus(), machine.getId());
+        return true;
+    }
+
+    private void checkBalanceCapacity(MachineModel machine) throws MessagingException {
+        Float balanceLoad = machine.getCurrentLoad() / machine.getCapacity() * 100;
+        if (balanceLoad >= WARNING_FULL)
+            sendEmailNotification(machine, balanceLoad);
+    }
+
+    // send email notifications if current load reach 80%
+    private boolean sendEmailNotification(MachineModel machine, Float balanceLoad) throws MessagingException {
+        System.out.println("Sending email notifications");
+
+        EmailRequest email = EmailRequest.builder()
+                .recipient(env.getProperty("ADMIN_EMAIL"))
+                .subject("Machine >= 80% load")
+                .msgBody("Machine ID: " + machine.getId() + " is " + balanceLoad + "% full")
+                .build();
+
+        emailService.sendMail(email);
         return true;
     }
 }
