@@ -44,12 +44,11 @@ public class BalanceService {
         balanceRepo.save(balanceModel);
     }
 
-    //manual delete balance
+    //delete balance using people id
     public void deleteBalance (PeopleModel peopleModel) throws Exception {
         BalanceModel balanceModel = balanceRepo.getBalanceByPeopleId(peopleModel.getId()).orElseThrow(() -> new Exception("Unable to find balance of user"));
         balanceRepo.delete(balanceModel);
     }
-
 
     //ensure there is enough amount for exchange
     public boolean checkBalanceForExchange(TransactionRequest transactionRequest) throws Exception {
