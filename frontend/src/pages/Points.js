@@ -12,6 +12,7 @@ const Points = () => {
   const { auth } = useAuth();
   const [data, setData] = useState([]);
   const [balance, setBalance] = useState("");
+  const [transactions, setTransactions] = useState([]);
   const [apiSearch, setApiSearch] = useState([]);
   const [message, setMessage] = useState();
   const [errMsg, setErrMsg] = useState();
@@ -37,16 +38,37 @@ const Points = () => {
     const fetchTransactions = async () => {
       try {
         const response = await axios.get(
-          TRANSACTION_ENDPOINTS.GetAll,
+          TRANSACTION_ENDPOINTS.GetByID,
           config({ token: auth.token })
         );
-        setApiSearch(response?.data);
-        console.log("Data: ", response?.data);
+
+        response?.data.sort((a,b) =>
+            (a.dateAndTime < b.dateAndTime)
+                ? 1
+                : ((b.dateAndTime < a.dateAndTime)
+                    ? -1
+                    : 0)
+        );
+
+        var newData = [];
+            response?.data.map((entry) => {
+            const date = entry.dateAndTime ? entry.dateAndTime.split("T")[0] : "";
+            entry.date = date;
+
+            const time = entry.dateAndTime ? entry.dateAndTime.split("T")[1].split(".")[0] : "";
+            entry.time = time;
+
+            newData.push(entry);
+        });
+
+        setTransactions(newData);
+        setApiSearch(newData);
+        setData(newData);
+        console.log("Transactions: ", newData);
       } catch (error) {
         console.log("Error: ", error);
       }
     };
-
     fetchBalance();
     fetchTransactions();
   }, [auth.token]);
@@ -56,22 +78,14 @@ const Points = () => {
     setErrMsg("");
     const inputText = e.target.value;
     const filterResult = apiSearch.filter((item) => {
-      return item.firstName
-        ? (item.firstName.toLowerCase().includes(inputText.toLowerCase()) ||
-            item.lastName.toLowerCase().includes(inputText.toLowerCase())) &&
-            item.role.includes(ROLES.Collector)
+      return item.machineModel?.name
+        ? (item.machineModel?.name.toLowerCase().includes(inputText.toLowerCase()))
         : false;
     });
+
     filterResult.length > 0
       ? setData(filterResult)
-      : setData([{ officialId: "No result for " + inputText }]);
-  };
-
-  const handleUpdate = async (id) => {
-
-    console.log("TimeStamp: ", moment().format("DD-MM-YYYY HH:mm:ss"));
-
-
+      : setData([{ id: "No result for " + inputText }]);
   };
 
   return (
@@ -116,7 +130,7 @@ const Points = () => {
                     onChange={handleFilter}
                   />
                   <label htmlFor="officialId light-300">
-                    Collector's Name
+                    Machine Name
                   </label>
                   {message && <em className="text-success px-2">{message}</em>}
                   {errMsg && <em className="text-danger px-2">{errMsg}</em>}
@@ -128,42 +142,24 @@ const Points = () => {
         <div className="row align-items-start ">
           <div className=" col-lg-10 m-auto text-left justify-content-center">
             <div className="row align-items-start text-primary fs-4 mb-3">
-              <div className="col-4">Date & Time</div>
-              <div className="col-4">Machine</div>
-              <div className="col-4">Balance Change</div>
+              <div className="col-2">ID</div>
+              <div className="col-3">Machine</div>
+              <div className="col-3">Time Stamp</div>
+              <div className="col-2">Type</div>
+              <div className="col-2">Transaction</div>
             </div>
-            {data.map((patient) => {
-              const { id, firstName, lastName, officialId, locationModel } = patient;
+            {data.map((entry) => {
+              const { id, balanceChange, dateAndTime, machineModel, date, time } = entry;
               return (
                 <div key={id} className="row align-items-start mb-2">
-                  <div className="col-2">{officialId}</div>
-                  <div className="col-2">
-                    {firstName} {lastName}
+                  <div className="col-2">{id}</div>
+                  <div className="col-3">{machineModel ? machineModel.name : ""}</div>
+                  <div className="col-3">
+                      <p>{date ? "Date: " + date : ""}</p>
+                      <p>{time ? "Time: " + time : ""}</p>
                   </div>
-                  <div className="col-2">
-                    {locationModel.districtModel.region}
-                  </div>
-                  <div className="col-2">
-                    {firstName && (
-                      <select
-                        className="form-select"
-                        onChange={(e) => setMachine(e.target.value)}
-                      >
-                        <option>Select Machine</option>
-
-                      </select>
-                    )}
-                  </div>
-                  <div className="col-2">
-                    {firstName && (
-                      <Link>
-                        <i
-                          className="bx bx-pencil bx-sm"
-                          onClick={() => handleUpdate(id)}
-                        />
-                      </Link>
-                    )}
-                  </div>
+                  <div className="col-2">{machineModel ? machineModel.name : ""}</div>
+                  <div className="col-2">{balanceChange}</div>
                 </div>
               );
             })}

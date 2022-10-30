@@ -22,8 +22,21 @@ const ReportMachine = () => {
           config({ token: auth.token })
         );
         response?.data.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
-        setApiSearch(response?.data);
-        setData(response?.data);
+
+        var newData = [];
+        response?.data.map((machine) => {
+            const percentage = (machine.currentLoad / machine.capacity) * 100;
+            machine.percentage = percentage.toFixed().toString() + "%";
+
+            const fullAddress = machine.machinelocation.address
+                + ((machine.unitNumber) ? " #" + machine.unitNumber : " ")
+                + " Singapore " + machine.machinelocation.postcode;
+            machine.fullAddress = fullAddress;
+            newData.push(machine);
+        });
+
+        setApiSearch(newData);
+        setData(newData);
         console.log("Machines: ", response?.data);
       } catch (error) {
         console.log("Error: ", error);
@@ -49,16 +62,20 @@ const ReportMachine = () => {
   };
 
   const handleUpdate = async (machine) => {
+    setErrMsg("");
+    setMessage("");
+
     const params = {
       machineId: machine.id,
       status: FAULTY_MACHINE,
     };
 
     console.log("Params: ", params);
+    console.log("URL: ", MACHINE_ENDPOINTS.UpdateStatus);
 
     try {
       const response = await axios.post(
-        MACHINE_ENDPOINTS.Update,
+        MACHINE_ENDPOINTS.UpdateStatus,
         params,
         config({ token: auth.token })
       );
@@ -76,6 +93,13 @@ const ReportMachine = () => {
     <>
       <Header />
       <section className="container-lg py-5">
+          <div className="row">
+            <div className="worksingle-content col-lg-10 m-auto text-left justify-content-center">
+              <h2 className="worksingle-heading h3 pb-5 light-300 typo-space-line">
+                Report Faulty Machines
+              </h2>
+            </div>
+          </div>
           <div className="row mb-4">
             <div className="worksingle-content col-lg-10 m-auto text-left justify-content-center">
               <form className="contact-form row">
@@ -88,7 +112,7 @@ const ReportMachine = () => {
                       onChange={handleFilter}
                     />
                     <label htmlFor="officialId light-300">
-                      Collector's Name
+                      Machine Name
                     </label>
                     {message && <em className="text-success px-2">{message}</em>}
                     {errMsg && <em className="text-danger px-2">{errMsg}</em>}
@@ -108,17 +132,13 @@ const ReportMachine = () => {
                 <div className="col-1">Faulty</div>
               </div>
               {data.map((machine) => {
-                const { id, name, machinelocation, status, percentage, unitNumber } = machine;
+                const { id, name, machinelocation, fullAddress, status, percentage } = machine;
                 return (
                   <div key={id} className="row align-items-start mb-2">
                     <div className="col-2">{id}</div>
                     <div className="col-2">{name}</div>
                     <div className="col-2">{machinelocation.districtModel.region}</div>
-                    <div className="col-2">
-                      {machinelocation.address}
-                      {(unitNumber) ? " #" + unitNumber : " "}
-                      {" Singapore " + machinelocation.postcode}
-                   </div>
+                    <div className="col-2">{fullAddress}</div>
                     <div className="col-1">{percentage}</div>
                     <div className="col-2">{status}</div>
                     <div className="col-1">

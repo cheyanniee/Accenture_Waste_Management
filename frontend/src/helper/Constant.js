@@ -19,12 +19,15 @@ export const BALANCE_ENDPOINTS = {
 
 export const TRANSACTION_ENDPOINTS = {
   GetAll: "/dev/v1/transaction/listall",
+  GetByID: "/dev/v1/transaction/find",
 }
 
 export const MACHINE_ENDPOINTS = {
   GetAll: "/dev/v1/machine/listall",
   Create: "/dev/v1/machine/add",
   Update: "/dev/v1/machine/update",
+  UpdateCurrentLoad: "/dev/v1/machine/update/currentload",
+  UpdateStatus: "/dev/v1/machine/update/status",
 }
 
 export const BATTERY_ENDPOINTS = {
@@ -36,6 +39,14 @@ export const BATTERY_ENDPOINTS = {
 export const TASK_ENDPOINTS = {
   GetAll: "/dev/v1/task/listall",
   Create: "/dev/v1/task/create",
+  GetByID: "/dev/v1/task/collector",
+  Collected: "/dev/v1/task/machine/collected/",
+  Delivered: "/dev/v1/task/collector/delivered/",
+}
+
+export const LOCATION_ENDPOINTS = {
+  GetAll: "/dev/v1/location/listall",
+  GetDistrict: "/dev/v1/location/getdistrict?postcode=",
 }
 
 

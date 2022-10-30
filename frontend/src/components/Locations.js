@@ -7,18 +7,35 @@ const Locations = () => {
   const [machineList, setMachineList] = useState([]);
   const [filterList, setFilterList] = useState([]);
   const [regionList, setRegionList] = useState([]);
+
   useEffect(() => {
     const getMachines = async () => {
       try {
-        const response = await axios.get(MACHINE_ENDPOINTS.GetAll);
-        const list = response.data;
-        setMachineList(list);
-        setFilterList(list);
-        setRegionList(
-          [...new Set(list.map((machine) => machine.machinelocation.districtModel.region))]
+        const response = await axios.get(
+          MACHINE_ENDPOINTS.GetAll
         );
+        response?.data.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+        console.log("Machines: ", response?.data);
+
+        var newData = [];
+        response?.data.map((machine) => {
+            const percentage = (machine.currentLoad / machine.capacity) * 100;
+            machine.percentage = percentage.toFixed().toString() + "%";
+
+            const fullAddress = machine.machinelocation.address
+                + ((machine.unitNumber) ? " #" + machine.unitNumber : " ")
+                + " Singapore " + machine.machinelocation.postcode;
+            machine.fullAddress = fullAddress;
+            newData.push(machine);
+        });
+        setMachineList(newData);
+        setFilterList(newData);
+        setRegionList(
+          [...new Set(newData.map((machine) => machine.machinelocation.districtModel.region))]
+        );
+        console.log("Add %: ", newData);
       } catch (error) {
-        console.log(error);
+        console.log("Error: ", error);
       }
     };
     getMachines();
@@ -86,7 +103,7 @@ const Locations = () => {
         <div className="row gx-5 gx-sm-3 gx-lg-5 gy-lg-5 gy-3 pb-3 projects">
           {/* Start Recent Work */}
           {filterList.map((machine) => {
-            const { id, name, machinelocation, unitNumber, status, currentLoad, capacity } = machine;
+            const { id, name, fullAddress, status, percentage } = machine;
             return (
               <div
                 key={id}
@@ -107,13 +124,13 @@ const Locations = () => {
                         {name}
                       </span>
                       <p className="card-text">
-                        {machinelocation.address} {unitNumber ? "#" + unitNumber : ""} {"S"+machinelocation.postcode}
+                        {fullAddress}
                       </p>
                       <p className="card-text">
                         Status: {status}
                       </p>
                       <p className="card-text">
-                        Storage: {currentLoad}
+                        Storage: {percentage}
                       </p>
                     </div>
                   </div>
