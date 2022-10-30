@@ -17,6 +17,7 @@ const UserAction = () => {
 
   const exchange = () => {
     console.log("Exchange");
+    navigate("/inputExchange", { replace: true });
   }
 
   return (

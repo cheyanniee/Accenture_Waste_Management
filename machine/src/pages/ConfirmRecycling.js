@@ -17,7 +17,7 @@ const ConfirmRecycling = () => {
 
   const no = () => {
     console.log("Reject Recycling");
-    navigate("/logout", { replace: true });
+    navigate("/cancelRecycling", { replace: true });
   }
 
   return (

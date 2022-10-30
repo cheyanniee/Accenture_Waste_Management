@@ -5,15 +5,19 @@ import useAuth from "../hooks/useAuth";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Login from "../components/Login";
 
-const InsertRecycling = () => {
+const ConfirmExchange = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
 
-  const done = () => {
-    console.log("Done Inserting Batteries");
-    navigate("/confirmRecycling", { replace: true });
+  const yes = () => {
+    console.log("Confirm Exchange");
+    navigate("/collectExchange", { replace: true });
+  }
+
+  const no = () => {
+    console.log("Reject Exchange");
+    navigate("/logout", { replace: true });
   }
 
   return (
@@ -29,19 +33,27 @@ const InsertRecycling = () => {
           </div>
 
           <div className="row">
-            <h3>
-              Please Insert Old Batteries!
-            </h3>
+          <h3>
+            Please confirm transaction details:
+          </h3>
           </div>
 
+
           <div className="h2 py-3">
+          <button
+              className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
+              onClick={yes}
+            >
+              Confirm
+            </button>
+            <br />
             <button
               className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
-              onClick={done}
+              onClick={no}
             >
-              Done Inserting Batteries
+              Cancel
             </button>
-          </div>
+        </div>
         </div>
       </section>
 
@@ -50,4 +62,4 @@ const InsertRecycling = () => {
   );
 };
 
-export default InsertRecycling;
+export default ConfirmExchange;

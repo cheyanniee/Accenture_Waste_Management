@@ -7,13 +7,13 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
 
-const InsertRecycling = () => {
+const CancelRecycling = () => {
   const { auth } = useAuth();
   const navigate = useNavigate();
 
   const done = () => {
-    console.log("Done Inserting Batteries");
-    navigate("/confirmRecycling", { replace: true });
+    console.log("Done Retrieving Rejected Batteries");
+    navigate("/logout", { replace: true });
   }
 
   return (
@@ -30,7 +30,7 @@ const InsertRecycling = () => {
 
           <div className="row">
             <h3>
-              Please Insert Old Batteries!
+              Please Collect Your Batteries!
             </h3>
           </div>
 
@@ -39,7 +39,7 @@ const InsertRecycling = () => {
               className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
               onClick={done}
             >
-              Done Inserting Batteries
+              Done Retrieving Batteries
             </button>
           </div>
         </div>
@@ -50,4 +50,4 @@ const InsertRecycling = () => {
   );
 };
 
-export default InsertRecycling;
+export default CancelRecycling;
