@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import moment from "moment";
 import axios from "axios";
@@ -23,9 +23,11 @@ const UserDetails = () => {
     setErrMsg("");
     setSuccessMsg("");
 
-    const updateFloor = (values.floor > 0) ? values.floor : (values.floor === 0) ? "" : unitFloor;
-    const updateUnit = (values.unit > 0) ? values.unit : (values.unit === 0) ? "" : unitUnit;
-    values.unitNumber =  updateFloor + "-" + updateUnit;
+    const updateFloor =
+      values.floor > 0 ? values.floor : values.floor === 0 ? "" : unitFloor;
+    const updateUnit =
+      values.unit > 0 ? values.unit : values.unit === 0 ? "" : unitUnit;
+    values.unitNumber = updateFloor + "-" + updateUnit;
 
     const updatedFieldKeys = Object.keys(values).filter(
       (key) => values[key] !== ""
@@ -33,14 +35,14 @@ const UserDetails = () => {
 
     if (updatedFieldKeys.length === 0) return;
 
-    if (values.postcode.toString().length>0 && values.address.length === 0) {
-        setErrMsg("Error: Address Doesn't Match Postal Code");
-        return;
+    if (values.postcode.toString().length > 0 && values.address.length === 0) {
+      setErrMsg("Error: Address Doesn't Match Postal Code");
+      return;
     }
 
-    if (values.password.length>0 && values.confirm_password.length === 0) {
-        setErrMsg("Error: Password doesn't match");
-        return;
+    if (values.password.length > 0 && values.confirm_password.length === 0) {
+      setErrMsg("Error: Password doesn't match");
+      return;
     }
 
     console.log(updatedFieldKeys);
@@ -60,8 +62,20 @@ const UserDetails = () => {
         config({ token: auth.token })
       );
       console.log(response.data);
+      const addPost = values.postcode
+        ? {
+            locationModel: {
+              ...auth.locationModel,
+              ...{ postcode: values.postcode },
+            },
+          }
+        : auth.locationModel;
       setAuth((prev) => {
-        return { ...prev, ...params };
+        return {
+          ...prev,
+          ...params,
+          ...addPost,
+        };
       });
       setSuccessMsg("Update success!");
 
@@ -82,22 +96,28 @@ const UserDetails = () => {
   const loadAddress = async () => {
     try {
       console.log("postcode: ", values.postcode);
-      const url = "https://developers.onemap.sg/commonapi/search?searchVal=" + values.postcode + "&returnGeom=N&getAddrDetails=Y&pageNum=1";
+      const url =
+        "https://developers.onemap.sg/commonapi/search?searchVal=" +
+        values.postcode +
+        "&returnGeom=N&getAddrDetails=Y&pageNum=1";
       console.log("url: ", url);
       const response = await axios.get(url);
       console.log("data: ", response.data);
-      const add = response.data.results[0].BLK_NO + " " + response.data.results[0].ROAD_NAME;
+      const add =
+        response.data.results[0].BLK_NO +
+        " " +
+        response.data.results[0].ROAD_NAME;
       values.address = add;
       setAddressLabel(add);
     } catch (error) {
       console.log("error: ", error.response);
       setAddressLabel("No address found!");
     }
-  }
+  };
 
-  const resetAddress = async () => {
+  const resetAddress = () => {
     values.address = "";
-  }
+  };
 
   const {
     values,
@@ -155,7 +175,9 @@ const UserDetails = () => {
               </div>
               <ul className="contact-info list-unstyled col-lg-9 col-9 light-300">
                 <li className="h5 mb-0">Main Office Address</li>
-                <li className="text-muted">40 Scotts Road, Environment Building</li>
+                <li className="text-muted">
+                  40 Scotts Road, Environment Building
+                </li>
                 <li className="text-muted">Singapore 228231</li>
               </ul>
             </div>
@@ -345,7 +367,7 @@ const UserDetails = () => {
                         ? "form-control form-control-lg-error light-300-error"
                         : "form-control form-control-lg light-300"
                     }
-                    id="phone"
+                    id="phoneNumber"
                     placeholder={auth?.phoneNumber}
                     value={values.phoneNumber}
                     onChange={handleChange}
@@ -377,9 +399,7 @@ const UserDetails = () => {
                     <em className="text-error">{errors.floor}</em>
                   )}
                 </div>
-                  <label className="spanLabel">
-                    Put 0 to Remove
-                  </label>
+                <label className="spanLabel">Put 0 to Remove</label>
               </div>
               {/* End Input floor */}
               <div className="col-lg-2 mb-4">
@@ -415,9 +435,12 @@ const UserDetails = () => {
                         : "form-control form-control-lg light-300"
                     }
                     id="postcode"
-                    placeholder={auth?.locationModel.postcode}
+                    placeholder={auth?.locationModel?.postcode}
                     value={values.postcode}
-                    onChange={e => {handleChange(e); resetAddress(e);}}
+                    onChange={(e) => {
+                      handleChange(e);
+                      resetAddress();
+                    }}
                     onBlur={handleBlur}
                   />
                   {errors.postcode && touched.postcode && (
