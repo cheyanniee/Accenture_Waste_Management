@@ -10,5 +10,4 @@ public interface DistrictRepo extends JpaRepository<DistrictModel, Integer> {
 
     @Query("select district from DistrictModel district where postal_sector=?1")
     Optional<DistrictModel> getDistrictByPostalSector(String postalSector);
-
 }
