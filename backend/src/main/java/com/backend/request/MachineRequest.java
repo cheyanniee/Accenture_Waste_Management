@@ -14,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class MachineRequest {
+  int machineId;
   String name;
   Float currentLoad;
   Float capacity;

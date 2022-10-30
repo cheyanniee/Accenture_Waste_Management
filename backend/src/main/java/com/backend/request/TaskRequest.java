@@ -14,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class TaskRequest {
+  Long taskId;
   String collectorEmail;
   String assignedByAdminEmail;
   Integer machineId;
