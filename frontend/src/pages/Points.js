@@ -42,6 +42,14 @@ const Points = () => {
           config({ token: auth.token })
         );
 
+        response?.data.sort((a,b) =>
+            (a.dateAndTime < b.dateAndTime)
+                ? 1
+                : ((b.dateAndTime < a.dateAndTime)
+                    ? -1
+                    : 0)
+        );
+
         var newData = [];
             response?.data.map((entry) => {
             const date = entry.dateAndTime ? entry.dateAndTime.split("T")[0] : "";
@@ -52,6 +60,7 @@ const Points = () => {
 
             newData.push(entry);
         });
+
         setTransactions(newData);
         setApiSearch(newData);
         setData(newData);
