@@ -92,7 +92,7 @@ public class TransactionService {
         ZoneId zid = ZoneId.of("Asia/Singapore");
 
         PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
-        MachineModel machineModel = machineService.findMachineById(transactionRequest.getMachineId()).orElseThrow(()-> new CustomException("Unable to find machine"));
+        MachineModel machineModel = machineService.getMachineById(transactionRequest.getMachineId());
 
         List<TransactionEntryModel> transactionEntryModelList =
                 transactionEntryRepo.getTransactionEntryByTransactionId(id)
@@ -166,7 +166,7 @@ public class TransactionService {
             transactionModel.setPeopleModel(peopleService.getPeopleById(transactionRequest.getPeopleId()));
         }
         if (transactionRequest.getMachineId() != null) {
-            transactionModel.setMachineModel(machineService.findMachineById(transactionRequest.getMachineId()).orElseThrow(()-> new CustomException("Machine not found.")));
+            transactionModel.setMachineModel(machineService.getMachineById(transactionRequest.getMachineId()));
         }
         if (transactionRequest.getDateAndTime() != null && !transactionRequest.getDateAndTime().equals("")) {
             transactionModel.setDateAndTime(transactionRequest.getDateAndTime());

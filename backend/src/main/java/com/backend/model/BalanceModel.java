@@ -27,6 +27,7 @@ public class BalanceModel {
     @OneToOne
     @JoinColumn(name="people_id")
     PeopleModel peopleModel;
+    
     Float currentBalance;
 
 }

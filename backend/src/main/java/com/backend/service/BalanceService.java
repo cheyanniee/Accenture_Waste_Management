@@ -66,7 +66,4 @@ public class BalanceService {
         balanceRepo.updateBalanceById(newBalance, balanceModel.getId());
         balanceRepo.save(balanceModel);
     }
-
-
-
 }
