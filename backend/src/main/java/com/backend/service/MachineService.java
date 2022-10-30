@@ -106,4 +106,20 @@ public class MachineService {
                 .orElseThrow(() -> new CustomException("Location not found"));
     }
 
+    public boolean updateCurrentLoad(MachineRequest machineRequest) throws CustomException {
+        MachineModel machine = getMachineById(machineRequest.getMachineId());
+        Float inputLoad = machineRequest.getCurrentLoad();
+        if (machine.getCapacity() < machine.getCurrentLoad() + inputLoad) {
+            throw new CustomException("Machine will be overloaded!");
+        }
+        machineRepo.updateCurrentLoad(inputLoad, machine.getId());
+        return true;
+    }
+
+    // Update machine status eg. NORMAL/FAULTY
+    public boolean updateStatus(MachineRequest machineRequest) throws CustomException {
+        MachineModel machine = getMachineById(machineRequest.getMachineId());
+        machineRepo.updateStatus(machineRequest.getStatus(), machine.getId());
+        return true;
+    }
 }
