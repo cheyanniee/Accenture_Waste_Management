@@ -23,8 +23,8 @@ const Header = () => {
       <div className="container d-flex justify-content-between align-items-center">
         <Link className="navbar-brand h1" to="/">
           <i className="bx bx-buildings bx-sm text-dark"></i>
-          <span className="text-dark h4">Geco</span>{" "}
-          <span className="text-primary h4">Buzz</span>
+          <span className="text-dark h4">Battery</span>{" "}
+          <span className="text-primary h4">Life</span>
         </Link>
         <button
           className="navbar-toggler border-0"

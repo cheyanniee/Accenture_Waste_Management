@@ -9,11 +9,11 @@ const Footer = () => {
           <div className="col-lg-3 col-12 align-left">
             <Link className="navbar-brand" to="index.html">
               <i className="bx bx-buildings bx-sm text-light" />
-              <span className="text-light h5">GECO</span>{" "}
-              <span className="text-light h5 semi-bold-600">Buzz</span>
+              <span className="text-light h5">Battery</span>{" "}
+              <span className="text-light h5 semi-bold-600">Life</span>
             </Link>
             <p className="text-light my-lg-4 my-2">
-              Our company aims to help everyone stay as safe as possible through this tough pandemic.
+              Our company aims to help reduce the environmental impact
             </p>
           </div>
           <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
@@ -29,9 +29,9 @@ const Footer = () => {
                   <i className="bx-fw bx bxs-chevron-right bx-xs" />
                   <Link
                     className="text-decoration-none text-light py-1"
-                    to="/clinics"
+                    to="/locations"
                   >
-                    Clinics
+                    Locations
                   </Link>
                 </li>
 
@@ -49,6 +49,11 @@ const Footer = () => {
                   cheyanne.lim@geco.asia
                 </Link>
               </li>
+            </ul>
+          </div>
+          <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
+              <h2 className="h4 pb-lg-3 text-light light-300">Backend Team</h2>
+              <ul className="list-unstyled text-light light-300">
               <li className="pb-2">
                 <i className="bx-fw bx bx-mail-send bx-xs" />
                 <Link
@@ -58,11 +63,6 @@ const Footer = () => {
                   alex.lim@geco.asia
                 </Link>
               </li>
-            </ul>
-          </div>
-          <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
-              <h2 className="h4 pb-lg-3 text-light light-300">Backend Team</h2>
-              <ul className="list-unstyled text-light light-300">
                 <li className="pb-2">
                   <i className="bx-fw bx bx-mail-send bx-xs" />
                   <Link
