@@ -47,7 +47,7 @@ public class BatteryService {
         }
 
         if (batteryRequest.getValuePerWeight() != null && batteryRequest.getValuePerWeight() != 0) {
-            battery.setType(batteryRequest.getType());
+            battery.setValuePerWeight(batteryRequest.getValuePerWeight());
         }
 
         ZoneId zid = ZoneId.of("Asia/Singapore");
@@ -56,6 +56,14 @@ public class BatteryService {
         battery.setLastUpdate(dtUpdate);
         batteryRepo.save(battery);
         return true;
+    }
+
+//    public Integer deleteBattery(BatteryRequest batteryRequest){
+//       return batteryRepo.deleteBatteryById(batteryRequest.getId());
+//    }
+
+    public List<BatteryModel> deleteBattery(BatteryRequest batteryRequest){
+        return batteryRepo.deleteByType(batteryRequest.getType());
     }
 
 
