@@ -14,5 +14,5 @@ public class BalanceRequest {
 
     //PeopleModel peopleModel;
     Long peopleId;
-    Integer currentBalance;
+    Float currentBalance;
 }

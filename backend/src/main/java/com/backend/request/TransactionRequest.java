@@ -3,6 +3,7 @@ package com.backend.request;
 import com.backend.model.MachineModel;
 import com.backend.model.PeopleModel;
 import com.backend.model.TransactionEntryModel;
+import com.backend.model.TransactionModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,11 +18,12 @@ import java.util.List;
 @Builder
 public class TransactionRequest {
 
-    PeopleModel peopleModel;
-    MachineModel machineModel;
-   // Long peopleId;
-   // Long machineId;
-    List<TransactionEntryModel> transactionEntry = new ArrayList<>();
-    Integer balanceChange;
+   // PeopleModel peopleModel;
+   // MachineModel machineModel;
+    Long peopleId;
+    Integer machineId;
+   // List<TransactionEntryModel> transactionEntry = new ArrayList<>();
+    Float balanceChange;
     ZonedDateTime dateAndTime;
+    TransactionModel.Choose chooseType;
 }

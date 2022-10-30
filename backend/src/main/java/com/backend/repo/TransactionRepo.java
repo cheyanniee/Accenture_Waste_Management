@@ -12,4 +12,6 @@ public interface TransactionRepo extends JpaRepository<TransactionModel, Long> {
     @Query("select transaction from TransactionModel transaction where people_id=?1")
     public Optional <List <TransactionModel>> getTransactionByPeopleId (Long people_id);
 
+
+
 }

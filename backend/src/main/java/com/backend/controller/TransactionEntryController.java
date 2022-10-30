@@ -1,6 +1,7 @@
 package com.backend.controller;
 
 import com.backend.model.PeopleModel;
+import com.backend.model.TransactionEntryModel;
 import com.backend.model.TransactionModel;
 import com.backend.request.TransactionEntryRequest;
 import com.backend.request.TransactionRequest;
@@ -46,6 +47,25 @@ public class TransactionEntryController {
         try{
             Long id = transactionEntryRequest.getTransactionId();
             return ResponseEntity.ok(transactionEntryService.getTransactionEntryByTransactionId(id));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
+        }
+    }
+    @PostMapping("create") // use for creating transaction entry
+    public ResponseEntity<?> createTransactionEntry(@RequestBody TransactionEntryRequest transactionEntryRequest)  {
+        try{
+            TransactionEntryModel transactionEntryModel = transactionEntryService.createTransactionEntryWithRequest(transactionEntryRequest);
+            return ResponseEntity.ok(transactionEntryModel);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
+        }
+    }
+
+    @PostMapping("delete/Entry") // use for creating transaction entry
+    public ResponseEntity<?> deleteTransactionEntry(@RequestBody TransactionEntryRequest transactionEntryRequest)  {
+        try{
+            transactionEntryService.createTransactionEntryWithRequest(transactionEntryRequest);
+            return ResponseEntity.ok(new GeneralResponse("Transaction entry created, please check."));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }

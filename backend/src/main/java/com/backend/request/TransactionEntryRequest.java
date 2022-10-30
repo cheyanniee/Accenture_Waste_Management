@@ -13,7 +13,7 @@ public class TransactionEntryRequest {
 
     //TransactionModel transactionModel;
     Long transactionId;
-    BatteryModel batteryModel;
+    String batteryType;
     Integer quantity;
 
 }

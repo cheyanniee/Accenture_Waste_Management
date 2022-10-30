@@ -103,7 +103,6 @@ public class PeopleController {
     @Autowired
     PeopleService peopleService;
 
-
     @GetMapping("listall")
     public ResponseEntity<?> listPeople(@RequestHeader String token) {
         try{
