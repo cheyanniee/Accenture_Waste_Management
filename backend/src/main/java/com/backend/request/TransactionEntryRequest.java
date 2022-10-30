@@ -14,6 +14,11 @@ public class TransactionEntryRequest {
     //TransactionModel transactionModel;
     Long transactionId;
     String batteryType;
-    Integer quantity;
+ //   String rateType;
+
+    //CHANGE TABLE COLUMN TO FLOAT. can be used for recycle or exchange - just make sure exchange doesn't allow .5 or something
+    Float quantity;
+
+
 
 }
