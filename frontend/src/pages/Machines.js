@@ -9,7 +9,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
 import { INITIAL_MACHINE_FORM_VALUES, registerMachineSchema } from "../schemas";
-import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, ROLES, MACHINE_STATUS } from "../helper/Constant";
+import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, LOCATION_ENDPOINTS, ROLES, MACHINE_STATUS } from "../helper/Constant";
 
 const Machines = () => {
   const { auth } = useAuth();
@@ -88,6 +88,15 @@ const Machines = () => {
       const add = response.data.results[0].BLK_NO + " " + response.data.results[0].ROAD_NAME;
       values.address = add;
       setAddressLabel(add);
+
+      const districtResponse = await myAxios.get(
+        LOCATION_ENDPOINTS.GetDistrict + values.postcode,
+        config({ token: auth.token })
+      );
+
+      console.log("District", districtResponse?.data);
+      values.region = districtResponse?.data.region;
+      setRegionLabel = districtResponse?.data.region;
     } catch (error) {
       console.log("error: ", error.response);
       setAddressLabel("No address found!");
