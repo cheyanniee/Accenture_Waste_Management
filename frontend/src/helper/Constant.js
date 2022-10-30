@@ -25,6 +25,8 @@ export const MACHINE_ENDPOINTS = {
   GetAll: "/dev/v1/machine/listall",
   Create: "/dev/v1/machine/add",
   Update: "/dev/v1/machine/update",
+  UpdateCurrentLoad: "/dev/v1/machine/update/currentload",
+  UpdateStatus: "/dev/v1/machine/update/status",
 }
 
 export const BATTERY_ENDPOINTS = {
