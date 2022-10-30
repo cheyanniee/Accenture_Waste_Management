@@ -25,5 +25,4 @@ public class MachineModel {
     @OneToOne
     @JoinColumn(name = "location_id")
     LocationModel locationModel;
-
 }
