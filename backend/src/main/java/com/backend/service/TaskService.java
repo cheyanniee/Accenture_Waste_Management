@@ -31,7 +31,7 @@ public class TaskService {
     PeopleService peopleService;
 
     @Autowired
-    MachineRepo machineRepo;
+    MachineService machineService;
 
     private static final String NO_RIGHTS = "User do not have enough access rights to perform this operation!";
 
@@ -84,6 +84,14 @@ public class TaskService {
         return admin;
     }
 
+    public PeopleModel getAdminOrCollectorByToken(String token) throws NumberFormatException, CustomException {
+        PeopleModel user = peopleService.findPeople(peopleService.getIdByToken(token))
+                .orElseThrow(() -> new CustomException("User not found!"));
+        if (user.getRole() != Role.admin && user.getRole() != Role.collector)
+            throw new CustomException(NO_RIGHTS);
+        return user;
+    }
+
     public boolean deleteTask(Long taskId) throws CustomException {
         TaskModel task = taskRepo.getTaskById(taskId).orElseThrow(() -> new CustomException("Task not found"));
         taskRepo.delete(task);
@@ -100,6 +108,7 @@ public class TaskService {
     }
 
     public boolean updateCollectedTime(Long taskId, String token) throws CustomException {
+        getAdminOrCollectorByToken(token);
 
         if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of("Asia/Singapore")), taskId) == 0)
             throw new CustomException("Task update collected fails!");
@@ -118,6 +127,16 @@ public class TaskService {
             task.setCollectedTime(taskRequest.getCollectedTime());
         if (taskRequest.getDeliveredTime() != null)
             task.setDeliveredTime(taskRequest.getDeliveredTime());
+        if (taskRequest.getMachineId() != null) {
+            MachineModel machine = machineService.getMachineById(taskRequest.getMachineId());
+            task.setMachine(machine);
+        }
+        if (taskRequest.getCollectorEmail() != null && !taskRequest.getCollectorEmail().equals("")) {
+            PeopleModel collector = peopleRepo.getPeopleByEmail(taskRequest.getCollectorEmail().toLowerCase())
+                    .orElseThrow(() -> new CustomException("Collector not found!"));
+            task.setCollector(collector);
+        }
+        task.setAdmin(admin);
         taskRepo.save(task);
         return true;
     }
