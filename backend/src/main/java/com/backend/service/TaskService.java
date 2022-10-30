@@ -8,6 +8,8 @@ import com.backend.model.PeopleModel.Role;
 import com.backend.repo.MachineRepo;
 import com.backend.repo.PeopleRepo;
 import com.backend.repo.TaskRepo;
+import com.backend.request.TaskRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,6 +103,22 @@ public class TaskService {
 
         if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of("Asia/Singapore")), taskId) == 0)
             throw new CustomException("Task update collected fails!");
+        return true;
+    }
+
+    private TaskModel getTaskById(Long taskId) throws CustomException {
+        return taskRepo.getTaskById(taskId).orElseThrow(() -> new CustomException("No Task found!"));
+    }
+
+    public boolean manualUpdate(PeopleModel admin, TaskRequest taskRequest) throws CustomException {
+        TaskModel task = getTaskById(taskRequest.getTaskId());
+        if (taskRequest.getAssignedTime() != null)
+            task.setAssignedTime(taskRequest.getAssignedTime());
+        if (taskRequest.getCollectedTime() != null)
+            task.setCollectedTime(taskRequest.getCollectedTime());
+        if (taskRequest.getDeliveredTime() != null)
+            task.setDeliveredTime(taskRequest.getDeliveredTime());
+        taskRepo.save(task);
         return true;
     }
 }

@@ -66,7 +66,7 @@ public class TaskController {
 
     // machine to mark as collected
     @GetMapping("/machine/collected/{taskId}")
-    public ResponseEntity<?> taskCollected(@RequestHeader String token, @PathVariable String taskId)
+    public ResponseEntity<GeneralResponse> taskCollected(@RequestHeader String token, @PathVariable String taskId)
             throws NumberFormatException, CustomException {
         taskService.updateCollectedTime(Long.valueOf(taskId), token);
         return ResponseEntity.ok(new GeneralResponse("Task Collected"));
@@ -79,5 +79,13 @@ public class TaskController {
         taskService.getAdminByToken(token);
         taskService.deleteTask(Long.valueOf(taskId));
         return ResponseEntity.ok(new GeneralResponse("Task deleted!"));
+    }
+
+    // Admin update task
+    @PostMapping("/update")
+    public ResponseEntity<GeneralResponse> updateTask(@RequestHeader String token,
+            @RequestBody TaskRequest taskRequest) throws CustomException {
+        taskService.manualUpdate(taskService.getAdminByToken(token), taskRequest);
+        return ResponseEntity.ok(new GeneralResponse("Task update!"));
     }
 }
