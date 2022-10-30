@@ -10,9 +10,9 @@ import lombok.*;
 @Builder
 public class EmailRequest {
     // Class data members
-    private String recipient;
-    private String msgBody;
-    private String subject;
+    String recipient;
+    String msgBody;
+    String subject;
 //    private String attachment;
 }
 
