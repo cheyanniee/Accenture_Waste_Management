@@ -21,4 +21,5 @@ public class DistrictService {
     public DistrictModel findDistrictByPostalSector(String postalSector) throws CustomException {
         return districtRepo.getDistrictByPostalSector(postalSector).orElseThrow(()-> new CustomException("District's postal not exists."));
     }
+
 }

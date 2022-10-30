@@ -113,7 +113,7 @@ const Locations = () => {
                         Status: {status}
                       </p>
                       <p className="card-text">
-                        Storage: {((currentLoad/capacity)*100).toFixed().toDtring() + "%"}
+                        Storage: {currentLoad}
                       </p>
                     </div>
                   </div>

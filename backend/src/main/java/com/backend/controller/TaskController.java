@@ -57,7 +57,21 @@ public class TaskController {
     }
 
     // collectors to mark as delivered
+    @GetMapping("/collector/delivered/{taskId}")
+    public ResponseEntity<GeneralResponse> tasksDelivered(@RequestHeader String token, @PathVariable String taskId)
+            throws NumberFormatException, CustomException {
+        taskService.updateDeliveredTaskByCollectorId(Long.valueOf(taskId), token);
+        return ResponseEntity.ok(new GeneralResponse("Task delivered!"));
+    }
+
     // machine to mark as collected
+    @GetMapping("/machine/collected/{taskId}")
+    public ResponseEntity<GeneralResponse> taskCollected(@RequestHeader String token, @PathVariable String taskId)
+            throws NumberFormatException, CustomException {
+        taskService.updateCollectedTime(Long.valueOf(taskId), token);
+        return ResponseEntity.ok(new GeneralResponse("Task Collected"));
+    }
+
     // delete task
     @DeleteMapping("/delete/{taskId}")
     public ResponseEntity<GeneralResponse> deleteTask(@RequestHeader String token, @PathVariable String taskId)
@@ -65,5 +79,13 @@ public class TaskController {
         taskService.getAdminByToken(token);
         taskService.deleteTask(Long.valueOf(taskId));
         return ResponseEntity.ok(new GeneralResponse("Task deleted!"));
+    }
+
+    // Admin update task
+    @PostMapping("/update")
+    public ResponseEntity<GeneralResponse> updateTask(@RequestHeader String token,
+            @RequestBody TaskRequest taskRequest) throws CustomException {
+        taskService.manualUpdate(taskService.getAdminByToken(token), taskRequest);
+        return ResponseEntity.ok(new GeneralResponse("Task update!"));
     }
 }

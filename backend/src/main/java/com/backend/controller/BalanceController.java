@@ -9,11 +9,7 @@ import com.backend.service.BalanceService;
 import com.backend.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("dev/v1/balance")
@@ -26,14 +22,23 @@ public class BalanceController {
     PeopleService peopleService;
 
     @GetMapping("listall")
-    public ResponseEntity<?> listBalance() {
-        return ResponseEntity.ok(balanceService.listBalance());
+    public ResponseEntity<?> listBalance(@RequestHeader String token) {
+        try{
+            PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
+            if (!peopleModel.getRole().equals(PeopleModel.Role.admin)){
+                return ResponseEntity.badRequest().body(new GeneralResponse("User does not have rights to acccess page"));
+            }else{
+                return ResponseEntity.ok(balanceService.listBalance()); // keep this
+            }
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
+        }
     }
 
     @GetMapping("find")
-    public ResponseEntity<?> listBalanceByPeopleId(@RequestHeader String Token)  {
+    public ResponseEntity<?> listBalanceByPeopleId(@RequestHeader String token)  {
         try{
-            Long id = peopleService.getIdByToken(Token);
+            Long id = peopleService.getIdByToken(token);
             PeopleModel peopleModel = peopleService.getPeopleById(id);
             return ResponseEntity.ok(balanceService.getBalanceByPeopleId(peopleModel));
         }catch (Exception e){
