@@ -1,9 +1,11 @@
 package com.backend.service;
 
 
+import com.backend.configuration.CustomException;
 import com.backend.model.MachineModel;
 import com.backend.model.StorageModel;
 import com.backend.repo.StorageRepo;
+import com.backend.request.StorageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +26,24 @@ public class StorageService {
     }
 
     // create balance alongside people
-    public void createBalance (MachineModel machineModel) {
+    public void createStorage (MachineModel machineModel) {
         StorageModel storageModel = StorageModel.builder()
                 .machineModel(machineModel)
                 .qtyAA(0)
                 .qtyAAA(0)
                 .build();
+        storageRepo.save(storageModel);
+    }
+
+    public void updateStorage(StorageRequest storageRequest) throws Exception {
+        StorageModel storageModel = storageRepo.getStorageByMachineId(storageRequest.getMachineId()).orElseThrow(()->
+                new CustomException("Storage does not exist"));
+        if (storageRequest.getQtyAA() != null) {
+            storageModel.setQtyAA(storageRequest.getQtyAA());
+        }
+        if (storageRequest.getQtyAAA() != null) {
+            storageModel.setQtyAAA(storageRequest.getQtyAAA());
+        }
         storageRepo.save(storageModel);
     }
 
