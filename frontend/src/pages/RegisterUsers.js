@@ -36,6 +36,7 @@ const RegisterUsers = () => {
       );
       console.log(response.data);
       actions.resetForm();
+      setAddressLabel("");
       setSuccessMsg("Registration Successful!");
     } catch (error) {
       console.log(error.response);

@@ -45,17 +45,18 @@ function App() {
 
               {/* Users Route */}
               <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                <Route path="/reportMachine" element={<ReportMachine />}></Route>
                 <Route path="/points" element={<Points />}></Route>
               </Route>
 
-
               {/* Collector Route */}
               <Route element={<RequireAuth allowedRoles={[ROLES.Collector]} />}>
-                <Route path="/reportMachine" element={<ReportMachine />}></Route>
                 <Route path="/viewTask" element={<ViewTask />}></Route>
               </Route>
 
+              {/* Shared User & Collector Route */}
+              <Route element={<RequireAuth allowedRoles={[ROLES.Collector, ROLES.User]} />}>
+                <Route path="/reportMachine" element={<ReportMachine />}></Route>
+              </Route>
 
               {/* Admin Route */}
               <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
