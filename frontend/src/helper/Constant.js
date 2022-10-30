@@ -40,6 +40,11 @@ export const TASK_ENDPOINTS = {
   Create: "/dev/v1/task/create",
 }
 
+export const LOCATION_ENDPOINTS = {
+  GetAll: "/dev/v1/location/listall",
+  GetDistrict: "/dev/v1/location/getdistrict?postcode=",
+}
+
 
 export const ROLES = {
   User: "user",
