@@ -9,6 +9,8 @@ import com.backend.service.MachineService;
 
 import java.util.List;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,7 +58,7 @@ public class MachineController {
     // update status
     @PostMapping("/update")
     public ResponseEntity<GeneralResponse> machineUpdate(@RequestHeader String token,
-            @RequestBody MachineRequest machineRequest) throws CustomException {
+            @RequestBody MachineRequest machineRequest) throws CustomException, MessagingException {
         machineService.getAdminByToken(token);
         machineService.updateMachineStatus(machineRequest);
         return ResponseEntity.ok(new GeneralResponse("Update success!"));
@@ -74,7 +76,7 @@ public class MachineController {
     // update currentLoad(from vending machine side)
     @PostMapping("/update/currentload")
     public ResponseEntity<GeneralResponse> updateCurrentLoad(@RequestHeader String token,
-            @RequestBody MachineRequest machineRequest) throws CustomException {
+            @RequestBody MachineRequest machineRequest) throws CustomException, MessagingException {
         machineService.updateCurrentLoad(machineRequest);
         return ResponseEntity.ok(new GeneralResponse("Current Load Updated!"));
     }
@@ -86,7 +88,4 @@ public class MachineController {
         machineService.updateStatus(machineRequest);
         return ResponseEntity.ok(new GeneralResponse("Status updated!"));
     }
-    // send email notifications if current load reach 80%
-    // current storage/capacity = %
-
 }
