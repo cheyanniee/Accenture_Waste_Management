@@ -39,6 +39,9 @@ export const BATTERY_ENDPOINTS = {
 export const TASK_ENDPOINTS = {
   GetAll: "/dev/v1/task/listall",
   Create: "/dev/v1/task/create",
+  GetByID: "/dev/v1/task/collector",
+  Collected: "/dev/v1/task/machine/collected/",
+  Delivered: "/dev/v1/task/collector/delivered/",
 }
 
 export const LOCATION_ENDPOINTS = {
