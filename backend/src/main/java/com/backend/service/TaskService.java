@@ -87,4 +87,20 @@ public class TaskService {
         taskRepo.delete(task);
         return true;
     }
+
+    public boolean updateDeliveredTaskByCollectorId(Long taskId, String token) throws CustomException {
+        // if update failed, throws exception
+        if (taskRepo.updateDeliveredTaskByCollectorId(ZonedDateTime.now(ZoneId.of("Asia/Singapore")), taskId,
+                peopleService.getIdByToken(token)) == 0)
+            throw new CustomException("No task delivered");
+
+        return true;
+    }
+
+    public boolean updateCollectedTime(Long taskId, String token) throws CustomException {
+
+        if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of("Asia/Singapore")), taskId) == 0)
+            throw new CustomException("Task update collected fails!");
+        return true;
+    }
 }
