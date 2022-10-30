@@ -15,11 +15,4 @@ public interface RateRepo extends JpaRepository<RateModel, Integer> {
     @Query("select rate from RateModel rate where type=?1")
     Optional<RateModel> getRateByType(String type);
 
-    @Modifying
-    @Transactional
-    @Query("delete from RateModel where id = ?1")
-    Integer deleteRateById(Integer id);
-
-    @Transactional
-    List<RateModel> deleteByType(String type);
 }

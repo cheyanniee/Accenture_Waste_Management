@@ -99,7 +99,7 @@ public class TransactionController {
                     .machineId(confirmTransactionRequest.getMachineId())
                     .chooseType(confirmTransactionRequest.getChooseType())
                     .build();
-            transactionService.updateTransactionByYes(transactionRequest, transactionId);
+            transactionService.updateTransactionByYesExchange(transactionRequest, transactionId);
             return ResponseEntity.ok(new GeneralResponse("Transaction done, balance updated."));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
