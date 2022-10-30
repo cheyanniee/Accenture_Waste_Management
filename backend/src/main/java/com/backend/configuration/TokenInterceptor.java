@@ -16,8 +16,9 @@ public class TokenInterceptor implements HandlerInterceptor {
     PeopleService peopleService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        return HandlerInterceptor.super.preHandle(request, response, handler);
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        // return HandlerInterceptor.super.preHandle(request, response, handler);
         String currentURL = String.valueOf(request.getRequestURL());
 
         if (request.getMethod().equals("OPTIONS")) {
@@ -27,9 +28,11 @@ public class TokenInterceptor implements HandlerInterceptor {
                 || currentURL.endsWith("people/register/admin") || currentURL.endsWith("people/register/collector")) {
             return true;
         }
-
+        if (currentURL.contains("machine/listall")) {
+            return true;
+        }
         String token = request.getHeader("token");
-//        String userId = request.getHeader("userId");
+        // String userId = request.getHeader("userId");
 
         if (token == null || token.isBlank()) {
             throw new CustomException("No token");
@@ -46,12 +49,14 @@ public class TokenInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+            ModelAndView modelAndView) throws Exception {
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+            throws Exception {
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 }
