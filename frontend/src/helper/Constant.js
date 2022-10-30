@@ -19,6 +19,7 @@ export const BALANCE_ENDPOINTS = {
 
 export const TRANSACTION_ENDPOINTS = {
   GetAll: "/dev/v1/transaction/listall",
+  GetByID: "/dev/v1/transaction/find",
 }
 
 export const MACHINE_ENDPOINTS = {
