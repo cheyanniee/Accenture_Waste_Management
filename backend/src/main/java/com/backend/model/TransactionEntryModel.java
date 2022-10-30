@@ -23,6 +23,10 @@ public class TransactionEntryModel {
     @JoinColumn(name="battery_id")
     BatteryModel batteryModel;
 
+    @ManyToOne
+    @JoinColumn(name="transaction_id")
+    TransactionModel transactionModel;
+
     Integer quantity;
 
 }

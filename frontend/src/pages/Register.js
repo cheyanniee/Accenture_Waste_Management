@@ -24,6 +24,7 @@ const Register = () => {
     try {
       const response = await myAxios.post(PEOPLE_ENDPOINTS.Register, values);
       console.log(response.data);
+      setAddressLabel("");
       actions.resetForm();
       navigate("/login", {
         state: { message: "Registration successful! Please Login to continue" },

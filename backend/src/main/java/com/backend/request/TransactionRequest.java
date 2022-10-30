@@ -1,20 +1,29 @@
 package com.backend.request;
 
+import com.backend.model.MachineModel;
 import com.backend.model.PeopleModel;
 import com.backend.model.TransactionEntryModel;
+import com.backend.model.TransactionModel;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TransactionRequest {
 
-    Long id;
-    PeopleModel peopleModel;
-//    MachineModel machineModel;
-
-    List<TransactionEntryModel> transactionEntry = new ArrayList<>();
-    Integer balanceChange;
+   // PeopleModel peopleModel;
+   // MachineModel machineModel;
+    Long peopleId;
+    Integer machineId;
+   // List<TransactionEntryModel> transactionEntry = new ArrayList<>();
+    Float balanceChange;
     ZonedDateTime dateAndTime;
+    TransactionModel.Choose chooseType;
 }
