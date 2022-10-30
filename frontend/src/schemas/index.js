@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { MACHINE_STATUS } from "../helper/Constant";
 
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 // min 5 characters, 1 upper case letter, 1 lower case letter and 1 number
@@ -41,7 +42,7 @@ export const INITIAL_MACHINE_FORM_VALUES = {
   name: "",
   currentLoad: "",
   capacity: "",
-  status: "",
+  status: MACHINE_STATUS[0],
   postcode: "",
   address: "",
   unitNumber: "",
@@ -184,6 +185,7 @@ export const userDetailsSchema = yup.object().shape({
 });
 
 export const registerMachineSchema = yup.object().shape({
+  id: yup.string(),
   name: yup.string(),
   currentLoad: yup
    .number()

@@ -6,19 +6,18 @@ import axios, { config } from "../api/axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
-import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, ROLES } from "../helper/Constant";
+import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, TASK_ENDPOINTS, ROLES } from "../helper/Constant";
 
 const AssignTask = () => {
   const { auth } = useAuth();
   const [data, setData] = useState([]);
   const [apiSearch, setApiSearch] = useState([]);
-  const [message, setMessage] = useState();
+  const [successMsg, setSuccessMsg] = useState();
   const [errMsg, setErrMsg] = useState();
 
   const [machine, setMachine] = useState("");
   const [machineList, setMachineList] = useState("");
 
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -37,23 +36,24 @@ const AssignTask = () => {
 
     const fetchMachines = async () => {
       try {
-        const response = await axios.get(
-          MACHINE_ENDPOINTS.GetAll,
-          config({ token: auth.token })
-        );
-        setMachineList(response?.data);
-        console.log("Machines: ", response?.data);
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    };
+       const response = await axios.get(
+         MACHINE_ENDPOINTS.GetAll,
+         config({ token: auth.token })
+       );
+       setMachineList(response?.data);
+       console.log("Machines: ", response?.data);
+     } catch (error) {
+       console.log("Error: ", error);
+     }
+    }
 
+  useEffect(() => {
     fetchData();
     fetchMachines();
   }, [auth.token]);
 
   const handleFilter = (e) => {
-    setMessage("");
+    setSuccessMsg("");
     setErrMsg("");
     const inputText = e.target.value;
     const filterResult = apiSearch.filter((item) => {
@@ -68,10 +68,29 @@ const AssignTask = () => {
       : setData([{ officialId: "No result for " + inputText }]);
   };
 
-  const handleUpdate = async (id) => {
+  const handleUpdate = async (email) => {
+    setErrMsg("");
+    setSuccessMsg("");
 
-    console.log("Task: ", id, machine, moment().format("DD-MM-YYYY HH:mm:ss"));
+    const params = {
+      collectorEmail: email,
+      machineId: machine,
+    }
 
+    console.log("Params: ", params);
+
+    try {
+      const response = await axios.post(
+         TASK_ENDPOINTS.Create,
+         params,
+         config({ token: auth.token })
+      );
+      console.log(response.data);
+      fetchData();
+    } catch (error) {
+      console.log(error.response);
+      setErrMsg(error.response.data.message);
+    }
   };
 
   return (
@@ -99,7 +118,7 @@ const AssignTask = () => {
                   <label htmlFor="officialId light-300">
                     Collector's Name
                   </label>
-                  {message && <em className="text-success px-2">{message}</em>}
+                  {successMsg && <em className="text-success px-2">{successMsg}</em>}
                   {errMsg && <em className="text-danger px-2">{errMsg}</em>}
                 </div>
               </div>
@@ -109,42 +128,42 @@ const AssignTask = () => {
         <div className="row align-items-start ">
           <div className=" col-lg-10 m-auto text-left justify-content-center">
             <div className="row align-items-start text-primary fs-4 mb-3">
-              <div className="col-2">Official ID</div>
               <div className="col-2">Full Name</div>
+              <div className="col-3">Email</div>
               <div className="col-2">Region</div>
-              <div className="col-2">Machine</div>
-              <div className="col-2">Assign</div>
+              <div className="col-3">Machine</div>
+              <div className="col-1">Assign</div>
             </div>
             {data.map((patient) => {
-              const { id, firstName, lastName, officialId, locationModel } = patient;
+              const { id, firstName, lastName, email, locationModel } = patient;
               return (
                 <div key={id} className="row align-items-start mb-2">
-                  <div className="col-2">{officialId}</div>
                   <div className="col-2">
                     {firstName} {lastName}
                   </div>
+                  <div className="col-3">{email}</div>
                   <div className="col-2">
                     {locationModel.districtModel.region}
                   </div>
-                  <div className="col-2">
-                    {firstName && (
+                  <div className="col-3">
+                    {email && (
                       <select
                         className="form-select"
                         onChange={(e) => setMachine(e.target.value)}
                       >
                         <option>Select Machine</option>
                         {machineList.map((unit) => (
-                          <option key={unit.id}>{unit.name}</option>
+                          <option key={unit.id} value={unit.id}>{unit.name}</option>
                         ))}
                       </select>
                     )}
                   </div>
-                  <div className="col-2">
-                    {firstName && (
+                  <div className="col-1">
+                    {email && (
                       <Link>
                         <i
                           className="bx bx-pencil bx-sm"
-                          onClick={() => handleUpdate(id)}
+                          onClick={() => handleUpdate(email)}
                         />
                       </Link>
                     )}

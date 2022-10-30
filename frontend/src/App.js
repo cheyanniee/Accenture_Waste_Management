@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import './App.css';
+import "./App.css";
 
 import { ROLES } from "./helper/Constant";
 
@@ -25,14 +25,12 @@ import RegisterUsers from "./pages/RegisterUsers";
 
 import UserDetails from "./pages/UserDetails";
 
-
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-
             {/* public routes */}
             <Route path="/login" element={<Login />}></Route>
             <Route path="/register" element={<Register />}></Route>
@@ -45,28 +43,48 @@ function App() {
 
               {/* Users Route */}
               <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
-                <Route path="/reportMachine" element={<ReportMachine />}></Route>
                 <Route path="/points" element={<Points />}></Route>
               </Route>
 
-
               {/* Collector Route */}
               <Route element={<RequireAuth allowedRoles={[ROLES.Collector]} />}>
-                <Route path="/reportMachine" element={<ReportMachine />}></Route>
                 <Route path="/viewTask" element={<ViewTask />}></Route>
               </Route>
 
+              {/* Shared User & Collector Route */}
+              <Route
+                element={
+                  <RequireAuth allowedRoles={[ROLES.Collector, ROLES.User]} />
+                }
+              >
+                <Route
+                  path="/reportMachine"
+                  element={<ReportMachine />}
+                ></Route>
+              </Route>
 
               {/* Admin Route */}
               <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
                 <Route path="/assignTask" element={<AssignTask />}></Route>
                 <Route path="/machines" element={<Machines />}></Route>
-                <Route path="/batteryUpdate" element={<BatteryUpdate />}></Route>
-                <Route path="/registerUsers" element={<RegisterUsers />}></Route>
+                <Route
+                  path="/batteryUpdate"
+                  element={<BatteryUpdate />}
+                ></Route>
+                <Route
+                  path="/registerUsers"
+                  element={<RegisterUsers />}
+                ></Route>
               </Route>
 
               {/* General Protected Route */}
-              <Route element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Collector, ROLES.Admin]} />}>
+              <Route
+                element={
+                  <RequireAuth
+                    allowedRoles={[ROLES.User, ROLES.Collector, ROLES.Admin]}
+                  />
+                }
+              >
                 <Route path="/userDetails" element={<UserDetails />}></Route>
               </Route>
             </Route>

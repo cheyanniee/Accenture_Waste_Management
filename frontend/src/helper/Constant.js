@@ -24,13 +24,18 @@ export const TRANSACTION_ENDPOINTS = {
 export const MACHINE_ENDPOINTS = {
   GetAll: "/dev/v1/machine/listall",
   Create: "/dev/v1/machine/add",
-  Update: "/dev/v1/machine/listall",
+  Update: "/dev/v1/machine/update",
 }
 
 export const BATTERY_ENDPOINTS = {
   GetAll: "/dev/v1/battery/listall",
   Create: "/dev/v1/battery/create",
   Update: "/dev/v1/battery/update",
+}
+
+export const TASK_ENDPOINTS = {
+  GetAll: "/dev/v1/task/listall",
+  Create: "/dev/v1/task/create",
 }
 
 
@@ -40,9 +45,11 @@ export const ROLES = {
   Admin: "admin",
 };
 
+export const FAULTY_MACHINE = "FAULTY";
+
 export const MACHINE_STATUS = [
   "NORMAL",
-  "FAULTY",
+  FAULTY_MACHINE,
 ];
 
 export const REGIONS = [
