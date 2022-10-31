@@ -116,10 +116,10 @@ public class TaskService {
         // update Task table on time collected
         if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of(ASIA_SINGAPORE)), taskId) == 0)
             throw new CustomException("Task update collected fails!");
-        TaskModel task = getTaskById(taskId);
-
         // update machine table currentLoad = 0;
-        machineRepo.updateCurrentLoad(0F, task.getMachine().getId());
+        // TaskModel task = getTaskById(taskId);
+
+        // machineRepo.updateCurrentLoad(0F, task.getMachine().getId());
         return true;
     }
 
