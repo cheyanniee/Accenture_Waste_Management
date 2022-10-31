@@ -9,6 +9,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//Purpose:
+//    - Create and manage token Interceptors
+//    - Control access to URL endpoints
+//    - Validate token before access endpoints
+//
+//Author:
+//    - Liu Fang, Xu Hong Lew, Alex Lim
+
 @Configuration
 public class TokenInterceptor implements HandlerInterceptor {
 

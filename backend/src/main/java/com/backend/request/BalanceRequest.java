@@ -1,9 +1,14 @@
 package com.backend.request;
 
-import com.backend.model.PeopleModel;
 import lombok.*;
 
-import javax.persistence.*;
+/*
+    Purpose:
+        - Object to be used for sending the necessary fields and data for Balance-related APIs
+
+    Author:
+        - Lew Xu Hong
+*/
 
 @Getter
 @Setter
@@ -12,7 +17,6 @@ import javax.persistence.*;
 @Builder
 public class BalanceRequest {
 
-    //PeopleModel peopleModel;
     Long peopleId;
     Float currentBalance;
 }

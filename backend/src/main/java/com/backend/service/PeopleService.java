@@ -58,29 +58,31 @@ public class PeopleService {
             throw new Exception("Official ID already exists.");
         }
 
-        // creating locationRequest from peopleRequest field
+        /*
+            Purpose:
+            - For creating the locationModel by using the input from PeopleRequest
+            - Building a new LocationRequest
+            Author:
+            - Lew Xu Hong
+        */
         LocationRequest locationRequest = LocationRequest.builder()
                 .address(peopleRequest.getAddress())
                 .postcode(peopleRequest.getPostcode())
                 .build();
-                
-        // locationService.createLocation(locationRequest);
-        // LocationModel locationNew;
-        // try {
-        // locationNew =
-        // locationService.findLocationByPostcode(locationRequest.getPostcode());
-        // } catch (Exception e) {
-        // locationService.createLocation(locationRequest);
-        // locationNew =
-        // locationService.findLocationByPostcode(locationRequest.getPostcode());
-        // }
+
+        /*
+            Purpose:
+            - (explanation here please)
+            Author:
+            - Liu Fang
+        */
         LocationModel locationNew = locationService.bindLocation(locationRequest);
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         PeopleModel peopleNew = PeopleModel.builder()
                 .firstName(peopleRequest.getFirstName())
                 .lastName(peopleRequest.getLastName())
-                .locationModel(locationNew) // please help with this, really sorry
+                .locationModel(locationNew)
                 .unitNumber(peopleRequest.getUnitNumber())
                 .email(peopleRequest.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(peopleRequest.getPassword()))
@@ -94,6 +96,12 @@ public class PeopleService {
         balanceService.createBalance(peopleNew);
     }
 
+    /*
+       Purpose:
+       - To create a PeopleModel with Role set as collector
+       Author:
+       - Lew Xu Hong
+   */
     public void createCollector(PeopleRequest peopleRequest) throws Exception {
         createUser(peopleRequest);
         PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId())
@@ -103,6 +111,12 @@ public class PeopleService {
         balanceService.deleteBalance(peopleNew);
     }
 
+    /*
+        Purpose:
+        - To create a PeopleModel with Role set as admin
+        Author:
+        - Lew Xu Hong
+    */
     public void createAdmin(PeopleRequest peopleRequest) throws Exception {
         createUser(peopleRequest);
         PeopleModel peopleNew = peopleRepo.getPeopleByOfficialId(peopleRequest.getOfficialId())
@@ -110,7 +124,6 @@ public class PeopleService {
         peopleNew.setRole(PeopleModel.Role.admin);
         peopleRepo.save(peopleNew);
         balanceService.deleteBalance(peopleNew);
-
     }
 
     public Jws<Claims> validateJWT(String token) {
@@ -227,16 +240,6 @@ public class PeopleService {
         // update location
         if (peopleRequest.getPostcode() != null && !peopleRequest.getPostcode().equals("")) {
             if (peopleRequest.getAddress() != null && !peopleRequest.getAddress().equals("")) {
-                // LocationModel location = people.getLocationModel();
-                // location.setPostcode(peopleRequest.getPostcode());
-                // location.setAddress(peopleRequest.getAddress());
-                //
-                // //updating districtModel
-                // String postCode = peopleRequest.getPostcode().substring(0,2);
-                // DistrictModel districtModel =
-                // districtService.findDistrictByPostalSector(postCode);
-                // people.getLocationModel().setDistrictModel(districtModel);
-                
                 LocationRequest locationRequest = LocationRequest.builder()
                         .address(peopleRequest.getAddress())
                         .postcode(peopleRequest.getPostcode())
@@ -244,31 +247,7 @@ public class PeopleService {
                 people.setLocationModel(locationService.bindLocation(locationRequest));
             }
         }
-        peopleRepo.save(people);// update the data as it has Primary key
-
-        // updating location
-        // LocationModel location =
-        // locationRepo.findById(people.getLocationModel().getId())
-        // .orElseThrow(() -> new CustomException("Address is not found!"));
-        //
-        // if(peopleRequest.getLocationModel().getAddress() != null &&
-        // !peopleRequest.getLocationModel().getAddress().equals("")){
-        // location.setAddress(peopleRequest.getLocationModel().getAddress());
-        // }
-        // if(peopleRequest.getLocationModel().getPostcode() != null &&
-        // !peopleRequest.getLocationModel().getPostcode().equals("")){
-        // location.setPostcode(peopleRequest.getLocationModel().getPostcode());
-        // }
-        // if(peopleRequest.getLocationModel().getAreaName() != null &&
-        // !peopleRequest.getLocationModel().getAreaName().equals("")){
-        // location.setAreaName(peopleRequest.getLocationModel().getAreaName());
-        // }
-        // if(peopleRequest.getLocationModel().getRegionName() != null &&
-        // !peopleRequest.getLocationModel().getRegionName().equals("")){
-        // location.setRegionName(peopleRequest.getLocationModel().getRegionName());
-        // }
-        //
-        // locationRepo.save(location);
+        peopleRepo.save(people);
         return true;
     }
 
@@ -284,7 +263,6 @@ public class PeopleService {
     public PeopleModel findPeopleByEmail(String email) throws CustomException {
         return peopleRepo.getPeopleByEmail(email).orElseThrow(() -> new CustomException("Email not registered."));
     }
-
 }
 
 

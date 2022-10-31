@@ -61,7 +61,7 @@ function App() {
               <Route path="/insertRecycling" element={<InsertRecycling />}></Route>
               <Route path="/confirmRecycling" element={<ConfirmRecycling />}></Route>
               <Route path="/cancelRecycling" element={<CancelRecycling />}></Route>
-              <Route path="/inputExchange" element={<ExchangeInput />}></Route>
+              <Route path="/exchangeInput" element={<ExchangeInput />}></Route>
               <Route path="/confirmExchange" element={<ConfirmExchange />}></Route>
               <Route path="/collectExchange" element={<CollectExchange />}></Route>
             </Route>

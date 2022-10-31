@@ -1,11 +1,14 @@
 package com.backend.request;
 
-import com.backend.model.MachineModel;
 import lombok.*;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+/*
+    Purpose:
+        - Object to be used for sending the necessary fields and data for Storage-related APIs
 
+    Author:
+        - Lew Xu Hong
+*/
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +16,6 @@ import javax.persistence.OneToOne;
 @Builder
 public class StorageRequest {
 
-    //MachineModel machineModel;
     Integer machineId;
     Integer qtyAA;
     Integer qtyAAA;

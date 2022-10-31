@@ -65,3 +65,5 @@ export const ACTION_TYPES = {
     Exchange: "exchange",
     Recycle: "recycle",
 }
+
+export const BATTERY_EXCHANGE_TYPES = ["AA", "AAA"];

@@ -39,15 +39,31 @@ const UserAction = () => {
             );
             setTransaction(response?.data?.id);
             console.log("TransactionID: ", response?.data?.id);
-            navigate("/insertRecycling", { replace: true });
         } catch (error) {
             console.log("Error: ", error);
             navigate("/", { replace: true });
+            return;
         }
+        navigate("/insertRecycling", { replace: true });
     }
 
-    const exchange = () => {
-        navigate("/inputExchange", { replace: true });
+    const exchange = async () => {
+        const params = {};
+
+        try {
+            const response = await axios.post(
+                TRANSACTION_ENDPOINTS.StartE,
+                params,
+                config({ token: auth.token })
+            );
+            setTransaction(response?.data?.id);
+            console.log("TransactionID: ", response?.data?.id);
+        } catch (error) {
+            console.log("Error: ", error);
+            navigate("/", { replace: true });
+            return;
+        }
+        navigate("/exchangeInput", { replace: true });
     }
 
     return (

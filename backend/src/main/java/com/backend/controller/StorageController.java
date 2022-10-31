@@ -1,12 +1,8 @@
 package com.backend.controller;
 
 
-import com.backend.configuration.CustomException;
 import com.backend.model.MachineModel;
 import com.backend.model.PeopleModel;
-import com.backend.model.StorageModel;
-import com.backend.repo.StorageRepo;
-import com.backend.request.PeopleRequest;
 import com.backend.request.StorageRequest;
 import com.backend.response.GeneralResponse;
 import com.backend.service.MachineService;
@@ -16,15 +12,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/*
+    Purpose:
+        - APIs for StorageModel-related operations
+        - Allow People (Admin) to view all existing StorageModels, find a StorageModel by machineId,
+        and update a specific StorageModel
+
+    Restriction:
+        - Only those with ROLES.Admin will be able to access the APIs.
+
+    Endpoints:
+        - dev/v1/storage/listall
+        - dev/v1/storage/find
+        - dev/v1/storage/update
+
+    Author:
+        - Lew Xu Hong (all related classes i.e. Model, Repo, Service, Request, Controller)
+*/
+
 @RestController
 @RequestMapping("dev/v1/storage")
 public class StorageController {
 
     @Autowired
     StorageService storageService;
-
-    @Autowired
-    StorageRepo storageRepo;
 
     @Autowired
     MachineService machineService;
@@ -51,9 +62,14 @@ public class StorageController {
     public ResponseEntity<?> listStorageByMachineId(@RequestBody StorageRequest storageRequest,
                                                    @RequestHeader String token )  {
         try{
-            Integer id = storageRequest.getMachineId();
-            MachineModel machineModel = machineService.getMachineById(id);
-            return ResponseEntity.ok(storageService.getStorageByMachineId(machineModel));
+            PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
+            if (!peopleModel.getRole().equals(PeopleModel.Role.admin)){
+                return ResponseEntity.badRequest().body(new GeneralResponse("User does not have rights to acccess page"));
+            }else{
+                Integer id = storageRequest.getMachineId();
+                MachineModel machineModel = machineService.getMachineById(id);
+                return ResponseEntity.ok(storageService.getStorageByMachineId(machineModel));
+            }
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
@@ -71,13 +87,4 @@ public class StorageController {
             return ResponseEntity.ok(new GeneralResponse("Storage updated successfully."));
         }
     }
-
-    @GetMapping("test")
-    public void checking() throws Exception {
-        MachineModel machineModel = machineService.getMachineById(2);
-        StorageModel storageModel = storageService.getStorageByMachineId(machineModel);
-        storageModel.setQtyAA(storageModel.getQtyAA() - 1);
-        storageRepo.save(storageModel);
-    }
-
 }
