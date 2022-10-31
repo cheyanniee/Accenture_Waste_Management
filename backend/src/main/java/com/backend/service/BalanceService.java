@@ -12,6 +12,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/*
+    Purpose:
+        - Service methods to be used in Balance-related APIs or assist in other functions
+        - Major functions: checking if balance is enough for exchange, updating balance when transaction is confirmed
+
+    Author:
+        - Lew Xu Hong
+*/
+
 @Service
 public class BalanceService {
 

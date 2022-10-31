@@ -10,6 +10,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/*
+    Purpose:
+        - Service methods to be used in Storage-related APIs or assist in other functions
+        - Major functions: updating number of batteries of certain type in storage after transaction (exchange) is confirmed
+
+    Author:
+        - Lew Xu Hong
+*/
+
 @Service
 public class StorageService {
 
@@ -34,6 +43,7 @@ public class StorageService {
         storageRepo.save(storageModel);
     }
 
+    //manually update StorageModel
     public void updateStorage(StorageRequest storageRequest) throws Exception {
         StorageModel storageModel = storageRepo.getStorageByMachineId(storageRequest.getMachineId()).orElseThrow(()->
                 new CustomException("Storage does not exist"));

@@ -69,7 +69,7 @@ public class MachineService {
                 .build();
 
         machineRepo.save(newMachine);
-        storageService.createStorage(newMachine);
+        storageService.createStorage(newMachine); //to ensure Storage is created and linked to Machine when created
         return true;
     }
 

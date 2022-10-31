@@ -6,6 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+/*
+    Purpose:
+        - Repo to execute SQL queries for TransactionEntry
+
+    Author:
+        - Lew Xu Hong
+*/
 
 public interface TransactionEntryRepo extends JpaRepository<TransactionEntryModel, Long> {
 

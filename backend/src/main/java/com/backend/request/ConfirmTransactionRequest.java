@@ -5,6 +5,14 @@ import lombok.*;
 
 import java.time.ZonedDateTime;
 
+/*
+    Purpose:
+        - Object to be used for sending the necessary fields and data for Transaction-related APIs
+        - Specifically for create/yes and create/no APIs in TransactionController
+
+    Author:
+        - Lew Xu Hong
+*/
 @Getter
 @Setter
 @NoArgsConstructor

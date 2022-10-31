@@ -7,7 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
+/*
+    Purpose:
+        - Repo to execute SQL queries for Balance
 
+    Author:
+        - Lew Xu Hong
+*/
 public interface BalanceRepo extends JpaRepository<BalanceModel, Long> {
 
     @Query("select balance from BalanceModel balance where people_id=?1")

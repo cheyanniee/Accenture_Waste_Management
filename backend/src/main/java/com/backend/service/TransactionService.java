@@ -16,7 +16,15 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Purpose:
+        - Service methods to be used in Transaction-related APIs or assist in other functions
+        - Major functions: creating a transaciton when confirmed, then update the related changes in balance and storage,
+        deleting a transaction when cancelled
 
+    Author:
+        - Lew Xu Hong
+*/
 
 @Service
 public class TransactionService {

@@ -7,6 +7,14 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+
+/*
+    Purpose:
+        - Entity to match with table in database (Transaction)
+
+    Author:
+        - Lew Xu Hong
+*/
 @Entity
 @Table(name="transaction")
 @Builder
