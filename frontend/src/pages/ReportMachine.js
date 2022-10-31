@@ -3,17 +3,32 @@ import { Link } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 import axios, { config } from "../api/axios";
-import { MACHINE_ENDPOINTS, FAULTY_MACHINE } from "../helper/Constant";
+import { MACHINE_ENDPOINTS, NORMAL_MACHINE, FAULTY_MACHINE } from "../helper/Constant";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+/*
+    Purpose:
+        - Report a Machine as Faulty
+
+    Restriction:
+        - Only those with ROLES.User or ROLES.Collector will be able to access this page.
+
+    Endpoints:
+        - MACHINE_ENDPOINTS.GetAll
+        - MACHINE_ENDPOINTS.UpdateStatus
+
+    Author:
+        - Cheyanne Lim
+*/
+
 const ReportMachine = () => {
-  const { auth } = useAuth();
-  const [data, setData] = useState([]);
-  const [apiSearch, setApiSearch] = useState([]);
-  const [message, setMessage] = useState();
-  const [errMsg, setErrMsg] = useState();
+    const { auth } = useAuth();
+    const [data, setData] = useState([]);
+    const [apiSearch, setApiSearch] = useState([]);
+    const [message, setMessage] = useState();
+    const [errMsg, setErrMsg] = useState();
 
   const fetchMachines = async () => {
       try {
@@ -23,7 +38,7 @@ const ReportMachine = () => {
         );
         response?.data.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
 
-        var newData = [];
+        let newData = [];
         response?.data.map((machine) => {
             const percentage = (machine.currentLoad / machine.capacity) * 100;
             machine.percentage = percentage.toFixed().toString() + "%";
@@ -35,9 +50,11 @@ const ReportMachine = () => {
             newData.push(machine);
         });
 
-        setApiSearch(newData);
-        setData(newData);
-        console.log("Machines: ", response?.data);
+        const filteredData = newData?.filter((machine) => (machine.status === NORMAL_MACHINE));
+
+        setApiSearch(filteredData);
+        setData(filteredData);
+        console.log("Machines: ", filteredData);
       } catch (error) {
         console.log("Error: ", error);
       }

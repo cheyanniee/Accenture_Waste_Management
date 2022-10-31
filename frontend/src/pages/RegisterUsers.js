@@ -4,12 +4,29 @@ import { useFormik } from "formik";
 import moment from "moment";
 import axios from "axios";
 
+import useAuth from "../hooks/useAuth";
 import { default as myAxios, config } from "../api/axios";
+import { PEOPLE_ENDPOINTS, ROLES } from "../helper/Constant";
+import { INITIAL_REGISTER_USERS_FORM_VALUES, registerUsersSchema } from "../schemas";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import useAuth from "../hooks/useAuth";
-import { INITIAL_REGISTER_USERS_FORM_VALUES, registerUsersSchema } from "../schemas";
-import { PEOPLE_ENDPOINTS, ROLES } from "../helper/Constant";
+
+/*
+    Purpose:
+        - Admins can Register an Account for Collectors and Admins
+
+    Restriction:
+        - Only those with ROLES.Admin will be able to access this page.
+
+    Endpoints:
+        - PEOPLE_ENDPOINTS.RegisterCollector
+        - PEOPLE_ENDPOINTS.RegisterAdmin
+        - https://developers.onemap.sg/commonapi/search
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const RegisterUsers = () => {
   const { auth } = useAuth();

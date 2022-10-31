@@ -3,13 +3,29 @@ import { useNavigate, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import moment from "moment";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 import { default as myAxios } from "../api/axios";
+import { PEOPLE_ENDPOINTS } from "../helper/Constant";
+import { INITIAL_REGISTER_FORM_VALUES, registerSchema } from "../schemas";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { INITIAL_REGISTER_FORM_VALUES, registerSchema } from "../schemas";
-import { PEOPLE_ENDPOINTS } from "../helper/Constant";
-import jwt_decode from "jwt-decode";
+
+/*
+    Purpose:
+        - Public can Register for an Account
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - PEOPLE_ENDPOINTS.Register
+        - https://developers.onemap.sg/commonapi/search
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const Register = () => {
   const [errMsg, setErrMsg] = useState("");
@@ -22,7 +38,10 @@ const Register = () => {
     console.log("params: ", values);
 
     try {
-      const response = await myAxios.post(PEOPLE_ENDPOINTS.Register, values);
+      const response = await myAxios.post(
+        PEOPLE_ENDPOINTS.Register,
+        values
+    );
       console.log(response.data);
       setAddressLabel("");
       actions.resetForm();

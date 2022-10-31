@@ -6,7 +6,23 @@ import axios, { config } from "../api/axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
-import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, TASK_ENDPOINTS, ROLES } from "../helper/Constant";
+import { TASK_ENDPOINTS, ROLES } from "../helper/Constant";
+
+/*
+    Purpose:
+        - View Task & Mark Completed / Delivered
+
+    Restriction:
+        - Only those with ROLES.Collector will be able to access this page.
+
+    Endpoints:
+        - TASK_ENDPOINTS.GetByID
+        - TASK_ENDPOINTS.Collected
+        - TASK_ENDPOINTS.Delivered
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const ViewTask = () => {
   const { auth } = useAuth();

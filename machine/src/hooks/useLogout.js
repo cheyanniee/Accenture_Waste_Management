@@ -10,7 +10,7 @@ import useAuth from "./useAuth";
         - NIL
 
     Endpoints:
-        - NIL
+        - PEOPLE_ENDPOINTS.Logout
 
     Author:
         - Alex Lim
