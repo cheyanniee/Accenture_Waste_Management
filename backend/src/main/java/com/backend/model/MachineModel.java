@@ -21,7 +21,7 @@ import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 public class MachineModel {
 
     public enum Status {
-        FAULTY, NORMAL
+        FAULTY, NORMAL, DELETED
     }
 
     @Id
