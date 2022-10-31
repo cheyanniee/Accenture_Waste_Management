@@ -26,11 +26,12 @@ export const TRANSACTION_ENDPOINTS = {
   StartE: "/dev/v1/transaction/create/start-e",
   Confirm: "/dev/v1/transaction/create/yes",
   Reject: "/dev/v1/transaction/create/no",
+  GetByID: "/dev/v1/transaction/find",
 }
 
 export const TRANSACTION_ENTRY_ENDPOINTS = {
   Create: "/dev/v1/transactionentry/create",
-  Find: "/dev/v1/transactionentry/find",
+  GetByID: "/dev/v1/transactionentry/find",
 }
 
 export const MACHINE_ENDPOINTS = {
@@ -58,3 +59,8 @@ export const ROLES = {
   Collector: "collector",
   Admin: "admin",
 };
+
+export const ACTION_TYPES = {
+    Exchange: "exchange",
+    Recycle: "recycle",
+}
