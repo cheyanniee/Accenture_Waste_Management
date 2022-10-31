@@ -1,10 +1,13 @@
 /*
     Purpose:
         - Save all endpoints and constants for easy access and change.
+
     Restriction:
         - NIL
+
     Endpoints:
         - All
+
     Author:
         - Cheyanne Lim
 */

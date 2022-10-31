@@ -8,7 +8,6 @@ import useAuth from "../hooks/useAuth";
 import { default as myAxios, config } from "../api/axios";
 import { INITIAL_MACHINE_FORM_VALUES, registerMachineSchema } from "../schemas";
 import {
-    PEOPLE_ENDPOINTS,
     MACHINE_ENDPOINTS,
     LOCATION_ENDPOINTS,
     ROLES,
@@ -18,6 +17,24 @@ import {
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
+/*
+    Purpose:
+        - Create and Edit Machines.
+
+    Restriction:
+        - Only those with ROLES.User will be able to access this page.
+
+    Endpoints:
+        - MACHINE_ENDPOINTS.GetAll
+        - MACHINE_ENDPOINTS.Create
+        - MACHINE_ENDPOINTS.Update
+        - LOCATION_ENDPOINTS.GetDistrict
+        - https://developers.onemap.sg/commonapi/search
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const Machines = () => {
     const { auth } = useAuth();
