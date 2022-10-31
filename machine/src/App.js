@@ -50,7 +50,7 @@ function App() {
               <Route path="/cancelRecycling" element={<CancelRecycling />}></Route>
               <Route path="/inputExchange" element={<ExchangeInput />}></Route>
               <Route path="/confirmExchange" element={<ConfirmExchange />}></Route>
-              <Route path="/collectExchange" element={<CollectExchange />}></Route>
+              <Route path="/cd mac" element={<CollectExchange />}></Route>
             </Route>
 
             {/* Collectors Route */}
