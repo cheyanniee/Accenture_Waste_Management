@@ -148,4 +148,8 @@ public class TaskService {
         taskRepo.save(task);
         return true;
     }
+
+    public List<TaskModel> getTaskbyMachineId(int machineId) {
+        return taskRepo.getTaskByMachineId(machineId);
+    }
 }
