@@ -4,34 +4,56 @@ import useRefreshToken from "../hooks/useRefreshToken";
 import useAuth from "../hooks/useAuth";
 import useLocalStorage from "../hooks/useLocalStorage";
 
+/*
+    Purpose:
+        - Persist Login
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Alex Lim
+*/
+
 const PersistLogin = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const { auth } = useAuth();
-  const refresh = useRefreshToken({ token: localStorage.getItem("token") });
-  const [persist] = useLocalStorage("persist", false);
+    const [isLoading, setIsLoading] = useState(true);
+    const { auth } = useAuth();
+    const refresh = useRefreshToken({ token: localStorage.getItem("token") });
+    const [persist] = useLocalStorage("persist", false);
 
-  useEffect(() => {
-    let isMounted = true;
+    useEffect(() => {
+        let isMounted = true;
 
-    const verifyRefreshToken = async () => {
-      console.log("calling refresh token in persist login");
-      try {
-        await refresh();
-      } catch (err) {
-        console.error(err);
-      } finally {
-        isMounted && setIsLoading(false);
-      }
-    };
+        const verifyRefreshToken = async () => {
+            console.log("calling refresh token in persist login");
 
-    !auth?.token && persist ? verifyRefreshToken() : setIsLoading(false);
+            try {
+                await refresh();
+            } catch (err) {
+                console.error(err);
+            } finally {
+                isMounted && setIsLoading(false);
+            }
+        };
 
-    return () => (isMounted = false);
-  }, [auth?.token, persist, refresh]);
+        !auth?.token && persist ? verifyRefreshToken() : setIsLoading(false);
 
-  return (
-    <>{!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}</>
-  );
+        return () => (isMounted = false);
+    }, [auth?.token, persist, refresh]);
+
+    return (
+        <>
+            {!persist
+                ? <Outlet />
+                : isLoading
+                    ? <p>Loading...</p>
+                    : <Outlet />
+            }
+        </>
+    );
 };
 
 export default PersistLogin;

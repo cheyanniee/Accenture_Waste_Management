@@ -9,22 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//Purpose:
-//    - Create URLs to register new location
-//    - Create URLs to retrieve district object from district table based on postcode
-//    - List all forgotPassword entries in forgot_password table of DB for testing purpose
-//
-//Restrictions:
-//    - Nil. User do not need token to send OTP and reset password.
-//    - Listall URL is not open to public, as it is for testing purpose. It needs token to access.
-//
-//Endpoints:
-//      - /dev/v1/forgotpassword/listall
-//      - /dev/v1/forgotpassword/sendotp
-//      - /dev/v1/forgotpassword/reset
-//
-//Author:
-//    - Liu Fang
+/*
+Purpose:
+    - Create URLs to register new location
+    - Create URLs to retrieve district object from district table based on postcode
+    - List all location entries in location table of DB
+
+Restrictions:
+    - Only logged-in user with token has access.
+
+Endpoints:
+      - /dev/v1/location/listall
+      - /dev/v1/location/register
+      - /dev/v1/location/getdistrict
+
+Author:
+    - Liu Fang
+
+ */
 
 @RestController
 @RequestMapping("dev/v1/location")

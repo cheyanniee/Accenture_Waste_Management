@@ -1,22 +1,36 @@
+/*
+    Purpose:
+        - Connection to backend
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 import axios from "axios";
 import { BASE_URL } from "../helper/Constant";
 
 export const config = ({ token }) => {
-  return {
-    headers: {
-      "Content-Type": "application/json",
-      token: token,
-    },
-  };
+    return {
+        headers: {
+            "Content-Type": "application/json",
+            token: token,
+        },
+    };
 };
 export const headers = ({ token }) => {
-  return {
-    "Content-Type": "application/json",
-    token: token,
-  };
+    return {
+        "Content-Type": "application/json",
+        token: token,
+    };
 };
 
 export default axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true,
+    baseURL: BASE_URL,
+    withCredentials: true,
 });

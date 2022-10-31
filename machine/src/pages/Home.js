@@ -1,28 +1,33 @@
 import React from "react";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Title from "../components/Title";
 import Login from "../components/Login";
 
+/*
+    Purpose:
+        - Home page for users.
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 const Home = () => {
-  return (
-    <>
-      <Header />
-
-      <section className="service-wrapper py-3">
-        <div className="container-fluid pb-3">
-          <div className="row">
-            <h2 className="h2 text-center col-12 py-5 semi-bold-600">
-              Battery Life
-            </h2>
-          </div>
-
-          <Login />
-        </div>
-      </section>
-
-      <Footer />
-    </>
-  );
+    return (
+        <>
+            <Header />
+            <Title />
+            <Login />
+            <Footer />
+        </>
+    );
 };
 
 export default Home;
