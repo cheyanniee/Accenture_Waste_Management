@@ -1,72 +1,63 @@
+/*
+    Purpose:
+        - Save all endpoints and constants for easy access and change.
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - All
+
+    Author:
+        - Cheyanne Lim
+*/
+
 //export const BASE_URL = "http://localhost:8080";
 export const BASE_URL = "https://localhost";
 
 export const PEOPLE_ENDPOINTS = {
-  GetAll: "/dev/v1/people/listall",
-  RefreshToken: "/dev/v1/people/getinfo",
-  Login: "/dev/v1/people/login",
-  Logout: "/dev/v1/people/logout",
-  Register: "/dev/v1/people/register",
-  RegisterCollector: "/dev/v1/people/register/collector",
-  RegisterAdmin: "/dev/v1/people/register/admin",
-  UpdateDetails: "/dev/v1/people/update",
-}
-
-export const BALANCE_ENDPOINTS = {
-  GetAll: "/dev/v1/balance/listall",
-  UserBalance: "/dev/v1/balance/find",
+    RefreshToken: "/dev/v1/people/getinfo",
+    Login: "/dev/v1/people/login",
+    Logout: "/dev/v1/people/logout",
 }
 
 export const TRANSACTION_ENDPOINTS = {
-  GetAll: "/dev/v1/transaction/listall",
-  GetByID: "/dev/v1/transaction/find",
+    StartR: "/dev/v1/transaction/create/start-r",
+    StartE: "/dev/v1/transaction/create/start-e",
+    Confirm: "/dev/v1/transaction/create/yes",
+    Reject: "/dev/v1/transaction/create/no",
+    GetByID: "/dev/v1/transaction/find",
+}
+
+export const TRANSACTION_ENTRY_ENDPOINTS = {
+    Create: "/dev/v1/transactionentry/create",
+    GetByID: "/dev/v1/transactionentry/find",
 }
 
 export const MACHINE_ENDPOINTS = {
-  GetAll: "/dev/v1/machine/listall",
-  Create: "/dev/v1/machine/add",
-  Update: "/dev/v1/machine/update",
-  UpdateCurrentLoad: "/dev/v1/machine/update/currentload",
-  UpdateStatus: "/dev/v1/machine/update/status",
-}
-
-export const BATTERY_ENDPOINTS = {
-  GetAll: "/dev/v1/battery/listall",
-  Create: "/dev/v1/battery/create",
-  Update: "/dev/v1/battery/update",
+    GetByID: "/dev/v1/machine/get/",
+    UpdateCurrentLoad: "/dev/v1/machine/update/currentload",
 }
 
 export const TASK_ENDPOINTS = {
-  GetAll: "/dev/v1/task/listall",
-  Create: "/dev/v1/task/create",
-  GetByID: "/dev/v1/task/collector",
-  Collected: "/dev/v1/task/machine/collected/",
-  Delivered: "/dev/v1/task/collector/delivered/",
+    GetAll: "/dev/v1/task/listall",
+    GetByID: "/dev/v1/task/collector",
+    Collected: "/dev/v1/task/machine/collected/",
+    GetByMachine: "/dev/v1/task/machine/",
 }
-
-export const LOCATION_ENDPOINTS = {
-  GetAll: "/dev/v1/location/listall",
-  GetDistrict: "/dev/v1/location/getdistrict?postcode=",
-}
-
 
 export const ROLES = {
-  User: "user",
-  Collector: "collector",
-  Admin: "admin",
+    User: "user",
+    Collector: "collector",
+    Admin: "admin",
 };
 
-export const FAULTY_MACHINE = "FAULTY";
+export const ACTION_TYPES = {
+    Exchange: "exchange",
+    Recycle: "recycle",
+}
 
-export const MACHINE_STATUS = [
-  "NORMAL",
-  FAULTY_MACHINE,
-];
-
-export const REGIONS = [
-  "Northeast",
-  "Central",
-  "West",
-  "East",
-  "North",
+export const BATTERY_EXCHANGE_TYPES = [
+    "AA",
+    "AAA"
 ];
