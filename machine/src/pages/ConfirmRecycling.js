@@ -12,6 +12,7 @@ import Title from "../components/Title";
 /*
     Purpose:
         - Display transaction for user to confirm or reject.
+        - Current load is updated if user confirms (Hardcoded for demo purposes ONLY)
 
     Restriction:
         - Only those with ROLES.User will be able to access this page.
@@ -20,7 +21,7 @@ import Title from "../components/Title";
         - TRANSACTION_ENTRY_ENDPOINTS.GetByID
         - TRANSACTION_ENDPOINTS.Confirm
         - TRANSACTION_ENDPOINTS.Reject
-        - MACHINE_ENDPOINTS.UpdateCurrentLoad (Hardcoded for demo purposes ONLY)
+        - MACHINE_ENDPOINTS.UpdateCurrentLoad
 
     Author:
         - Cheyanne Lim
