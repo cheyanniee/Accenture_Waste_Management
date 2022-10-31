@@ -47,6 +47,10 @@ public class TaskService {
     // Creating tasks and assigning collector to machine
     public boolean createTask(String collectorEmail, Integer machineId, PeopleModel admin) throws CustomException {
         MachineModel machine = machineService.getMachineById(machineId);
+        TaskModel existingTask = taskRepo.getTaskNotCollected(machineId);
+        if (existingTask != null)
+            throw new CustomException("Existing task uncompleted");
+
         TaskModel newTask = TaskModel.builder()
                 .assignedTime(ZonedDateTime.now(ZoneId.of(ASIA_SINGAPORE)))
                 .collector(getCollectorByEmail(collectorEmail))
@@ -116,10 +120,10 @@ public class TaskService {
         // update Task table on time collected
         if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of(ASIA_SINGAPORE)), taskId) == 0)
             throw new CustomException("Task update collected fails!");
-        TaskModel task = getTaskById(taskId);
-
         // update machine table currentLoad = 0;
-        machineRepo.updateCurrentLoad(0F, task.getMachine().getId());
+        // TaskModel task = getTaskById(taskId);
+
+        // machineRepo.updateCurrentLoad(0F, task.getMachine().getId());
         return true;
     }
 
@@ -147,5 +151,9 @@ public class TaskService {
         task.setAdmin(admin);
         taskRepo.save(task);
         return true;
+    }
+
+    public List<TaskModel> getTaskbyMachineId(int machineId) {
+        return taskRepo.getTaskByMachineId(machineId);
     }
 }

@@ -21,7 +21,7 @@ button:disabled {
 
 .spanLink {
   text-decoration: underline;
-  color: #0000FF;
+  color: #0000ff;
   font-size: 14px;
 }
 
@@ -29,4 +29,21 @@ button:disabled {
   text-decoration: underline;
   color: #808080;
   font-size: 14px;
+}
+
+.spinner {
+  width: 64px;
+  height: 55vh;
+  border: 8px solid;
+  border-color: #3d5af1 transparent #3d5af1 transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

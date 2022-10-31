@@ -19,6 +19,12 @@ public interface TaskRepo extends JpaRepository<TaskModel, Long> {
   @Query("SELECT task from TaskModel task WHERE id=?1")
   Optional<TaskModel> getTaskById(Long taskId);
 
+  @Query("SELECT task from TaskModel task WHERE machine_id=?1")
+  List<TaskModel> getTaskByMachineId(int machineId);
+
+  @Query("SELECT task from TaskModel task WHERE machine_id=?1 AND collected_time IS NULL")
+  TaskModel getTaskNotCollected(int machineId);
+
   @Modifying
   @Transactional
   @Query("UPDATE TaskModel SET delivered_time=?1 WHERE id=?2 AND collector_id=?3")

@@ -132,6 +132,13 @@ const Login = () => {
               </div>
             </form>
             <p className="text-secondary">
+              Forget Password?
+              <br />
+              <span className="text-secondary">
+                <Link to="/resetpassword">Reset Password</Link>
+              </span>
+            </p>
+            <p className="text-secondary">
               Need an Account?
               <br />
               <span className="text-secondary">

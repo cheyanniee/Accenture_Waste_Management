@@ -88,4 +88,9 @@ public class TaskController {
         taskService.manualUpdate(taskService.getAdminByToken(token), taskRequest);
         return ResponseEntity.ok(new GeneralResponse("Task update!"));
     }
+
+    @GetMapping("/machine/{machineId}")
+    public ResponseEntity<List<TaskModel>> listTaskByMachineId(@PathVariable String machineId) {
+        return ResponseEntity.ok(taskService.getTaskbyMachineId(Integer.valueOf(machineId)));
+    }
 }
