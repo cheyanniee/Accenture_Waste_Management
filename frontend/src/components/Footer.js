@@ -13,7 +13,8 @@ const Footer = () => {
               <span className="text-light h5 semi-bold-600">L!fe</span>
             </Link>
             <p className="text-light my-lg-4 my-2">
-              Our company aims to help reduce the environmental impact
+              Our company aims to do a part for the environment by recycling
+              batteries
             </p>
           </div>
           <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
@@ -90,7 +91,7 @@ const Footer = () => {
           <div className="row pt-2">
             <div className="col-lg-6 col-sm-12">
               <p className="text-lg-start text-center text-light light-300">
-                © Copyright 2022 GECO Buzz Company. All Rights Reserved.
+                © Copyright 2022 BATTERY L!fe Company. All Rights Reserved.
               </p>
             </div>
             <div className="col-lg-6 col-sm-12">

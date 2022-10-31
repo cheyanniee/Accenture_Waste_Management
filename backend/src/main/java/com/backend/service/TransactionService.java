@@ -37,6 +37,9 @@ public class TransactionService {
     @Autowired
     TransactionEntryRepo transactionEntryRepo;
 
+    @Autowired
+    StorageService storageService;
+
 
     public List<TransactionModel> listTransaction() {
         return transactionRepo.findAll();
@@ -84,47 +87,58 @@ public class TransactionService {
         transactionRepo.save(transactionModel);
     }
 
-    //rework into updating
-    public void updateTransactionByYes (TransactionRequest transactionRequest, Long id) throws Exception {
-
-        TransactionModel transactionModel = getTransaction(id);
-
-        ZoneId zid = ZoneId.of("Asia/Singapore");
-
-        PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
-        MachineModel machineModel = machineService.getMachineById(transactionRequest.getMachineId());
-
-        List<TransactionEntryModel> transactionEntryModelList =
-                transactionEntryRepo.getTransactionEntryByTransactionId(id)
-                        .orElseThrow(()-> new CustomException("Unable to find list of transactionEntries as no Transaction exists."));
-
-        Float balanceChange = 0F;
-        for (TransactionEntryModel teM: transactionEntryModelList) {
-            Float pointsOne = teM.getBatteryModel().getValuePerWeight() * teM.getQuantity();
-            balanceChange += pointsOne;
-        }
-
-        transactionModel.setPeopleModel(peopleModel);
-        transactionModel.setMachineModel(machineModel);
-        transactionModel.setBalanceChange(balanceChange);
-        transactionModel.setChoose(transactionRequest.getChooseType());
-        saveChooseType(transactionModel); //???
-        transactionModel.setDateAndTime(ZonedDateTime.now(zid));
-        transactionRepo.save(transactionModel);
-
-
-        //pass the updated balance to updateBalance as a new TransactionRequest.
-        TransactionRequest transUpdate = TransactionRequest.builder()
-                .peopleId(transactionModel.getPeopleModel().getId())
-                .chooseType(transactionRequest.getChooseType())
-                .balanceChange(transactionModel.getBalanceChange())
-                .build();
-        try{
-            balanceService.updateBalanceByTransaction(transUpdate);
-        }catch (Exception e){
-            e.getMessage();
-        }
-    }
+//    //changed to updateTransactionByYesExchange
+//    public ResponseEntity<?> updateTransactionByYes (TransactionRequest transactionRequest, Long id) throws Exception {
+//
+//        TransactionModel transactionModel = getTransaction(id);
+//
+//        ZoneId zid = ZoneId.of("Asia/Singapore");
+//
+//        PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
+//        MachineModel machineModel = machineService.getMachineById(transactionRequest.getMachineId());
+//
+//        List<TransactionEntryModel> transactionEntryModelList =
+//                transactionEntryRepo.getTransactionEntryByTransactionId(id)
+//                        .orElseThrow(()-> new CustomException("Unable to find list of transactionEntries as no Transaction exists."));
+//
+//
+//        Float balanceChange = 0F;
+//        for (TransactionEntryModel teM: transactionEntryModelList) {
+//            if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
+//                Float pointsOne = teM.getBatteryModel().getValuePerWeight() * teM.getQuantity();
+//                balanceChange += pointsOne;
+//            }
+//            if(transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
+//                Float exchangeOne = teM.getRateModel().getPointsPerUnit() * teM.getQuantity();
+//                balanceChange += exchangeOne;
+//            }
+//        }
+//
+//        transactionModel.setPeopleModel(peopleModel);
+//        transactionModel.setMachineModel(machineModel);
+//        transactionModel.setBalanceChange(balanceChange);
+//        transactionModel.setChoose(transactionRequest.getChooseType());
+//        saveChooseType(transactionModel);
+//        transactionModel.setDateAndTime(ZonedDateTime.now(zid));
+//        transactionRepo.save(transactionModel);
+//
+//        //pass the updated balance to updateBalance as a new TransactionRequest.
+//        TransactionRequest transUpdate = TransactionRequest.builder()
+//                .peopleId(transactionModel.getPeopleModel().getId())
+//                .chooseType(transactionRequest.getChooseType())
+//                .balanceChange(transactionModel.getBalanceChange())
+//                .build();
+//
+//            if(transUpdate.getChooseType().equals(TransactionModel.Choose.exchange)
+//                    && !balanceService.checkBalanceForExchange(transUpdate)){
+//                deleteTransactionByNo(transactionModel.getId());
+//                throw new CustomException("You do not have enough balance");
+//            }else {
+//                balanceService.updateBalanceByTransaction(transUpdate);
+//            }
+//
+//        return ResponseEntity.ok(new GeneralResponse("Update successful"));
+//    }
 
 //    public void createTransactionBackupCopy (TransactionRequest transactionRequest) throws Exception {
 //        ZoneId zid = ZoneId.of("Asia/Singapore");
@@ -159,8 +173,10 @@ public class TransactionService {
     }
 
 
+    //manual update Transaction if needed
+    //to add in Admin token verification
     public void updateTransaction(TransactionRequest transactionRequest, Long id) throws Exception{
-        TransactionModel transactionModel = transactionRepo.findById(id).orElseThrow(() -> new CustomException("Transaction not found!"));//get the data bases on primary key
+        TransactionModel transactionModel = transactionRepo.findById(id).orElseThrow(() -> new CustomException("Transaction not found."));//get the data bases on primary key
 
         if (transactionRequest.getPeopleId() != null) {
             transactionModel.setPeopleModel(peopleService.getPeopleById(transactionRequest.getPeopleId()));
@@ -177,8 +193,87 @@ public class TransactionService {
     }
 
 
-    Float balanceChange;
-    ZonedDateTime dateAndTime;
-    String serviceType;
+
+    //experiment with storage
+    public ResponseEntity<?> updateTransactionByYesExchange (TransactionRequest transactionRequest, Long id) throws Exception {
+
+
+        TransactionModel transactionModel = getTransaction(id);
+
+        ZoneId zid = ZoneId.of("Asia/Singapore");
+
+        PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
+        MachineModel machineModel = machineService.getMachineById(transactionRequest.getMachineId());
+
+        List<TransactionEntryModel> transactionEntryModelList =
+                transactionEntryRepo.getTransactionEntryByTransactionId(id)
+                        .orElseThrow(()-> new CustomException("Unable to find list of transactionEntries as no Transaction exists."));
+
+
+        Float balanceChange = 0F;
+
+        String rateType = "";
+        Float exchangePointsRate = 0F;
+        for (TransactionEntryModel teM: transactionEntryModelList) {
+            if(transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
+                rateType = teM.getRateModel().getType();
+                System.out.print("Rate type is: " + rateType);
+                exchangePointsRate = teM.getRateModel().getPointsPerUnit();
+                Float exchangeOne = teM.getRateModel().getPointsPerUnit() * teM.getQuantity();
+                balanceChange += exchangeOne;
+            }
+            if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
+                Float pointsOne = teM.getBatteryModel().getValuePerWeight() * teM.getQuantity();
+                balanceChange += pointsOne;
+            }
+        }
+
+        //needs to be in integer because cannot exchange 1.5 battery
+        Integer batteriesExchanged = Math.round(balanceChange/exchangePointsRate);
+
+        StorageModel storageModel = storageService.getStorageByMachineId(machineModel);
+        //Storage to check if points and number of storage enough
+
+        Integer batteriesStored = 0;
+        if (rateType.equals("AAA")){
+            batteriesStored = storageModel.getQtyAAA();
+            System.out.print("batteries stored in AAA: " + batteriesStored);
+        }
+        else if (rateType.equals("AA")){
+            batteriesStored = storageModel.getQtyAAA();
+            System.out.print("batteries stored in AA: " + batteriesStored);
+        }
+        //if not enough batteries then immediately throw error and start over in first page.
+        if(batteriesStored < batteriesExchanged){
+            throw new CustomException("Not enough batteries of this type in storage. Please start over");
+        }
+
+        transactionModel.setPeopleModel(peopleModel);
+        transactionModel.setMachineModel(machineModel);
+        transactionModel.setBalanceChange(balanceChange);
+        transactionModel.setChoose(transactionRequest.getChooseType());
+        saveChooseType(transactionModel);
+        transactionModel.setDateAndTime(ZonedDateTime.now(zid));
+        transactionRepo.save(transactionModel);
+
+        //pass the updated balance to updateBalance as a new TransactionRequest.
+        TransactionRequest transUpdate = TransactionRequest.builder()
+                .peopleId(transactionModel.getPeopleModel().getId())
+                .chooseType(transactionRequest.getChooseType())
+                .balanceChange(transactionModel.getBalanceChange())
+                .build();
+
+        if(transUpdate.getChooseType().equals(TransactionModel.Choose.exchange)){
+            if(!balanceService.checkBalanceForExchange(transUpdate)){
+                deleteTransactionByNo(transactionModel.getId());
+                throw new CustomException("You do not have enough balance");
+            }
+            balanceService.updateBalanceByTransaction(transUpdate);
+            storageService.updateStorageByTransaction(machineModel, rateType, batteriesExchanged);
+        }else {
+            balanceService.updateBalanceByTransaction(transUpdate);
+        }
+        return ResponseEntity.ok(new GeneralResponse("Update successful"));
+    }
 
 }

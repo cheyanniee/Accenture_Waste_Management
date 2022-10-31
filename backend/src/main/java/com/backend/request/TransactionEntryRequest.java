@@ -13,7 +13,13 @@ public class TransactionEntryRequest {
 
     //TransactionModel transactionModel;
     Long transactionId;
-    String batteryType;
-    Integer quantity;
+    String batteryType; //handles both rateType and batteryType
+ //   String rateType;
+
+    //for EXCHANGE SCREEN - please set to only integer
+    //for RECYCLE SCREEN - can be float
+    Float quantity;
+
+
 
 }
