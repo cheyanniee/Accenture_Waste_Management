@@ -29,11 +29,11 @@ const Information = () => {
           </ol>
           <div className="carousel-inner">
             <div className="carousel-item">
-              <div className="row d-flex align-items-center">
-                <div className="banner-content col-lg-8 col-8 offset-2 m-lg-auto text-left py-1 pb-1">
-                  <h2 className="banner-heading h1 text-secondary display-6 mb-0 pb-3 mx-0 px-0 light-300 typo-space-line">
+              <div className="py-5 row d-flex align-items-center">
+                <div className="banner-content col-lg-8 col-8 offset-2 m-lg-auto text-left py-5 pb-5">
+                  <h1 className="banner-heading h1 text-secondary display-3 mb-0 pb-3 mx-0 px-0 light-300">
                     E-waste Recycling Locations
-                  </h2>
+                  </h1>
                   <iframe
                     width="450"
                     height="300"
@@ -58,9 +58,9 @@ const Information = () => {
               </div>
             </div>
             <div className="carousel-item">
-              <div className="py-1 row d-flex align-items-center">
-                <div className="banner-content col-lg-8 col-8 offset-2 m-lg-auto text-left py-1 pb-1">
-                  <h1 className="banner-heading h1 text-secondary display-6 mb-0 pb-3 mx-0 px-0 light-300">
+              <div className="py-5 row d-flex align-items-center">
+                <div className="banner-content col-lg-8 col-8 offset-2 m-lg-auto text-left py-5 pb-5">
+                  <h1 className="banner-heading h1 text-secondary display-3 mb-0 pb-3 mx-0 px-0 light-300">
                     Inside a Li-ion battery
                   </h1>
                   <p className="banner-body text-muted py-3">
