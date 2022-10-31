@@ -4,7 +4,6 @@ package com.backend.service;
 import com.backend.configuration.CustomException;
 import com.backend.model.*;
 import com.backend.repo.BatteryRepo;
-import com.backend.repo.RateRepo;
 import com.backend.repo.TransactionEntryRepo;
 import com.backend.request.TransactionEntryRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+/*
+    Purpose:
+        - Service methods to be used in TransactionEntry-related APIs or assist in other functions
+        - Major functions: creating a TransactionEntryModels when a transaction is created,
+        deleting all TransactionEntryModels when a transaction is cancelled
+
+    Author:
+        - Lew Xu Hong
+*/
 
 @Service
 public class TransactionEntryService {
@@ -25,9 +34,6 @@ public class TransactionEntryService {
 
     @Autowired
     BatteryRepo batteryRepo;
-
-    @Autowired
-    RateRepo rateRepo;
 
     public List<TransactionEntryModel> listAllTransactionEntry() {return transactionEntryRepo.findAll();}
 

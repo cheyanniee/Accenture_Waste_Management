@@ -5,6 +5,13 @@ import com.backend.model.TransactionModel;
 import lombok.*;
 import java.time.ZonedDateTime;
 
+/*
+    Purpose:
+        - Object to be used for sending the necessary fields and data for Transaction-related APIs
+
+    Author:
+        - Lew Xu Hong
+*/
 
 @Getter
 @Setter

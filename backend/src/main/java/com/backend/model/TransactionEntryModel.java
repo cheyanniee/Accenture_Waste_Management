@@ -3,6 +3,14 @@ package com.backend.model;
 import lombok.*;
 import javax.persistence.*;
 
+/*
+    Purpose:
+        - Entity to match with table in database (TransactionEntry)
+
+    Author:
+        - Lew Xu Hong
+*/
+
 @Entity
 @Table(name="transaction_entry")
 @Builder
