@@ -10,6 +10,8 @@ export const PEOPLE_ENDPOINTS = {
   RegisterCollector: "/dev/v1/people/register/collector",
   RegisterAdmin: "/dev/v1/people/register/admin",
   UpdateDetails: "/dev/v1/people/update",
+  ResetPassword: "/dev/v1/forgotpassword/sendotp",
+  ResetPasswordNewPass: "/dev/v1/forgotpassword/reset",
 };
 
 export const BALANCE_ENDPOINTS = {

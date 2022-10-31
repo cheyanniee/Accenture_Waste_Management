@@ -48,13 +48,27 @@ export const INITIAL_MACHINE_FORM_VALUES = {
   unitNumber: "",
   floor: "",
   unit: "",
-}
+};
 
 export const INITIAL_BATTERY_FORM_VALUES = {
   id: "",
   type: "",
   valuePerWeight: "",
-}
+};
+
+export const resetPasswordSchema = yup.object().shape({
+  email: yup.string().email("Please enter a valid email").required("Required"),
+  password: yup
+    .string()
+    .min(5)
+    .matches(passwordRules, { message: "Please enter stronger password" })
+    .required("Required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Password must match")
+    .required("Required"),
+  otp: yup.string().required("Required"),
+});
 
 export const registerSchema = yup.object().shape({
   firstName: yup.string().required("Required"),
@@ -89,14 +103,8 @@ export const registerSchema = yup.object().shape({
     .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits")
     .required("Required"),
-  floor: yup
-    .number()
-    .positive()
-    .integer(),
-  unit: yup
-    .number()
-    .positive()
-    .integer(),
+  floor: yup.number().positive().integer(),
+  unit: yup.number().positive().integer(),
   unitNumber: yup.string(),
 });
 
@@ -134,14 +142,8 @@ export const registerUsersSchema = yup.object().shape({
     .max(1000000, "Postal code must be at exactly 6 digits")
     .required("Required"),
   role: yup.string().required("Required"),
-  floor: yup
-    .number()
-    .positive()
-    .integer(),
-  unit: yup
-    .number()
-    .positive()
-    .integer(),
+  floor: yup.number().positive().integer(),
+  unit: yup.number().positive().integer(),
   unitNumber: yup.string(),
 });
 
@@ -173,26 +175,16 @@ export const userDetailsSchema = yup.object().shape({
     .integer()
     .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits"),
-  floor: yup
-    .number()
-    .moreThan(-1)
-    .integer(),
-  unit: yup
-    .number()
-    .moreThan(-1)
-    .integer(),
+  floor: yup.number().moreThan(-1).integer(),
+  unit: yup.number().moreThan(-1).integer(),
   unitNumber: yup.string(),
 });
 
 export const registerMachineSchema = yup.object().shape({
   id: yup.string(),
   name: yup.string(),
-  currentLoad: yup
-   .number()
-   .positive(),
-  capacity: yup
-    .number()
-    .positive(),
+  currentLoad: yup.number().positive(),
+  capacity: yup.number().positive(),
   status: yup.string(),
   address: yup.string(),
   postcode: yup
@@ -202,14 +194,8 @@ export const registerMachineSchema = yup.object().shape({
     .min(10000, "Postal code must be exactly 6 digits")
     .max(1000000, "Postal code must be at exactly 6 digits"),
   unitNumber: yup.string(),
-  floor: yup
-    .number()
-    .positive()
-    .integer(),
-  unit: yup
-    .number()
-    .positive()
-    .integer(),
+  floor: yup.number().positive().integer(),
+  unit: yup.number().positive().integer(),
 });
 
 export const registerBatterySchema = yup.object().shape({
