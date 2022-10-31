@@ -54,7 +54,13 @@ export const ROLES = {
   Collector: "collector",
   Admin: "admin",
 };
+export const twoDigits = (unitNumber) => {
+  const fullUnit = unitNumber.split("-").reduce((acc, number) => {
+    return acc + (number <= 9 ? "0" + number : number) + "-";
+  }, "");
 
+  return fullUnit.substring(0, fullUnit.length - 1);
+};
 export const FAULTY_MACHINE = "FAULTY";
 
 export const MACHINE_STATUS = ["NORMAL", FAULTY_MACHINE];

@@ -18,25 +18,26 @@ const Footer = () => {
             </p>
           </div>
           <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
-            <h3 className="h4 pb-lg-3 text-light light-300">Our Company</h3>
-            <ul className="list-unstyled text-light light-300">
-              <li className="pb-2">
-                <i className="bx-fw bx bxs-chevron-right bx-xs" />
-                <Link className="text-decoration-none text-light" to="/">
-                  Home
-                </Link>
-              </li>
-              <li className="pb-2">
-                <i className="bx-fw bx bxs-chevron-right bx-xs" />
-                <Link
-                  className="text-decoration-none text-light py-1"
-                  to="/clinics"
-                >
-                  Clinics
-                </Link>
-              </li>
-            </ul>
-          </div>
+              <h3 className="h4 pb-lg-3 text-light light-300">Our Company</h3>
+              <ul className="list-unstyled text-light light-300">
+                <li className="pb-2">
+                  <i className="bx-fw bx bxs-chevron-right bx-xs" />
+                  <Link className="text-decoration-none text-light" to="/">
+                    Home
+                  </Link>
+                </li>
+                <li className="pb-2">
+                  <i className="bx-fw bx bxs-chevron-right bx-xs" />
+                  <Link
+                    className="text-decoration-none text-light py-1"
+                    to="/locations"
+                  >
+                    Locations
+                  </Link>
+                </li>
+
+              </ul>
+            </div>
           <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
             <h2 className="h4 pb-lg-3 text-light light-300">Frontend Team</h2>
             <ul className="list-unstyled text-light light-300">
@@ -49,6 +50,11 @@ const Footer = () => {
                   cheyanne.lim@geco.asia
                 </Link>
               </li>
+            </ul>
+          </div>
+          <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
+              <h2 className="h4 pb-lg-3 text-light light-300">Backend Team</h2>
+              <ul className="list-unstyled text-light light-300">
               <li className="pb-2">
                 <i className="bx-fw bx bx-mail-send bx-xs" />
                 <Link
@@ -58,31 +64,26 @@ const Footer = () => {
                   alex.lim@geco.asia
                 </Link>
               </li>
-            </ul>
-          </div>
-          <div className="col-lg-3 col-md-4 my-sm-0 mt-4">
-            <h2 className="h4 pb-lg-3 text-light light-300">Backend Team</h2>
-            <ul className="list-unstyled text-light light-300">
-              <li className="pb-2">
-                <i className="bx-fw bx bx-mail-send bx-xs" />
-                <Link
-                  className="text-decoration-none text-light py-1"
-                  to="mailto:info@company.com"
-                >
-                  liu.fang@geco.asia
-                </Link>
-              </li>
-              <li className="pb-2">
-                <i className="bx-fw bx bx-mail-send bx-xs" />
-                <Link
-                  className="text-decoration-none text-light py-1"
-                  to="mailto:info@company.com"
-                >
-                  xuhong.lew@geco.asia
-                </Link>
-              </li>
-            </ul>
-          </div>
+                <li className="pb-2">
+                  <i className="bx-fw bx bx-mail-send bx-xs" />
+                  <Link
+                    className="text-decoration-none text-light py-1"
+                    to="mailto:info@company.com"
+                  >
+                    liu.fang@geco.asia
+                  </Link>
+                </li>
+                <li className="pb-2">
+                  <i className="bx-fw bx bx-mail-send bx-xs" />
+                  <Link
+                    className="text-decoration-none text-light py-1"
+                    to="mailto:info@company.com"
+                  >
+                    xuhong.lew@geco.asia
+                  </Link>
+                </li>
+              </ul>
+            </div>
         </div>
       </div>
       <div className="w-100 bg-primary py-3">

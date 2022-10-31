@@ -1,5 +1,6 @@
 package com.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,11 +18,13 @@ public class ForgotPasswordModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @JsonIgnore
     String encryptedOtp;
     ZonedDateTime requested_time;
 
     @OneToOne
     @JoinColumn(name = "people_id")
+    @JsonIgnore
     PeopleModel peopleModel;
 
 }
