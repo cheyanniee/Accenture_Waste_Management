@@ -6,6 +6,15 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+//Purpose:
+//    - Set up configuration to communicate with front end (React)
+//    - To add token Interceptors
+//    - To resolve CORS error
+//
+//Author:
+//    - Liu Fang
+
+
 @Configuration
 public class SpringCommonConfig implements WebMvcConfigurer {
     @Autowired

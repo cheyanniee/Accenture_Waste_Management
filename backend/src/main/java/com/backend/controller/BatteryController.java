@@ -11,6 +11,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//Purpose:
+//    - List all rows of data from battery table in Database
+//    - Create, Update, Delete battery entry from Database
+//    - To add token Interceptors
+//    - To resolve CORS error
+//
+//Restrictions:
+//    - Only the logged in admin user can have access to these URLs
+//
+//Endpoints:
+//        - /dev/v1/battery/listall
+//        - /dev/v1/battery/create
+//        - /dev/v1/battery/update
+//        - /dev/v1/battery/delete
+//
+//Author:
+//    - Liu Fang
+
+
 @RestController
 @RequestMapping("dev/v1/battery")
 public class BatteryController {
