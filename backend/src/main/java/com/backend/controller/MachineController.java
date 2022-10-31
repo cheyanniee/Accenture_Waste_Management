@@ -75,13 +75,14 @@ public class MachineController {
     }
 
     // delete machine
-    @DeleteMapping("/delete/{machineId}")
-    public ResponseEntity<GeneralResponse> deleteMachine(@RequestHeader String token, @PathVariable String machineId)
-            throws NumberFormatException, CustomException {
-        machineService.getAdminByToken(token);
-        machineService.deleteMachine(Integer.valueOf(machineId));
-        return ResponseEntity.ok(new GeneralResponse("Machine Deleted!"));
-    }
+    // @DeleteMapping("/delete/{machineId}")
+    // public ResponseEntity<GeneralResponse> deleteMachine(@RequestHeader String
+    // token, @PathVariable String machineId)
+    // throws NumberFormatException, CustomException {
+    // machineService.getAdminByToken(token);
+    // machineService.deleteMachine(Integer.valueOf(machineId));
+    // return ResponseEntity.ok(new GeneralResponse("Machine Deleted!"));
+    // }
 
     // update currentLoad(from vending machine side)
     @PostMapping("/update/currentload")
