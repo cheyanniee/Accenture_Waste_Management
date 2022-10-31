@@ -14,17 +14,20 @@ import javax.mail.MessagingException;
 import java.util.List;
 
 //Purpose:
-//    - Create URLs to register new location
-//    - Create URLs to retrieve district object from district table based on postcode
-//    - List all location entries in location table of DB
+//    - Create URLs to listall machines, and CRUD operations of machine entry in machine table of DB
+//    - Create URLs to update load and the status of machine
 //
 //Restrictions:
-//    - Only logged-in user with token has access.
+//    - Only logged-in user can have access to CRUD operations.
 //
 //Endpoints:
-//      - /dev/v1/location/listall
-//      - /dev/v1/location/register
-//      - /dev/v1/location/getdistrict
+//      - /dev/v1/machine/listall
+//      - /dev/v1/machine/get/{machineId}
+//      - /dev/v1/machine/add
+//      - /dev/v1/machine/update
+//      - /dev/v1/machine/delete/{machineId}
+//      - /dev/v1/machine/update/currentload
+//      - /dev/v1/machine/update/status
 //
 //Author:
 //    - Alex Lim

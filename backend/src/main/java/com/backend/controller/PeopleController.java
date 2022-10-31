@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 /*
     Purpose:
         - APIs for PeopleModel-related operations
-        - Allow People to register and login
+        - Allow People to register, login, and logout
+        - Allow People to retrieve people entry data from people table by token and officialID
+        - Allow People to update people entry data by token
         - Allow People (Admin) to register new People with collector and admin roles
         - (please add on here for the other functions)
 
@@ -26,7 +28,9 @@ import org.springframework.web.bind.annotation.*;
         - dev/v1/people/listall
         - dev/v1/people/find
         - dev/v1/people/update
-        -(please add on the other endpoints)
+        - dev/v1/people/login
+        - dev/v1/people/getinfo
+        - dev/v1/people/logout
 
     Author:
         - Liu Fang,
@@ -55,7 +59,7 @@ public class PeopleController {
         }
     }
 
-    @PostMapping("register")
+    @PostMapping("register")//Xu Hong
     public ResponseEntity<?> registerPeople(@RequestBody PeopleRequest peopleRequest) {
         try {
             peopleService.createUser(peopleRequest);
@@ -65,7 +69,7 @@ public class PeopleController {
         }
     }
 
-    @PostMapping("register/collector")
+    @PostMapping("register/collector")//Xu Hong
     public ResponseEntity<?> registerCollector(@RequestBody PeopleRequest peopleRequest, @RequestHeader String token) {
         //verify if requester is an admin
         Long id = peopleService.getIdByToken(token);
@@ -82,7 +86,7 @@ public class PeopleController {
         }
     }
 
-    @PostMapping("register/admin")
+    @PostMapping("register/admin")//Xu Hong
     public ResponseEntity<?> registerAdmin(@RequestBody PeopleRequest peopleRequest, @RequestHeader String token) {
         //verify if requester is an admin
         Long id = peopleService.getIdByToken(token);
@@ -132,7 +136,7 @@ public class PeopleController {
         return ResponseEntity.ok(new GeneralResponse("Logout successfully!"));
     }
 
-    @GetMapping("find")
+    @GetMapping("find")//retrieve people data based on officialId
     public ResponseEntity<?> findPeopleByOfficialId(@RequestParam String officialId) throws CustomException {
         return ResponseEntity.ok(peopleService.findPeopleByOfficialId(officialId));
     }
