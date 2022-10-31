@@ -227,7 +227,6 @@ public class TransactionService {
 
         ZoneId zid = ZoneId.of("Asia/Singapore");
 
-
         //PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
         PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
         Long testid = peopleService.getIdByToken(token);
@@ -238,18 +237,17 @@ public class TransactionService {
                 transactionEntryRepo.getTransactionEntryByTransactionId(id)
                         .orElseThrow(()-> new CustomException("Unable to find list of transactionEntries as no Transaction exists."));
 
-
         Float balanceChange = 0F;
 
-        String rateType = "";
+        String batType = "";
         Float exchangePointsRate = 0F;
+
         for (TransactionEntryModel teM: transactionEntryModelList) {
             if(transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
-                rateType = teM.getRateModel().getType();
-                System.out.print("Rate type is: " + rateType);
                 //still keep this but change to just getBattery, then which column - pointsperunit or valueperweight
-                exchangePointsRate = teM.getRateModel().getPointsPerUnit();
-                Float exchangeOne = teM.getRateModel().getPointsPerUnit() * teM.getQuantity();
+                batType = teM.getBatteryModel().getType();
+                exchangePointsRate = teM.getBatteryModel().getExchangePoint();
+                Float exchangeOne = teM.getBatteryModel().getExchangePoint() * teM.getQuantity();
                 balanceChange += exchangeOne;
             }
             if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
@@ -262,7 +260,6 @@ public class TransactionService {
         if(transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
             batteriesExchanged = Math.round(balanceChange/exchangePointsRate);
         }
-
         //needs to be in integer because cannot exchange 1.5 battery
 
         StorageModel storageModel = storageService.getStorageByMachineId(machineModel);
@@ -271,11 +268,11 @@ public class TransactionService {
         //check this part with new battery model
         //right now storage only got AA and AAA so this part should be okay.
         Integer batteriesStored = 0;
-        if (rateType.equals("AAA")){
+        if (batType.equals("AAA")){
             batteriesStored = storageModel.getQtyAAA();
             System.out.print("batteries stored in AAA: " + batteriesStored);
         }
-        else if (rateType.equals("AA")){
+        else if (batType.equals("AA")){
             batteriesStored = storageModel.getQtyAAA();
             System.out.print("batteries stored in AA: " + batteriesStored);
         }
@@ -305,7 +302,7 @@ public class TransactionService {
                 throw new CustomException("You do not have enough balance");
             }
             balanceService.updateBalanceByTransaction(transUpdate);
-            storageService.updateStorageByTransaction(machineModel, rateType, batteriesExchanged);
+            storageService.updateStorageByTransaction(machineModel, batType, batteriesExchanged);
         }else {
             balanceService.updateBalanceByTransaction(transUpdate);
         }
