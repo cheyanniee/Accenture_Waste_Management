@@ -8,12 +8,26 @@ import { MACHINE_ENDPOINTS, FAULTY_MACHINE } from "../helper/Constant";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+/*
+    Purpose:
+        - Save all endpoints and constants for easy access and change.
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - All
+
+    Author:
+        - Cheyanne Lim
+*/
+
 const ReportMachine = () => {
-  const { auth } = useAuth();
-  const [data, setData] = useState([]);
-  const [apiSearch, setApiSearch] = useState([]);
-  const [message, setMessage] = useState();
-  const [errMsg, setErrMsg] = useState();
+    const { auth } = useAuth();
+    const [data, setData] = useState([]);
+    const [apiSearch, setApiSearch] = useState([]);
+    const [message, setMessage] = useState();
+    const [errMsg, setErrMsg] = useState();
 
   const fetchMachines = async () => {
       try {
@@ -37,7 +51,7 @@ const ReportMachine = () => {
 
         setApiSearch(newData);
         setData(newData);
-        console.log("Machines: ", response?.data);
+        console.log("Machines: ", newData);
       } catch (error) {
         console.log("Error: ", error);
       }

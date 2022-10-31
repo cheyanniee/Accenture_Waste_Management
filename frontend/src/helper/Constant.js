@@ -42,6 +42,7 @@ export const MACHINE_ENDPOINTS = {
     GetAll: "/dev/v1/machine/listall",
     Create: "/dev/v1/machine/add",
     Update: "/dev/v1/machine/update",
+    Update: "/dev/v1/machine/delete/",
     UpdateCurrentLoad: "/dev/v1/machine/update/currentload",
     UpdateStatus: "/dev/v1/machine/update/status",
 };
@@ -80,7 +81,6 @@ export const twoDigits = (unitNumber) => {
 };
 
 export const FAULTY_MACHINE = "FAULTY";
-export const DELETED_MACHINE = "DELETED";
-export const MACHINE_STATUS = ["NORMAL", FAULTY_MACHINE, DELETED_MACHINE];
+export const MACHINE_STATUS = ["NORMAL", FAULTY_MACHINE];
 
 export const REGIONS = ["Northeast", "Central", "West", "East", "North"];
