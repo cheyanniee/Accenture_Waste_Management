@@ -10,13 +10,14 @@ import Footer from "../components/Footer";
 
 /*
     Purpose:
-        - Save all endpoints and constants for easy access and change.
+        - Report a Machine as Faulty
 
     Restriction:
-        - NIL
+        - Only those with ROLES.User or ROLES.Collector will be able to access this page.
 
     Endpoints:
-        - All
+        - MACHINE_ENDPOINTS.GetAll
+        - MACHINE_ENDPOINTS.UpdateStatus
 
     Author:
         - Cheyanne Lim

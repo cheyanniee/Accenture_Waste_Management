@@ -2,11 +2,27 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
+import useAuth from "../hooks/useAuth";
 import axios, { config } from "../api/axios";
+import { BALANCE_ENDPOINTS, TRANSACTION_ENDPOINTS, ROLES } from "../helper/Constant";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import useAuth from "../hooks/useAuth";
-import { BALANCE_ENDPOINTS, TRANSACTION_ENDPOINTS, ROLES } from "../helper/Constant";
+
+/*
+    Purpose:
+        - View Balance & Transactions History
+
+    Restriction:
+        - Only those with ROLES.User will be able to access this page.
+
+    Endpoints:
+        - BALANCE_ENDPOINTS.UserBalance
+        - TRANSACTION_ENDPOINTS.GetByID
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const Points = () => {
   const { auth } = useAuth();

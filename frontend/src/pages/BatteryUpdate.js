@@ -3,12 +3,29 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import moment from "moment";
 
-import axios, { config } from "../api/axios";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
+import axios, { config } from "../api/axios";
 import { BATTERY_ENDPOINTS } from "../helper/Constant";
 import { INITIAL_BATTERY_FORM_VALUES, registerBatterySchema } from "../schemas";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+/*
+    Purpose:
+        - Admins to Update & Create Batteries
+
+    Restriction:
+        - Only those with ROLES.Admin will be able to access this page.
+
+    Endpoints:
+        - BATTERY_ENDPOINTS.GetAll
+        - BATTERY_ENDPOINTS.Create
+        - BATTERY_ENDPOINTS.Update
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const BatteryUpdate = () => {
   const { auth } = useAuth();

@@ -23,7 +23,7 @@ import Footer from "../components/Footer";
         - Create and Edit Machines.
 
     Restriction:
-        - Only those with ROLES.User will be able to access this page.
+        - Only those with ROLES.Admin will be able to access this page.
 
     Endpoints:
         - MACHINE_ENDPOINTS.GetAll
