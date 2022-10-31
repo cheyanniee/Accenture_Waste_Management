@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
+import axios, { config } from "../api/axios";
+import { TRANSACTION_ENDPOINTS } from "../helper/Constant";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -15,18 +17,31 @@ import Title from "../components/Title";
         - Only those with ROLES.User will be able to access this page.
 
     Endpoints:
-        - NIL
+        - TRANSACTION_ENDPOINTS.StartR
+        - TRANSACTION_ENDPOINTS.StartE
 
     Author:
         - Cheyanne Lim
 */
 
 const UserAction = () => {
-    const { auth } = useAuth();
+    const { auth, setTransaction } = useAuth();
     const navigate = useNavigate();
 
-    const recycle = () => {
-        navigate("/insertRecycling", { replace: true });
+    const recycle = async () => {
+        try {
+            const response = await axios.post(
+                TRANSACTION_ENDPOINTS.StartR,
+                {},
+                config({ token: auth.token })
+            );
+            setTransaction(response?.data?.id);
+            console.log("TransactionID: ", response?.data?.id);
+            navigate("/insertRecycling", { replace: true });
+        } catch (error) {
+            console.log("Error: ", error);
+            navigate("/", { replace: true });
+        }
     }
 
     const exchange = () => {
