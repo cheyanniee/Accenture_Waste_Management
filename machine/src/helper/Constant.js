@@ -47,6 +47,7 @@ export const TASK_ENDPOINTS = {
   GetAll: "/dev/v1/task/listall",
   GetByID: "/dev/v1/task/collector",
   Collected: "/dev/v1/task/machine/collected/",
+  GetByMachine: "/dev/v1/task/machine/",
 }
 
 export const LOCATION_ENDPOINTS = {

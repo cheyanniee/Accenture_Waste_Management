@@ -25,8 +25,7 @@ const CollectorAction = () => {
     const { auth } = useAuth();
     const navigate = useNavigate();
 
-    const done = () => {
-        console.log("Done Collecting Batteries");
+    const start = () => {
         navigate("/confirmCollection", { replace: true });
     }
 
@@ -53,7 +52,7 @@ const CollectorAction = () => {
                         <div className="h2 py-3">
                             <button
                                 className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
-                                onClick={done}
+                                onClick={start}
                             >
                                 Start Collection
                             </button>
