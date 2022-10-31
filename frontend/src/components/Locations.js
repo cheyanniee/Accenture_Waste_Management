@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import axios from "../api/axios";
-import { MACHINE_ENDPOINTS, twoDigits } from "../helper/Constant";
+import { MACHINE_ENDPOINTS, DELETED_MACHINE, twoDigits } from "../helper/Constant";
 
 /*
     Purpose:
@@ -43,16 +43,19 @@ const Locations = () => {
           machine.fullAddress = fullAddress;
           newData.push(machine);
         });
-        setMachineList(newData);
-        setFilterList(newData);
+
+        const filteredData = newData?.filter((machine) => (machine.status !== DELETED_MACHINE));
+
+        setMachineList(filteredData);
+        setFilterList(filteredData);
+
         setRegionList([
           ...new Set(
-            newData.map(
+            filteredData.map(
               (machine) => machine.machinelocation.districtModel.region
             )
           ),
         ]);
-        console.log("Add %: ", newData);
       } catch (error) {
         console.log("Error: ", error);
       }

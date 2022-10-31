@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 import axios, { config } from "../api/axios";
-import { MACHINE_ENDPOINTS, FAULTY_MACHINE } from "../helper/Constant";
+import { MACHINE_ENDPOINTS, NORMAL_MACHINE, FAULTY_MACHINE } from "../helper/Constant";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -38,7 +38,7 @@ const ReportMachine = () => {
         );
         response?.data.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
 
-        var newData = [];
+        let newData = [];
         response?.data.map((machine) => {
             const percentage = (machine.currentLoad / machine.capacity) * 100;
             machine.percentage = percentage.toFixed().toString() + "%";
@@ -50,7 +50,7 @@ const ReportMachine = () => {
             newData.push(machine);
         });
 
-        const filteredData = newData?.filter((machine) => (machine.status !== FAULTY_MACHINE));
+        const filteredData = newData?.filter((machine) => (machine.status === NORMAL_MACHINE));
 
         setApiSearch(filteredData);
         setData(filteredData);

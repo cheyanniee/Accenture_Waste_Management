@@ -80,8 +80,9 @@ export const twoDigits = (unitNumber) => {
     return fullUnit.substring(0, fullUnit.length - 1);
 };
 
+export const NORMAL_MACHINE = "NORMAL";
 export const FAULTY_MACHINE = "FAULTY";
 export const DELETED_MACHINE = "DELETED";
-export const MACHINE_STATUS = ["NORMAL", FAULTY_MACHINE, DELETED_MACHINE];
+export const MACHINE_STATUS = [NORMAL_MACHINE, FAULTY_MACHINE, DELETED_MACHINE];
 
 export const REGIONS = ["Northeast", "Central", "West", "East", "North"];
