@@ -43,7 +43,7 @@ const UserAction = () => {
                     <div className="col-lg-4 border px-3 rounded-3">
                         <div className="row">
                             <h1 className="col-12 col-xl-8 h2 text-left text-primary pt-3 mb-3">
-                                Welcome Back {auth?.firstName}!
+                                Hi {auth?.firstName}!
                             </h1>
                         </div>
                         <br />
