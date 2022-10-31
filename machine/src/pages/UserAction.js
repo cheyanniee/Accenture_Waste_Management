@@ -1,4 +1,13 @@
-{/*
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+import useAuth from "../hooks/useAuth";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Title from "../components/Title";
+
+/*
     Purpose:
         Allow user to choose an action after logging in.
 
@@ -10,16 +19,7 @@
 
     Author:
         Cheyanne Lim
-*/}
-
-import React from "react";
-import { useNavigate } from "react-router-dom";
-
-import useAuth from "../hooks/useAuth";
-
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Title from "../components/Title";
+*/
 
 const UserAction = () => {
     const { auth } = useAuth();

@@ -1,11 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ROLES } from "../helper/Constant";
-import useAuth from "../hooks/useAuth";
 import useLogout from "../hooks/useLogout";
 
 const Title = () => {
-  const { auth } = useAuth();
   const navigate = useNavigate();
   const logout = useLogout();
   const signOut = async () => {
