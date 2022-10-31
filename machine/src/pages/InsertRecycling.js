@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
+import axios, { config } from "../api/axios";
+import { TRANSACTION_ENTRY_ENDPOINTS } from "../helper/Constant";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -15,19 +17,37 @@ import Title from "../components/Title";
         - Only those with ROLES.User will be able to access this page.
 
     Endpoints:
-        - NIL
+        - TRANSACTION_ENTRY_ENDPOINTS.Create (For Demo Purposes ONLY)
 
     Author:
         - Cheyanne Lim
 */
 
 const InsertRecycling = () => {
-    const { auth } = useAuth();
+    const { auth, transaction } = useAuth();
     const navigate = useNavigate();
 
-    const done = () => {
-        console.log("Done Inserting Batteries");
-        navigate("/confirmRecycling", { replace: true });
+    const done = async () => {
+        const params = {
+            "transactionId" : transaction,
+            "batteryType": "AA",
+            "quantity": 15
+        }
+
+        console.log("Done Inserting Batteries: ", params);
+
+        try {
+            const response = await axios.post(
+                TRANSACTION_ENTRY_ENDPOINTS.Create,
+                params,
+                config({ token: auth.token })
+            );
+            console.log("Transaction Entry: ", response?.data);
+            navigate("/confirmRecycling", { replace: true });
+        } catch (error) {
+            console.log("Error: ", error);
+            navigate("/", { replace: true });
+        }
     }
 
     return (
