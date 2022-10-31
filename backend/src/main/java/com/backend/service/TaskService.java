@@ -28,6 +28,9 @@ public class TaskService {
     PeopleRepo peopleRepo;
 
     @Autowired
+    MachineRepo machineRepo;
+
+    @Autowired
     PeopleService peopleService;
 
     @Autowired
@@ -109,8 +112,13 @@ public class TaskService {
     public boolean updateCollectedTime(Long taskId, String token) throws CustomException {
         getAdminOrCollectorByToken(token);
 
+        // update Task table on time collected
         if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of("Asia/Singapore")), taskId) == 0)
             throw new CustomException("Task update collected fails!");
+        TaskModel task = getTaskById(taskId);
+
+        // update machine table currentLoad = 0;
+        machineRepo.updateCurrentLoad(0F, task.getMachine().getId());
         return true;
     }
 
