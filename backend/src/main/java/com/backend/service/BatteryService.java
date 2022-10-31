@@ -33,7 +33,7 @@ public class BatteryService {
 
         BatteryModel batteryModel = BatteryModel.builder()
                 .type(batteryRequest.getType())
-                .recylePoint(batteryRequest.getRecyclePoint())
+                .recyclePoint(batteryRequest.getRecyclePoint())
                 .exchangePoint(batteryRequest.getExchangePoint())
                 .lastUpdate(dtCreate)
                 .build();
@@ -52,7 +52,7 @@ public class BatteryService {
         }
 
         if (batteryRequest.getRecyclePoint() != null && batteryRequest.getRecyclePoint() != 0) {
-            battery.setRecylePoint(batteryRequest.getRecyclePoint());
+            battery.setRecyclePoint(batteryRequest.getRecyclePoint());
         }
 
         ZoneId zid = ZoneId.of("Asia/Singapore");

@@ -2,22 +2,19 @@ package com.backend.service;
 
 import com.backend.configuration.CustomException;
 import com.backend.model.*;
-import com.backend.repo.BalanceRepo;
 import com.backend.repo.TransactionEntryRepo;
 import com.backend.repo.TransactionRepo;
-import com.backend.request.LocationRequest;
-import com.backend.request.PeopleRequest;
 import com.backend.request.TransactionEntryRequest;
 import com.backend.request.TransactionRequest;
 import com.backend.response.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransactionService {
@@ -240,7 +237,7 @@ public class TransactionService {
                 balanceChange += exchangeOne;
             }
             if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
-                Float pointsOne = teM.getBatteryModel().getRecylePoint() * teM.getQuantity();
+                Float pointsOne = teM.getBatteryModel().getRecyclePoint() * teM.getQuantity();
                 balanceChange += pointsOne;
             }
         }
