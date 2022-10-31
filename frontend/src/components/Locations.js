@@ -1,7 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import axios from "../api/axios";
 import { MACHINE_ENDPOINTS, twoDigits } from "../helper/Constant";
+
+/*
+    Purpose:
+        - Display Vending Machines with their Location and Details
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - MACHINE_ENDPOINTS.GetAll
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const Locations = () => {
   const [machineList, setMachineList] = useState([]);

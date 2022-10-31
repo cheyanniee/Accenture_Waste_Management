@@ -8,40 +8,62 @@ import Header from "./Header";
 import Footer from "./Footer";
 import Loader from "./Loader";
 
+/*
+    Purpose:
+        - Request for Password Reset
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - PEOPLE_ENDPOINTS.ResetPassword
+
+    Author:
+        - Alex Lim
+*/
+
 const ResetPassword = () => {
-  const emailRef = useRef();
-  const [errMsg, setErrMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+    const emailRef = useRef();
+    const [errMsg, setErrMsg] = useState("");
+    const [successMsg, setSuccessMsg] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    setErrMsg("");
-    emailRef.current.focus();
-  }, []);
+    useEffect(() => {
+        setErrMsg("");
+        emailRef.current.focus();
+    }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const email = emailRef.current.value;
-    if (!email) return;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const email = emailRef.current.value;
 
-    try {
-      setLoading(true);
-      const response = await axios.post(PEOPLE_ENDPOINTS.ResetPassword, {
-        email,
-      });
-      console.log(response);
-      setSuccessMsg(response?.data.message);
-      setLoading(false);
-      navigate("/resetpasswordnewpass", {
-        state: { message: response?.data.message, email },
-      });
-    } catch (error) {
-      setLoading(false);
-      setErrMsg(error?.response.data.message);
-    }
-    console.log("hello");
-  };
+        if (!email) return;
+
+        try {
+            setLoading(true);
+            const response = await axios.post(
+                PEOPLE_ENDPOINTS.ResetPassword,
+                {
+                    email,
+                }
+            );
+
+            console.log(response);
+            setSuccessMsg(response?.data.message);
+
+            setLoading(false);
+            navigate("/resetpasswordnewpass", {
+                state: { message: response?.data.message, email },
+            });
+        } catch (error) {
+            setLoading(false);
+            setErrMsg(error?.response.data.message);
+        }
+
+        console.log("hello");
+    };
+
   return (
     <>
       <Header />
