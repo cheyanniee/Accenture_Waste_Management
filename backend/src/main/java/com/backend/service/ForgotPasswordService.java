@@ -92,8 +92,8 @@ public class ForgotPasswordService {
 //            throw new Exception("No OTP entered.");
 //        }
 
-        List<ForgotPasswordModel> ltForgot = forgotPasswordRepo.findAllByPeopleModelEmail(request.getEmail());
-
+//        List<ForgotPasswordModel> ltForgot = forgotPasswordRepo.findAllByPeopleModelEmail(request.getEmail());
+        List<ForgotPasswordModel> ltForgot = forgotPasswordRepo.findAllByPeopleModelEmailOrderById(request.getEmail());
 
         if (ltForgot.size() <= 0) {
             throw new Exception("No valid OTP with this email.");
@@ -137,7 +137,7 @@ public class ForgotPasswordService {
         people.setPassword(passwordEncoder.encode(request.getPassword()));
         peopleRepo.save(people);
 
-        List<ForgotPasswordModel> ltForgot = forgotPasswordRepo.findAllByPeopleModelEmail(request.getEmail());
+        List<ForgotPasswordModel> ltForgot = forgotPasswordRepo.findAllByPeopleModelEmailOrderById(request.getEmail());
 
         if (ltForgot.size() > 0) {
             ltForgot.forEach(item -> forgotPasswordRepo.delete(item));
