@@ -281,6 +281,10 @@ public class PeopleService {
                 .orElseThrow(() -> new CustomException("No user with this Official ID."));
     }
 
+    public PeopleModel findPeopleByEmail(String email) throws CustomException {
+        return peopleRepo.getPeopleByEmail(email).orElseThrow(() -> new CustomException("Email not registered."));
+    }
+
 }
 
 
