@@ -1,15 +1,30 @@
 package com.backend.controller;
 
-import com.backend.configuration.CustomException;
 import com.backend.model.PeopleModel;
-import com.backend.request.BalanceRequest;
-import com.backend.request.PeopleRequest;
 import com.backend.response.GeneralResponse;
 import com.backend.service.BalanceService;
 import com.backend.service.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+/*
+    Purpose:
+        - APIs for BalanceModel-related operations
+        - Allow People (User) or Machine to view BalanceModel
+        - Allow People (Admin) to view all existing BalanceModels
+
+    Restriction:
+        - Only those with ROLES.Admin will be able to access the /listall page showing all existing BalanceModels.
+
+    Endpoints:
+        - dev/v1/balance/listall
+        - dev/v1/balance/find
+
+    Author:
+        - Lew Xu Hong (all related classes i.e. Model, Repo, Service, Request, Controller)
+*/
+
 
 @RestController
 @RequestMapping("dev/v1/balance")
@@ -45,6 +60,5 @@ public class BalanceController {
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
     }
-
 
 }

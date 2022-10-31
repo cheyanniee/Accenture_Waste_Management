@@ -13,13 +13,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+/*
+    Purpose:
+        - APIs for TransactionEntryModel-related operations
+        - Allow People (Admin) to view all existing TransactionEntryModel
+        - Allow People or Machine to find all TransactionEntryModels of a specific TransactionModel
+        - Create TransactionEntry on vending machine for recycling or exchanging of batteries;
+
+    Restriction:
+        - Only those with ROLES.Admin will be able to see all TransactionModels.
+
+    Endpoints:
+        - dev/v1/transactionentry/listall
+        - dev/v1/transactionentry/find
+        - dev/v1/transactionentry/create
+
+    Author:
+        - Lew Xu Hong (all related classes i.e. Model, Repo, Service, Request, Controller)
+*/
+
 @RestController
 @RequestMapping("dev/v1/transactionentry")
 public class TransactionEntryController {
 
     @Autowired
     TransactionEntryService transactionEntryService;
-
     @Autowired
     PeopleService peopleService;
 
@@ -51,7 +70,9 @@ public class TransactionEntryController {
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
     }
-    @PostMapping("create") // use for creating transaction entry
+
+    //Create a TransactionEntry, used in conjunction with vending machine flow
+    @PostMapping("create")
     public ResponseEntity<?> createTransactionEntry(@RequestBody TransactionEntryRequest transactionEntryRequest)  {
         try{
             TransactionEntryModel transactionEntryModel = transactionEntryService.createTransactionEntryWithRequest(transactionEntryRequest);
@@ -60,15 +81,4 @@ public class TransactionEntryController {
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
     }
-
-    @PostMapping("delete/Entry") // use for creating transaction entry
-    public ResponseEntity<?> deleteTransactionEntry(@RequestBody TransactionEntryRequest transactionEntryRequest)  {
-        try{
-            transactionEntryService.createTransactionEntryWithRequest(transactionEntryRequest);
-            return ResponseEntity.ok(new GeneralResponse("Transaction entry created, please check."));
-        }catch (Exception e){
-            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
-        }
-    }
-
 }

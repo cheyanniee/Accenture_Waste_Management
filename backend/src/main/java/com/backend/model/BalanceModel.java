@@ -1,14 +1,7 @@
 package com.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import javax.transaction.Transactional;
-import java.time.ZonedDateTime;
 
 @Entity
 @Table(name="balance")

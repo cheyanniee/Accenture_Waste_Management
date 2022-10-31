@@ -1,9 +1,6 @@
 package com.backend.request;
 
-import com.backend.model.PeopleModel;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
@@ -12,7 +9,6 @@ import javax.persistence.*;
 @Builder
 public class BalanceRequest {
 
-    //PeopleModel peopleModel;
     Long peopleId;
     Float currentBalance;
 }

@@ -14,7 +14,6 @@ public class PeopleRequest {
     String address;
     String postcode;
     String unitNumber;
-//    String areaName;
 
     //for peopleModel
     String firstName;

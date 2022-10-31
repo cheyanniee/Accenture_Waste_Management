@@ -1,6 +1,5 @@
 package com.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
 import org.hibernate.annotations.Type;
@@ -8,9 +7,6 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name="transaction")
 @Builder
@@ -40,10 +36,6 @@ public class TransactionModel {
     @OneToOne
     @JoinColumn(name="machine_id")
     MachineModel machineModel;
-
-//    @OneToMany
-//    @JoinColumn(name="transaction_entry_id")
-//    List<TransactionEntryModel> transactionEntry = new ArrayList<>();
 
     Float balanceChange;
 

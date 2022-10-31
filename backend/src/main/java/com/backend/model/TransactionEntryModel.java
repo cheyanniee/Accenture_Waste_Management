@@ -1,14 +1,11 @@
 package com.backend.model;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.time.ZonedDateTime;
 
 @Entity
 @Table(name="transaction_entry")
 @Builder
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,10 +19,6 @@ public class TransactionEntryModel {
     @OneToOne
     @JoinColumn(name="battery_id")
     BatteryModel batteryModel;
-
-    @OneToOne
-    @JoinColumn(name = "rate_id")
-    RateModel rateModel;
 
     @ManyToOne
     @JoinColumn(name="transaction_id")

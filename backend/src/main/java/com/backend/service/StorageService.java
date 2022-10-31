@@ -1,6 +1,5 @@
 package com.backend.service;
 
-
 import com.backend.configuration.CustomException;
 import com.backend.model.MachineModel;
 import com.backend.model.StorageModel;
@@ -22,10 +21,10 @@ public class StorageService {
     }
 
     public StorageModel getStorageByMachineId(MachineModel machineModel) throws Exception {
-        return storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(()-> new Exception("Unable to find balance"));
+        return storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(()-> new Exception("Unable to find storage"));
     }
 
-    // create balance alongside people
+    // create StorageModel alongside MachineModel
     public void createStorage (MachineModel machineModel) {
         StorageModel storageModel = StorageModel.builder()
                 .machineModel(machineModel)
@@ -47,12 +46,13 @@ public class StorageService {
         storageRepo.save(storageModel);
     }
 
-    //delete storage using machine id
+    //Delete StorageModel using machineId
     public void deleteStorage (MachineModel machineModel) throws Exception {
         StorageModel storageModel = storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(() -> new Exception("Unable to find storage of machine"));
         storageRepo.delete(storageModel);
     }
 
+    //Update the StorageModel when a transaction (exchange) is successful
     public void updateStorageByTransaction (MachineModel machineModel, String type, Integer batteriesExchange) throws Exception{
         StorageModel storageModel = storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(() -> new Exception("Unable to find storage of machine"));
         Integer batteriesStored = 0;
@@ -66,10 +66,4 @@ public class StorageService {
         }
         storageRepo.save(storageModel);
     }
-
-
-    //updateMachineStorage after exchange happens
-
-    //check storage
-
 }

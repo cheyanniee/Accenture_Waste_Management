@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Table(name="storage")
 @Builder
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
