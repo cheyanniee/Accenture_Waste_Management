@@ -64,4 +64,10 @@ ALTER TABLE machine ADD COLUMN unit_number VARCHAR;
 
 ALTER TABLE machine RENAME COLUMN unit_number unitNumber;
 
-CREATE TYPE status_type AS ENUM('FAULTY', 'NORMAL');
+ALTER TABLE machine RENAME COLUMN status status1;
+
+CREATE TYPE status_type1 AS ENUM('FAULTY', 'NORMAL', 'DELETED');
+
+drop type if exists status_type1;
+
+ALTER TYPE status_type ADD VALUE 'DELETED' AFTER 'NORMAL';
