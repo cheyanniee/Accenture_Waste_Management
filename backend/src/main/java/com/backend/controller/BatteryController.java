@@ -43,19 +43,19 @@ public class BatteryController {
     }
 
 
-    @PostMapping("create")
+    @PostMapping("create")//create new battery type
     public ResponseEntity<?> create(@RequestBody BatteryRequest batteryRequest) throws CustomException {
         batteryService.createBattery(batteryRequest);
         return ResponseEntity.ok(new GeneralResponse("Battery created successfully!"));
     }
 
-    @PostMapping("update")
+    @PostMapping("update")//update the information of a type of battery
     public ResponseEntity<?> update(@RequestBody BatteryRequest batteryRequest) throws CustomException {
         batteryService.updateBattery(batteryRequest);
         return ResponseEntity.ok(new GeneralResponse("Battery " + batteryRequest.getType() + " updated successfully!"));
     }
 
-    @PostMapping("delete")
+    @PostMapping("delete")//delete a type of battery
     public ResponseEntity<?> delete(@RequestBody BatteryRequest batteryRequest) throws CustomException {
         List<BatteryModel> listDeleted = batteryService.deleteBattery(batteryRequest);
         if (listDeleted.size() == 1) {
