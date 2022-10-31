@@ -19,8 +19,8 @@ public class BatteryModel {
     Integer id;
 
     String type;
-    Double recylePoint;
-    Double exchangePoint;
+    Float recylePoint;
+    Float exchangePoint;
     ZonedDateTime lastUpdate;
 
 }
