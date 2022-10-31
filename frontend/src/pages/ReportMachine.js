@@ -49,9 +49,11 @@ const ReportMachine = () => {
             newData.push(machine);
         });
 
-        setApiSearch(newData);
-        setData(newData);
-        console.log("Machines: ", newData);
+        const filteredData = newData?.filter((machine) => (machine.status !== FAULTY_MACHINE));
+
+        setApiSearch(filteredData);
+        setData(filteredData);
+        console.log("Machines: ", filteredData);
       } catch (error) {
         console.log("Error: ", error);
       }
