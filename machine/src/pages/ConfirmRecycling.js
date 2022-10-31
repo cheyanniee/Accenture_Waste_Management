@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 import axios, { config } from "../api/axios";
-import { TRANSACTION_ENTRY_ENDPOINTS, TRANSACTION_ENDPOINTS, ACTION_TYPES } from "../helper/Constant";
+import { TRANSACTION_ENTRY_ENDPOINTS, TRANSACTION_ENDPOINTS, MACHINE_ENDPOINTS, ACTION_TYPES } from "../helper/Constant";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -20,6 +20,7 @@ import Title from "../components/Title";
         - TRANSACTION_ENTRY_ENDPOINTS.GetByID
         - TRANSACTION_ENDPOINTS.Confirm
         - TRANSACTION_ENDPOINTS.Reject
+        - MACHINE_ENDPOINTS.UpdateCurrentLoad (Hardcoded for demo purposes ONLY)
 
     Author:
         - Cheyanne Lim
@@ -54,20 +55,37 @@ const ConfirmRecycling = () => {
     }, [])
 
     const yes = async () => {
-        const params = {
+        const params1 = {
             "transactionId" : transaction,
             "machineId": machineID,
             "chooseType": ACTION_TYPES.Recycle
         }
 
+        const params2 = {
+            "machineId": machineID,
+            "currentLoad": 50
+        }
+
         try {
-            const response = await axios.post(
+            console.log("Confirming Transaction: ", params1);
+
+            const res1 = await axios.post(
                 TRANSACTION_ENDPOINTS.Confirm,
-                params,
+                params1,
                 config({ token: auth.token })
             );
-            console.log("Transaction: ", response?.data);
-            setData(response?.data);
+
+            console.log("Confirmed Transaction: ", res1?.data);
+
+            console.log("Updating Current Load: ", params2);
+
+            const res2 = await axios.post(
+                MACHINE_ENDPOINTS.UpdateCurrentLoad,
+                params2,
+                config({ token: auth.token })
+            );
+
+            console.log("Updated Current Load: ", res2?.data);
         } catch (error) {
             console.log("Error: ", error);
             navigate("/", { replace: true });
