@@ -53,7 +53,8 @@ export const INITIAL_MACHINE_FORM_VALUES = {
 export const INITIAL_BATTERY_FORM_VALUES = {
   id: "",
   type: "",
-  valuePerWeight: "",
+  recyclePoint: "",
+  exchangePoint: "",
 };
 
 export const resetPasswordSchema = yup.object().shape({
@@ -201,5 +202,6 @@ export const registerMachineSchema = yup.object().shape({
 export const registerBatterySchema = yup.object().shape({
   id: yup.string(),
   type: yup.string(),
-  valuePerWeight: yup.string(),
+  recyclePoint: yup.string(),
+  exchangePoint: yup.string(),
 });
