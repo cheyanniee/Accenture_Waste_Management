@@ -31,6 +31,11 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (currentURL.contains("machine/listall")) {
             return true;
         }
+        if (currentURL.endsWith("forgotpassword/listall") || currentURL.endsWith("forgotpassword/sendotp")
+                || currentURL.endsWith("forgotpassword/reset")) {
+            return true;
+        }
+
         String token = request.getHeader("token");
         // String userId = request.getHeader("userId");
 
@@ -50,7 +55,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-            ModelAndView modelAndView) throws Exception {
+                           ModelAndView modelAndView) throws Exception {
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
