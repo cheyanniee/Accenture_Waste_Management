@@ -28,26 +28,49 @@ const InsertRecycling = () => {
     const navigate = useNavigate();
 
     const done = async () => {
-        const params = {
+        const params1 = {
             "transactionId" : transaction,
             "batteryType": "AA",
             "quantity": 15
         }
 
-        console.log("Done Inserting Batteries: ", params);
+        console.log("Inserting Batteries 1: ", params1);
 
         try {
             const response = await axios.post(
                 TRANSACTION_ENTRY_ENDPOINTS.Create,
-                params,
+                params1,
                 config({ token: auth.token })
             );
             console.log("Transaction Entry: ", response?.data);
-            navigate("/confirmRecycling", { replace: true });
         } catch (error) {
             console.log("Error: ", error);
             navigate("/", { replace: true });
+            return;
         }
+
+        const params2 = {
+            "transactionId" : transaction,
+            "batteryType": "AAA",
+            "quantity": 10
+        }
+
+        console.log("Inserting Batteries 2: ", params2);
+
+        try {
+            const response = await axios.post(
+                TRANSACTION_ENTRY_ENDPOINTS.Create,
+                params2,
+                config({ token: auth.token })
+            );
+            console.log("Transaction Entry: ", response?.data);
+        } catch (error) {
+            console.log("Error: ", error);
+            navigate("/", { replace: true });
+            return;
+        }
+
+        navigate("/confirmRecycling", { replace: true });
     }
 
     return (
