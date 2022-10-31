@@ -1,15 +1,15 @@
 package com.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import javax.transaction.Transactional;
-import java.time.ZonedDateTime;
 
+/*
+    Purpose:
+        - Entity to match with table in database (Balance)
+
+    Author:
+        - Lew Xu Hong
+*/
 @Entity
 @Table(name="balance")
 @Builder

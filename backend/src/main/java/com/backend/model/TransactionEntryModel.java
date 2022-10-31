@@ -1,14 +1,19 @@
 package com.backend.model;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+
+/*
+    Purpose:
+        - Entity to match with table in database (TransactionEntry)
+
+    Author:
+        - Lew Xu Hong
+*/
 
 @Entity
 @Table(name="transaction_entry")
 @Builder
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,10 +27,6 @@ public class TransactionEntryModel {
     @OneToOne
     @JoinColumn(name="battery_id")
     BatteryModel batteryModel;
-
-    @OneToOne
-    @JoinColumn(name = "rate_id")
-    RateModel rateModel;
 
     @ManyToOne
     @JoinColumn(name="transaction_id")

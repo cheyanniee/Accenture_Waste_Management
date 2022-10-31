@@ -13,6 +13,7 @@ public class BatteryRequest {
 
     Integer id;
     String type;
-    Float valuePerWeight;
+    Float recyclePoint;
+    Float exchangePoint;
     ZonedDateTime lastUpdate;
 }

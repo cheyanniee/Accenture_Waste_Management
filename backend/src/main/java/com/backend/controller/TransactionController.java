@@ -2,32 +2,50 @@ package com.backend.controller;
 
 import com.backend.model.PeopleModel;
 import com.backend.model.TransactionModel;
-import com.backend.request.BalanceRequest;
 import com.backend.request.ConfirmTransactionRequest;
-import com.backend.request.TransactionEntryRequest;
 import com.backend.request.TransactionRequest;
 import com.backend.response.GeneralResponse;
-import com.backend.service.BalanceService;
 import com.backend.service.PeopleService;
 import com.backend.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZonedDateTime;
+/*
+    Purpose:
+        - APIs for TransactionModel-related operations
+        - Allow People (Admin) to view all existing TransactionModel
+        - Allow People or Machine to find specific TransactionModel by PeopleId or TransactionId
+        - Create Transaction on vending machine for recycling or exchanging of batteries; able to confirm if Transaction
+        is to proceed or to abort (to recycle/exchange or not)
 
+    Restriction:
+        - Only those with ROLES.Admin will be able to see all TransactionModels.
+
+    Endpoints:
+        - dev/v1/transaction/listall
+        - dev/v1/transaction/find
+        - dev/v1/transaction/findOne
+        - dev/v1/transaction/find
+        - dev/v1/transaction/update
+        - dev/v1/transaction/create/start-r
+        - dev/v1/transaction/create/start-e
+        - dev/v1/transaction/create/yes
+        - dev/v1/transaction/create/no
+
+    Author:
+        - Lew Xu Hong (all related classes i.e. Model, Repo, Service, Request, Controller, ConfirmTransactionRequest)
+*/
 @RestController
 @RequestMapping("dev/v1/transaction")
 public class TransactionController {
     @Autowired
     TransactionService transactionService;
-
     @Autowired
     PeopleService peopleService;
 
     @GetMapping("listall")
     public ResponseEntity<?> listTransaction(@RequestHeader String token) {
-
         try{
             PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
             if (!peopleModel.getRole().equals(PeopleModel.Role.admin)){
@@ -38,12 +56,11 @@ public class TransactionController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
-
     }
 
-    @GetMapping("find") // view transaction by peopleId
+    //View Transaction by PeopleId
+    @GetMapping("find")
     public ResponseEntity<?> listTransactionByPeopleId(@RequestHeader String token)  {
-
         try{
             PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
             return ResponseEntity.ok(transactionService.getTransactionByPeopleId(peopleModel));
@@ -52,33 +69,42 @@ public class TransactionController {
         }
     }
 
-    @PostMapping("create/start-r") //create a transaction and eventually update balance (from Machine, but need another API)
+    //View Transaction by TransactionId
+    @GetMapping("findOne")
+    public ResponseEntity<?> findTransaction(@RequestHeader String token, @RequestBody Long id)  {
+        try{
+            TransactionModel transactionModel = transactionService.getTransaction(id);
+            return ResponseEntity.ok(transactionModel);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
+        }
+    }
+
+    //Create Transaction when user choose Recycle
+    @PostMapping("create/start-r")
     public ResponseEntity<?> createTempTransactionR (@RequestHeader String token)  {
         PeopleModel.Role roleTemp = peopleService.getRoleByToken(token);
         if (roleTemp.equals(PeopleModel.Role.user) || roleTemp.equals(PeopleModel.Role.admin)){
             try{
-                TransactionModel transactionModel = transactionService.createTempTransactionWithReturn();
-                transactionModel.setPeopleModel(peopleService.getPeopleById(peopleService.getIdByToken(token)));
-                transactionModel.setChoose(TransactionModel.Choose.recycle);
-                transactionService.saveChooseType(transactionModel);
-                return ResponseEntity.ok(transactionModel); //to get the id of the newly created transactionModel
+                TransactionModel transactionModel = transactionService.createTempTransactionWithParams(token,
+                        TransactionModel.Choose.recycle);
+                return ResponseEntity.ok(transactionModel); //to get the id of the newly created TransactionModel
             }catch (Exception e){
                 return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
             }
         }else{
-            return ResponseEntity.badRequest().body(new GeneralResponse("You do not have rights to acccess machine"));
+            return ResponseEntity.badRequest().body(new GeneralResponse("You do not have rights to access this page on the machine"));
         }
     }
 
-    @PostMapping("create/start-e") //create a transaction and eventually update balance (from Machine, but need another API)
+    //Create Transaction when user choose Exchange
+    @PostMapping("create/start-e")
     public ResponseEntity<?> createTempTransactionE (@RequestHeader String token)  {
         PeopleModel.Role roleTemp = peopleService.getRoleByToken(token);
         if (roleTemp.equals(PeopleModel.Role.user) || roleTemp.equals(PeopleModel.Role.admin)){
             try{
-                TransactionModel transactionModel = transactionService.createTempTransactionWithReturn();
-                transactionModel.setPeopleModel(peopleService.getPeopleById(peopleService.getIdByToken(token)));
-                transactionModel.setChoose(TransactionModel.Choose.exchange);
-                transactionService.saveChooseType(transactionModel);
+                TransactionModel transactionModel = transactionService.createTempTransactionWithParams(token,
+                        TransactionModel.Choose.exchange);
                 return ResponseEntity.ok(transactionModel); //to get the id of the newly created transactionModel
             }catch (Exception e){
                 return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
@@ -88,25 +114,28 @@ public class TransactionController {
         }
     }
 
-    @PostMapping("create/yes") //create a transaction and eventually update balance (from Machine, but need another API)
-    public ResponseEntity<?> confirmTransaction (@RequestBody ConfirmTransactionRequest confirmTransactionRequest)  {
+    //Confirm keeping Transaction when PeopleModel clicks confirm, thereby updating balance (People) and storage (Machine)
+    @PostMapping("create/yes")
+    public ResponseEntity<?> confirmTransaction (@RequestBody ConfirmTransactionRequest confirmTransactionRequest,
+                                                 @RequestHeader String token)  {
         try{
-
             Long transactionId = confirmTransactionRequest.getTransactionId();
 
+            //craete a new TransactionRequest for the method to updateTransactionByYes
             TransactionRequest transactionRequest = TransactionRequest.builder()
                     .peopleId(confirmTransactionRequest.getPeopleId())
                     .machineId(confirmTransactionRequest.getMachineId())
                     .chooseType(confirmTransactionRequest.getChooseType())
                     .build();
-            transactionService.updateTransactionByYesExchange(transactionRequest, transactionId);
+            transactionService.updateTransactionByYes(transactionRequest, transactionId, token);
             return ResponseEntity.ok(new GeneralResponse("Transaction done, balance updated."));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
     }
 
-    @PostMapping("create/no") //create a transaction and eventually update balance (from Machine, but need another API)
+    //Delete the Transaction and related TransactionEntry when person clicks cancel, no changes to balance or storage
+    @PostMapping("create/no")
     public ResponseEntity<?> deleteTempTransaction (@RequestBody ConfirmTransactionRequest confirmTransactionRequest)  {
         try{
             transactionService.deleteTransactionByNo(confirmTransactionRequest.getTransactionId());
@@ -115,21 +144,4 @@ public class TransactionController {
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
         }
     }
-
-
-
-
-    //should we allow people to manually update transaction and transaction entries?
-//    @PostMapping("delete")
-//    public ResponseEntity<?> deleteTransaction (@RequestBody Long transactionId)  {
-//        try{
-//            transactionService.deleteTransaction(transactionId);
-//            return ResponseEntity.ok(new GeneralResponse("Transaction deleted."));
-//        }catch (Exception e){
-//            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
-//        }
-//    }
-
-    // view transaction details by Id
-
 }

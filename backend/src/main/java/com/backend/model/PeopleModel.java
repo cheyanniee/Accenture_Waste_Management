@@ -12,7 +12,6 @@ import java.time.ZonedDateTime;
 @Entity
 @Table(name="people")
 @Builder
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor

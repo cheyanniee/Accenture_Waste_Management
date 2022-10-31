@@ -11,6 +11,25 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//Purpose:
+//    - List all rows of data from battery table in Database
+//    - Create, Update, Delete battery entry from Database
+//    - To add token Interceptors
+//    - To resolve CORS error
+//
+//Restrictions:
+//    - Only the logged in admin user can have access to these URLs
+//
+//Endpoints:
+//        - /dev/v1/battery/listall
+//        - /dev/v1/battery/create
+//        - /dev/v1/battery/update
+//        - /dev/v1/battery/delete
+//
+//Author:
+//    - Liu Fang
+
+
 @RestController
 @RequestMapping("dev/v1/battery")
 public class BatteryController {
@@ -39,11 +58,11 @@ public class BatteryController {
     @PostMapping("delete")
     public ResponseEntity<?> delete(@RequestBody BatteryRequest batteryRequest) throws CustomException {
         List<BatteryModel> listDeleted = batteryService.deleteBattery(batteryRequest);
-        if(listDeleted.size()==1){
+        if (listDeleted.size() == 1) {
             return ResponseEntity.ok(new GeneralResponse("Battery " + listDeleted.get(0).getType() + " deleted!"));
-        }else if(listDeleted.size()>1){
-            throw new CustomException("A few battery with type deleted.");
-        }else{
+        } else if (listDeleted.size() > 1) {
+            throw new CustomException("A few type of " + listDeleted.get(0).getType() + " deleted.");
+        } else {
             throw new CustomException("No battery deleted.");
         }
 

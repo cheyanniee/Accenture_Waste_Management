@@ -5,6 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+//Purpose:
+//    - Allow application to manage all exceptions in a central place
+//
+//Author:
+//    - Liu Fang
+
+
 @ControllerAdvice
 public class CommonException {
     @ExceptionHandler(CustomException.class)

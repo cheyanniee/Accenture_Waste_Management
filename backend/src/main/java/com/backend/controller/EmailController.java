@@ -11,6 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.MessagingException;
 
+//Purpose:
+//    - Create URL to send email from application
+//    - This URL is created for testing purpose
+//
+//Restrictions:
+//    - Only the logged-in user can have access to these URLs
+//
+//Endpoints:
+//        - /dev/v1/email/sendmail
+//
+//Author:
+//    - Liu Fang
 @RestController
 @RequestMapping("dev/v1/email")
 public class EmailController {
