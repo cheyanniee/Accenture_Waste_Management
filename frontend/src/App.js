@@ -24,6 +24,8 @@ import BatteryUpdate from "./pages/BatteryUpdate";
 import RegisterUsers from "./pages/RegisterUsers";
 
 import UserDetails from "./pages/UserDetails";
+import ResetPassword from "./components/ResetPassword";
+import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
 
 function App() {
   return (
@@ -34,6 +36,11 @@ function App() {
             {/* public routes */}
             <Route path="/login" element={<Login />}></Route>
             <Route path="/register" element={<Register />}></Route>
+            <Route path="/resetpassword" element={<ResetPassword />}></Route>
+            <Route
+              path="/resetpasswordnewpass"
+              element={<ResetPasswordNewPass />}
+            ></Route>
             <Route path="/locations" element={<LocationsPage />}></Route>
             <Route path="/unauthorized" element={<Unauthorized />}></Route>
 

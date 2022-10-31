@@ -127,10 +127,10 @@ public class MachineService {
     public boolean updateCurrentLoad(MachineRequest machineRequest) throws CustomException, MessagingException {
         MachineModel machine = getMachineById(machineRequest.getMachineId());
         Float inputLoad = machineRequest.getCurrentLoad();
-        if (machine.getCapacity() < machine.getCurrentLoad() + inputLoad) {
+        if (machine.getCapacity() < inputLoad) {
             throw new CustomException("Machine will be overloaded!");
         }
-        machine.setCurrentLoad(inputLoad + machine.getCurrentLoad());
+        machine.setCurrentLoad(inputLoad);
         machineRepo.updateCurrentLoad(machine.getCurrentLoad(), machine.getId());
         checkBalanceCapacity(machine);
         return true;

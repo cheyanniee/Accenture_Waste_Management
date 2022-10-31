@@ -9,7 +9,14 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
 import { INITIAL_MACHINE_FORM_VALUES, registerMachineSchema } from "../schemas";
-import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, LOCATION_ENDPOINTS, ROLES, MACHINE_STATUS } from "../helper/Constant";
+import {
+  PEOPLE_ENDPOINTS,
+  MACHINE_ENDPOINTS,
+  LOCATION_ENDPOINTS,
+  ROLES,
+  MACHINE_STATUS,
+  twoDigits,
+} from "../helper/Constant";
 
 const Machines = () => {
   const { auth } = useAuth();
@@ -54,38 +61,43 @@ const Machines = () => {
   const defaultUnit = "Unit";
   const [unitLabel, setUnitLabel] = useState(defaultUnit);
 
+  const fetchMachines = async () => {
+    try {
+      const response = await myAxios.get(
+        MACHINE_ENDPOINTS.GetAll,
+        config({ token: auth.token })
+      );
+      response?.data.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
+      setApiSearch(response?.data);
+      console.log("Machines: ", response?.data);
 
-    const fetchMachines = async () => {
-      try {
-        const response = await myAxios.get(
-          MACHINE_ENDPOINTS.GetAll,
-          config({ token: auth.token })
-        );
-        response?.data.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
-        setApiSearch(response?.data);
-        console.log("Machines: ", response?.data);
-
-        var newData = [];
-        response?.data.map((machine) => {
-            const percentage = (machine.currentLoad / machine.capacity) * 100;
-            machine.percentage = percentage.toFixed().toString() + "%";
-            newData.push(machine);
-        });
-        setData(newData);
-        console.log("Add %: ", newData);
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    };
+      var newData = [];
+      response?.data.map((machine) => {
+        const percentage = (machine.currentLoad / machine.capacity) * 100;
+        machine.percentage = percentage.toFixed().toString() + "%";
+        newData.push(machine);
+      });
+      setData(newData);
+      console.log("Add %: ", newData);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
   const loadAddress = async () => {
     try {
       console.log("postcode: ", values.postcode);
-      const url = "https://developers.onemap.sg/commonapi/search?searchVal=" + values.postcode + "&returnGeom=N&getAddrDetails=Y&pageNum=1";
+      const url =
+        "https://developers.onemap.sg/commonapi/search?searchVal=" +
+        values.postcode +
+        "&returnGeom=N&getAddrDetails=Y&pageNum=1";
       console.log("url: ", url);
       const response = await axios.get(url);
       console.log("data: ", response.data);
-      const add = response.data.results[0].BLK_NO + " " + response.data.results[0].ROAD_NAME;
+      const add =
+        response.data.results[0].BLK_NO +
+        " " +
+        response.data.results[0].ROAD_NAME;
       values.address = add;
       setAddressLabel(add);
 
@@ -101,7 +113,7 @@ const Machines = () => {
       console.log("error: ", error.response);
       setAddressLabel("No address found!");
     }
-  }
+  };
 
   useEffect(() => {
     fetchMachines();
@@ -113,7 +125,7 @@ const Machines = () => {
     const inputText = e.target.value;
     const filterResult = apiSearch.filter((item) => {
       return item.name
-        ? (item.name.toLowerCase().includes(inputText.toLowerCase()))
+        ? item.name.toLowerCase().includes(inputText.toLowerCase())
         : false;
     });
     filterResult.length > 0
@@ -126,23 +138,24 @@ const Machines = () => {
     resetLabels();
     resetForm();
     resetMsg();
-  }
+  };
 
   const onSubmit = async (values, actions) => {
     resetMsg();
 
-    const endpoint = (idLabel === defaultId)
-      ? MACHINE_ENDPOINTS.Create
-      : MACHINE_ENDPOINTS.Update
+    const endpoint =
+      idLabel === defaultId
+        ? MACHINE_ENDPOINTS.Create
+        : MACHINE_ENDPOINTS.Update;
 
     console.log("Endpoint: ", endpoint);
 
     if (values.floor > 0 && values.unit > 0) {
-        values.unitNumber = values.floor + "-" + values.unit;
+      values.unitNumber = values.floor + "-" + values.unit;
     } else if (values.floor > 0) {
-        values.unitNumber = values.floor + "-" + unitLabel;
+      values.unitNumber = values.floor + "-" + unitLabel;
     } else if (values.unit > 0) {
-        values.unitNumber =  floorLabel + "-" + values.unit;
+      values.unitNumber = floorLabel + "-" + values.unit;
     }
 
     const updatedFieldKeys = Object.keys(values).filter(
@@ -155,18 +168,20 @@ const Machines = () => {
       return { ...acc, [key]: values[key] };
     }, {});
 
-    params.machineId = (idLabel !== defaultId)
-      ? idLabel : "";
+    params.machineId = idLabel !== defaultId ? idLabel : "";
 
-    if (!(params.machineId) && !(
-            params.name
-            && params.currentLoad
-            && params.capacity
-            && params.status
-            && params.postcode
-            && params.address
-            && params.unitNumber
-       )) {
+    if (
+      !params.machineId &&
+      !(
+        params.name &&
+        params.currentLoad &&
+        params.capacity &&
+        params.status &&
+        params.postcode &&
+        params.address &&
+        params.unitNumber
+      )
+    ) {
       setFormErrMsg("Invalid Input");
       return;
     }
@@ -189,7 +204,7 @@ const Machines = () => {
       setFormErrMsg(error.response.data.message);
     }
     onReset();
-  }
+  };
 
   const handleUpdate = (machine) => {
     console.log("Task: ", machine.id, moment().format("DD-MM-YYYY HH:mm:ss"));
@@ -220,7 +235,7 @@ const Machines = () => {
     setFormErrMsg("");
     setErrMsg("");
     setFormSuccessMsg("");
-  }
+  };
 
   const resetLabels = () => {
     setIdLabel(defaultId);
@@ -234,22 +249,22 @@ const Machines = () => {
     serUnitNumberLabel(defaultUnitNumber);
     setFloorLabel(defaultFloor);
     setUnitLabel(defaultUnit);
-  }
+  };
 
   const {
-      values,
-      errors,
-      touched,
-      isSubmitting,
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      resetForm,
-    } = useFormik({
-      initialValues: INITIAL_MACHINE_FORM_VALUES,
-      validationSchema: registerMachineSchema,
-      onSubmit,
-    });
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    resetForm,
+  } = useFormik({
+    initialValues: INITIAL_MACHINE_FORM_VALUES,
+    validationSchema: registerMachineSchema,
+    onSubmit,
+  });
 
   return (
     <>
@@ -262,239 +277,243 @@ const Machines = () => {
             </h2>
           </div>
         </div>
-          <div className="worksingle-content col-lg-10 m-auto text-left justify-content-center">
-            <form className="contact-form row" onSubmit={handleSubmit}>
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">ID</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-lg light-300"
-                    id="id"
-                    placeholder={idLabel}
-                    value={idLabel}
-                    onBlur={handleBlur}
-                    disabled
-                  />
-                </div>
+        <div className="worksingle-content col-lg-10 m-auto text-left justify-content-center">
+          <form className="contact-form row" onSubmit={handleSubmit}>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">ID</label>
+                <input
+                  type="text"
+                  className="form-control form-control-lg light-300"
+                  id="id"
+                  placeholder={idLabel}
+                  value={idLabel}
+                  onBlur={handleBlur}
+                  disabled
+                />
               </div>
-              {/* End Input ID */}
+            </div>
+            {/* End Input ID */}
 
-              <div className="col-4 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Name</label>
-                  <input
-                    type="text"
-                    className={
-                      errors.name && touched.name
-                        ? "form-control form-control-lg-error light-300-error"
-                        : "form-control form-control-lg light-300"
-                    }
-                    id="name"
-                    placeholder={nameLabel}
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.name && touched.name && (
-                    <em className="text-error">{errors.name}</em>
-                  )}
-                </div>
+            <div className="col-4 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Name</label>
+                <input
+                  type="text"
+                  className={
+                    errors.name && touched.name
+                      ? "form-control form-control-lg-error light-300-error"
+                      : "form-control form-control-lg light-300"
+                  }
+                  id="name"
+                  placeholder={nameLabel}
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.name && touched.name && (
+                  <em className="text-error">{errors.name}</em>
+                )}
               </div>
-              {/* End Input Name */}
+            </div>
+            {/* End Input Name */}
 
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Current Load</label>
-                  <input
-                    type="number"
-                    className={
-                      errors.currentLoad && touched.currentLoad
-                        ? "form-control form-control-lg-error light-300-error"
-                        : "form-control form-control-lg light-300"
-                    }
-                    id="currentLoad"
-                    placeholder={currentLoadLabel}
-                    value={values.currentLoad}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.currentLoad && touched.currentLoad && (
-                    <em className="text-error">{errors.currentLoad}</em>
-                  )}
-                </div>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Current Load</label>
+                <input
+                  type="number"
+                  className={
+                    errors.currentLoad && touched.currentLoad
+                      ? "form-control form-control-lg-error light-300-error"
+                      : "form-control form-control-lg light-300"
+                  }
+                  id="currentLoad"
+                  placeholder={currentLoadLabel}
+                  value={values.currentLoad}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.currentLoad && touched.currentLoad && (
+                  <em className="text-error">{errors.currentLoad}</em>
+                )}
               </div>
-              {/* End Input Current Load */}
+            </div>
+            {/* End Input Current Load */}
 
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Capacity</label>
-                  <input
-                    type="number"
-                    className={
-                      errors.capacity && touched.capacity
-                        ? "form-control form-control-lg-error light-300-error"
-                        : "form-control form-control-lg light-300"
-                    }
-                    id="capacity"
-                    placeholder={capacityLabel}
-                    value={values.capacity}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.capacity && touched.capacity && (
-                    <em className="text-error">{errors.capacity}</em>
-                  )}
-                </div>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Capacity</label>
+                <input
+                  type="number"
+                  className={
+                    errors.capacity && touched.capacity
+                      ? "form-control form-control-lg-error light-300-error"
+                      : "form-control form-control-lg light-300"
+                  }
+                  id="capacity"
+                  placeholder={capacityLabel}
+                  value={values.capacity}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.capacity && touched.capacity && (
+                  <em className="text-error">{errors.capacity}</em>
+                )}
               </div>
-              {/* End Input Capacity */}
+            </div>
+            {/* End Input Capacity */}
 
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Status</label>
-                  <select
-                    className="form-control form-control-lg light-300"
-                    id="status"
-                    placeholder="status"
-                    value={values.status}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  >
-                    {statusOptions.map((stat) => {
-                      return(<option value={stat} label={stat} >{stat}</option>)
-                    })}
-                  </select>
-                  {errors.status && touched.status && (
-                    <em className="text-error">{errors.status}</em>
-                  )}
-                </div>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Status</label>
+                <select
+                  className="form-control form-control-lg light-300"
+                  id="status"
+                  placeholder="status"
+                  value={values.status}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                >
+                  {statusOptions.map((stat) => {
+                    return (
+                      <option value={stat} label={stat}>
+                        {stat}
+                      </option>
+                    );
+                  })}
+                </select>
+                {errors.status && touched.status && (
+                  <em className="text-error">{errors.status}</em>
+                )}
               </div>
-              {/* End Input Status */}
+            </div>
+            {/* End Input Status */}
 
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Postal Code</label>
-                  <input
-                    type="number"
-                    className={
-                      errors.postcode && touched.postcode
-                        ? "form-control form-control-lg-error light-300-error"
-                        : "form-control form-control-lg light-300"
-                    }
-                    id="postcode"
-                    placeholder={postcodeLabel}
-                    value={values.postcode}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.postcode && touched.postcode && (
-                    <em className="text-error">{errors.postcode}</em>
-                  )}
-                  <Link className="spanLink" onClick={loadAddress}>
-                    Load Address
-                  </Link>
-                </div>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Postal Code</label>
+                <input
+                  type="number"
+                  className={
+                    errors.postcode && touched.postcode
+                      ? "form-control form-control-lg-error light-300-error"
+                      : "form-control form-control-lg light-300"
+                  }
+                  id="postcode"
+                  placeholder={postcodeLabel}
+                  value={values.postcode}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.postcode && touched.postcode && (
+                  <em className="text-error">{errors.postcode}</em>
+                )}
+                <Link className="spanLink" onClick={loadAddress}>
+                  Load Address
+                </Link>
               </div>
-              {/* End Input Postal Code */}
+            </div>
+            {/* End Input Postal Code */}
 
-              <div className="col-4 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Address</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-lg light-300"
-                    id="address"
-                    placeholder={addressLabel}
-                    value={values.address}
-                    onBlur={handleBlur}
-                    disabled
-                  />
-                </div>
+            <div className="col-4 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Address</label>
+                <input
+                  type="text"
+                  className="form-control form-control-lg light-300"
+                  id="address"
+                  placeholder={addressLabel}
+                  value={values.address}
+                  onBlur={handleBlur}
+                  disabled
+                />
               </div>
-              {/* End Input Address */}
+            </div>
+            {/* End Input Address */}
 
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Region</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-lg light-300"
-                    id="region"
-                    placeholder={regionLabel}
-                    value={values.region}
-                    onBlur={handleBlur}
-                    disabled
-                  />
-                </div>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Region</label>
+                <input
+                  type="text"
+                  className="form-control form-control-lg light-300"
+                  id="region"
+                  placeholder={regionLabel}
+                  value={values.region}
+                  onBlur={handleBlur}
+                  disabled
+                />
               </div>
-              {/* End Input Region */}
+            </div>
+            {/* End Input Region */}
 
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Floor</label>
-                  <input
-                    type="number"
-                    className={
-                      errors.floor && touched.floor
-                        ? "form-control form-control-lg-error light-300-error"
-                        : "form-control form-control-lg light-300"
-                    }
-                    id="floor"
-                    placeholder={floorLabel}
-                    value={values.floor}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.floor && touched.floor && (
-                    <em className="text-error">{errors.floor}</em>
-                  )}
-                </div>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Floor</label>
+                <input
+                  type="number"
+                  className={
+                    errors.floor && touched.floor
+                      ? "form-control form-control-lg-error light-300-error"
+                      : "form-control form-control-lg light-300"
+                  }
+                  id="floor"
+                  placeholder={floorLabel}
+                  value={values.floor}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.floor && touched.floor && (
+                  <em className="text-error">{errors.floor}</em>
+                )}
               </div>
-              {/* End Input Floor */}
+            </div>
+            {/* End Input Floor */}
 
-              <div className="col-2 mb-4">
-                <div className="">
-                  <label htmlFor="firstName light-300">Unit</label>
-                  <input
-                    type="number"
-                    className={
-                      errors.unit && touched.unit
-                        ? "form-control form-control-lg-error light-300-error"
-                        : "form-control form-control-lg light-300"
-                    }
-                    id="unit"
-                    placeholder={unitLabel}
-                    value={values.unit}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.unit && touched.unit && (
-                    <em className="text-error">{errors.unit}</em>
-                  )}
-                </div>
+            <div className="col-2 mb-4">
+              <div className="">
+                <label htmlFor="firstName light-300">Unit</label>
+                <input
+                  type="number"
+                  className={
+                    errors.unit && touched.unit
+                      ? "form-control form-control-lg-error light-300-error"
+                      : "form-control form-control-lg light-300"
+                  }
+                  id="unit"
+                  placeholder={unitLabel}
+                  value={values.unit}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.unit && touched.unit && (
+                  <em className="text-error">{errors.unit}</em>
+                )}
               </div>
-              {/* End Input Unit */}
+            </div>
+            {/* End Input Unit */}
 
-              <div className="col-md-12 col-12 m-auto">
-                  <button
-                    disabled={isSubmitting}
-                    type="submit"
-                    className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
-                  >
-                    Submit
-                  </button>
-                  <button
-                    disabled={isSubmitting}
-                    type="reset"
-                    className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
-                    onClick={onReset}
-                  >
-                    Reset
-                  </button>
-                  <em className="text-error px-3">{formErrMsg}</em>
-                  <em className="text-success">{formSuccessMsg}</em>
-                </div>
-            </form>
+            <div className="col-md-12 col-12 m-auto">
+              <button
+                disabled={isSubmitting}
+                type="submit"
+                className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
+              >
+                Submit
+              </button>
+              <button
+                disabled={isSubmitting}
+                type="reset"
+                className="btn btn-secondary rounded-pill px-md-5 px-4 py-2 radius-0 text-light light-300"
+                onClick={onReset}
+              >
+                Reset
+              </button>
+              <em className="text-error px-3">{formErrMsg}</em>
+              <em className="text-success">{formSuccessMsg}</em>
+            </div>
+          </form>
         </div>
 
         <br />
@@ -510,9 +529,7 @@ const Machines = () => {
                     id="name"
                     onChange={handleFilter}
                   />
-                  <label htmlFor="officialId light-300">
-                    Collector's Name
-                  </label>
+                  <label htmlFor="officialId light-300">Collector's Name</label>
                   {message && <em className="text-success px-2">{message}</em>}
                   {errMsg && <em className="text-danger px-2">{errMsg}</em>}
                 </div>
@@ -532,17 +549,27 @@ const Machines = () => {
               <div className="col-1">Details</div>
             </div>
             {data.map((machine) => {
-              const { id, name, machinelocation, status, percentage, unitNumber } = machine;
+              const {
+                id,
+                name,
+                machinelocation,
+                status,
+                percentage,
+                unitNumber,
+              } = machine;
               return (
                 <div key={id} className="row align-items-start mb-2">
                   <div className="col-2">{id}</div>
                   <div className="col-2">{name}</div>
-                  <div className="col-2">{machinelocation.districtModel.region}</div>
                   <div className="col-2">
-                    {machinelocation.address}
-                    {(unitNumber) ? "#" + unitNumber : ""}
+                    {machinelocation.districtModel.region}
+                  </div>
+                  <div className="col-2">
+                    {machinelocation.address}{" "}
+                    {unitNumber ? "#" + twoDigits(unitNumber) : ""}
+                    {" S"}
                     {machinelocation.postcode}
-                 </div>
+                  </div>
                   <div className="col-1">{percentage}</div>
                   <div className="col-2">{status}</div>
                   <div className="col-1">
