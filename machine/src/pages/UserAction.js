@@ -29,10 +29,12 @@ const UserAction = () => {
     const navigate = useNavigate();
 
     const recycle = async () => {
+        const params = {};
+
         try {
             const response = await axios.post(
                 TRANSACTION_ENDPOINTS.StartR,
-                {},
+                params,
                 config({ token: auth.token })
             );
             setTransaction(response?.data?.id);
