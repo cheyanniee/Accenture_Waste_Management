@@ -24,7 +24,7 @@ const Header = () => {
         <Link className="navbar-brand h1" to="/">
           <i className="bx bx-buildings bx-sm text-dark"></i>
           <span className="text-dark h4">Battery</span>{" "}
-          <span className="text-primary h4">Life</span>
+          <span className="text-primary h4">L!fe</span>
         </Link>
         <button
           className="navbar-toggler border-0"

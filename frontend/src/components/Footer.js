@@ -10,7 +10,7 @@ const Footer = () => {
             <Link className="navbar-brand" to="index.html">
               <i className="bx bx-buildings bx-sm text-light" />
               <span className="text-light h5">Battery</span>{" "}
-              <span className="text-light h5 semi-bold-600">Life</span>
+              <span className="text-light h5 semi-bold-600">L!fe</span>
             </Link>
             <p className="text-light my-lg-4 my-2">
               Our company aims to help reduce the environmental impact
