@@ -1,6 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+/*
+    Purpose:
+        - Display Company Info
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 const Footer = () => {
   return (
     <footer className="bg-secondary pt-4">
