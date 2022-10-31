@@ -31,8 +31,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (currentURL.contains("machine/listall")) {
             return true;
         }
-        if (currentURL.endsWith("forgotpassword/listall") || currentURL.endsWith("forgotpassword/sendotp")
-                || currentURL.endsWith("forgotpassword/reset")) {
+        if (currentURL.contains("forgotpassword")) {
             return true;
         }
 
@@ -55,7 +54,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+            ModelAndView modelAndView) throws Exception {
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 

@@ -10,6 +10,8 @@ export const PEOPLE_ENDPOINTS = {
   RegisterCollector: "/dev/v1/people/register/collector",
   RegisterAdmin: "/dev/v1/people/register/admin",
   UpdateDetails: "/dev/v1/people/update",
+  ResetPassword: "/dev/v1/forgotpassword/sendotp",
+  ResetPasswordNewPass: "/dev/v1/forgotpassword/reset",
 };
 
 export const BALANCE_ENDPOINTS = {
@@ -54,7 +56,13 @@ export const ROLES = {
   Collector: "collector",
   Admin: "admin",
 };
+export const twoDigits = (unitNumber) => {
+  const fullUnit = unitNumber.split("-").reduce((acc, number) => {
+    return acc + (number <= 9 ? "0" + number : number) + "-";
+  }, "");
 
+  return fullUnit.substring(0, fullUnit.length - 1);
+};
 export const FAULTY_MACHINE = "FAULTY";
 
 export const MACHINE_STATUS = ["NORMAL", FAULTY_MACHINE];
