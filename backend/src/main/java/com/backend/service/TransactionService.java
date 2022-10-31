@@ -16,6 +16,20 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Purpose:
+        - Allow user to choose an action after logging in.
+
+    Restriction:
+        - Only those with ROLES.User will be able to access this page.
+
+    Endpoints:
+        - NIL
+
+    Author:
+        -
+*/
+
 @Service
 public class TransactionService {
 
@@ -216,7 +230,9 @@ public class TransactionService {
 
         //PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
         PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
+        Long testid = peopleService.getIdByToken(token);
         MachineModel machineModel = machineService.getMachineById(transactionRequest.getMachineId());
+        Integer testid2 = transactionRequest.getMachineId();
 
         List<TransactionEntryModel> transactionEntryModelList =
                 transactionEntryRepo.getTransactionEntryByTransactionId(id)
@@ -242,8 +258,12 @@ public class TransactionService {
             }
         }
 
+        Integer batteriesExchanged = 0;
+        if(transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
+            batteriesExchanged = Math.round(balanceChange/exchangePointsRate);
+        }
+
         //needs to be in integer because cannot exchange 1.5 battery
-        Integer batteriesExchanged = Math.round(balanceChange/exchangePointsRate);
 
         StorageModel storageModel = storageService.getStorageByMachineId(machineModel);
         //Storage to check if points and number of storage enough

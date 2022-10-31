@@ -60,6 +60,7 @@ public class TransactionEntryService {
         //find transaction first, if not create one then get by its the current id.
 
         TransactionModel transactionModel = transactionService.getTransaction(transactionEntryRequest.getTransactionId());
+
      //   TransactionModel transactionModel = transactionService.getLastTransaction();
 
         TransactionEntryModel transactionEntryNew = TransactionEntryModel.builder()
