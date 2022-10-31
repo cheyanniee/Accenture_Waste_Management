@@ -39,11 +39,11 @@ public class BatteryController {
     @PostMapping("delete")
     public ResponseEntity<?> delete(@RequestBody BatteryRequest batteryRequest) throws CustomException {
         List<BatteryModel> listDeleted = batteryService.deleteBattery(batteryRequest);
-        if(listDeleted.size()==1){
+        if (listDeleted.size() == 1) {
             return ResponseEntity.ok(new GeneralResponse("Battery " + listDeleted.get(0).getType() + " deleted!"));
-        }else if(listDeleted.size()>1){
-            throw new CustomException("A few battery with type deleted.");
-        }else{
+        } else if (listDeleted.size() > 1) {
+            throw new CustomException("A few type of " + listDeleted.get(0).getType() + " deleted.");
+        } else {
             throw new CustomException("No battery deleted.");
         }
 
