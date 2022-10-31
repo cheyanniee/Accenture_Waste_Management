@@ -5,19 +5,35 @@ import com.backend.model.TaskModel;
 import com.backend.request.TaskRequest;
 import com.backend.response.GeneralResponse;
 import com.backend.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+/*
+Purpose:
+    - Create URLs to list all tasks
+    - Create URL for Role.admin to create and assign task to collector, update task, and delete task
+    - Create URL for Role.collector to view task and update task as delivered
+    - Create URL for machine to update the task as collected
+
+Restrictions:
+    - Only logged-in user or admin can have access to CRUD operations.
+
+Endpoints:
+      - dev/v1/task/listall
+      - dev/v1/task/create
+      - dev/v1/task/collector/{collectorId}
+      - dev/v1/task/collector
+      - dev/v1/task/collector/delivered/{taskId}
+      - dev/v1/task/machine/collected/{taskId}
+      - dev/v1/task/delete/{taskId}
+      - dev/v1/task/update
+
+Author:
+    - Alex Lim
+ */
 
 @RestController
 @RequestMapping("/dev/v1/task")
