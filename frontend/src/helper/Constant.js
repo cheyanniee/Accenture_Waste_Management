@@ -1,5 +1,7 @@
 //export const BASE_URL = "http://localhost:8080";
-export const BASE_URL = "https://localhost";
+//export const BASE_URL = "https://localhost";
+export const BASE_URL =
+  "https://ec2-103-4-13-163.ap-northeast-1.compute.amazonaws.com:8080";
 
 export const PEOPLE_ENDPOINTS = {
   GetAll: "/dev/v1/people/listall",
