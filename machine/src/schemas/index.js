@@ -1,5 +1,19 @@
 import * as yup from "yup";
 
+/*
+    Purpose:
+        - Schemas for formik templates
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 export const INITIAL_EXCHANGE_FORM_VALUES = {
     transactionId: "",
     batteryType: "",
