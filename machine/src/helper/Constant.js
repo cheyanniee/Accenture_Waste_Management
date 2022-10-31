@@ -1,5 +1,5 @@
-export const BASE_URL = "http://localhost:8080";
-//export const BASE_URL = "https://localhost";
+//export const BASE_URL = "http://localhost:8080";
+export const BASE_URL = "https://localhost";
 
 export const PEOPLE_ENDPOINTS = {
   GetAll: "/dev/v1/people/listall",
