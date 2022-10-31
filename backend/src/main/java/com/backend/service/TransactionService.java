@@ -62,6 +62,20 @@ public class TransactionService {
         return transactionModel.getId();
     }
 
+//    public TransactionModel getLastTransaction (){
+//        return transactionRepo.getLastTransaction();
+//    }
+
+    public TransactionModel createTempTransactionWithParams (String token, TransactionModel.Choose choose) throws Exception{
+        TransactionModel transactionModel = TransactionModel.builder()
+                .peopleModel(peopleService.getPeopleById(peopleService.getIdByToken(token)))
+                .choose(choose)
+                .balanceChange(0F)
+                .build();
+        transactionRepo.save(transactionModel);
+        return transactionModel;
+    }
+
     public TransactionModel createTempTransactionWithReturn () {
         TransactionModel transactionModel = TransactionModel.builder()
                 .balanceChange(0F)
@@ -195,14 +209,16 @@ public class TransactionService {
 
 
     //experiment with storage
-    public ResponseEntity<?> updateTransactionByYesExchange (TransactionRequest transactionRequest, Long id) throws Exception {
+    public ResponseEntity<?> updateTransactionByYesExchange (TransactionRequest transactionRequest, Long id, String token) throws Exception {
 
 
         TransactionModel transactionModel = getTransaction(id);
 
         ZoneId zid = ZoneId.of("Asia/Singapore");
 
-        PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
+
+        //PeopleModel peopleModel = peopleService.getPeopleById(transactionRequest.getPeopleId());
+        PeopleModel peopleModel = peopleService.getPeopleById(peopleService.getIdByToken(token));
         MachineModel machineModel = machineService.getMachineById(transactionRequest.getMachineId());
 
         List<TransactionEntryModel> transactionEntryModelList =
@@ -218,12 +234,13 @@ public class TransactionService {
             if(transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
                 rateType = teM.getRateModel().getType();
                 System.out.print("Rate type is: " + rateType);
+                //still keep this but change to just getBattery, then which column - pointsperunit or valueperweight
                 exchangePointsRate = teM.getRateModel().getPointsPerUnit();
                 Float exchangeOne = teM.getRateModel().getPointsPerUnit() * teM.getQuantity();
                 balanceChange += exchangeOne;
             }
             if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
-                Float pointsOne = teM.getBatteryModel().getValuePerWeight() * teM.getQuantity();
+                Float pointsOne = teM.getBatteryModel().getRecylePoint() * teM.getQuantity();
                 balanceChange += pointsOne;
             }
         }
@@ -234,6 +251,8 @@ public class TransactionService {
         StorageModel storageModel = storageService.getStorageByMachineId(machineModel);
         //Storage to check if points and number of storage enough
 
+        //check this part with new battery model
+        //right now storage only got AA and AAA so this part should be okay.
         Integer batteriesStored = 0;
         if (rateType.equals("AAA")){
             batteriesStored = storageModel.getQtyAAA();
