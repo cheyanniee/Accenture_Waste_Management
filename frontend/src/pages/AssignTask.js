@@ -86,6 +86,7 @@ const AssignTask = () => {
          config({ token: auth.token })
       );
       console.log(response.data);
+      setSuccessMsg("Successfully Assigned!");
       fetchData();
     } catch (error) {
       console.log(error.response);
