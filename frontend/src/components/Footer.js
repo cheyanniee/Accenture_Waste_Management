@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="col-lg-3 col-12 align-left">
             <Link className="navbar-brand" to="index.html">
               <i className="bx bx-buildings bx-sm text-light" />
-              <span className="text-light h5">Battery</span>{" "}
+              <span className="text-light h5">BATTERY</span>{" "}
               <span className="text-light h5 semi-bold-600">L!fe</span>
             </Link>
             <p className="text-light my-lg-4 my-2">
