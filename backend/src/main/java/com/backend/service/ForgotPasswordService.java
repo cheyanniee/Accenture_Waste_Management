@@ -67,10 +67,10 @@ public class ForgotPasswordService {
 
         String content = "<p>Hi " + people.getFirstName() + ":</p>"
                 + "<p>For security reason, you're required to use the following "
-                + "One Time Password to reset your password:</p>"
+                + "One Time Password(OTP) to reset your password:</p>"
                 + "<p><b style='color:red;'>" + otp + "</b></p>"
                 + "<br>"
-                + "<p>Note: this OTP will expire in <b style='color:red;'>"+environment.getProperty("OTP_LIFE")+"</b> minutes.</p>";
+                + "<p>Note: this OTP will expire in <b style='color:red;'>" + environment.getProperty("OTP_LIFE") + "</b> minutes.</p>";
 
         EmailRequest emailRequest = EmailRequest.builder()
                 .recipient(people.getEmail())
@@ -83,7 +83,7 @@ public class ForgotPasswordService {
     }
 
     public void checkOtp(ForgotPasswordRequest request) throws Exception {
-        ForgotPasswordModel forgotPassword = new ForgotPasswordModel();
+//        ForgotPasswordModel forgotPassword = new ForgotPasswordModel();
 //        if (request.getEmail() == null || request.getEmail().isBlank()) {
 //            throw new Exception("No email entered.");
 //        }
@@ -95,10 +95,11 @@ public class ForgotPasswordService {
         List<ForgotPasswordModel> ltForgot = forgotPasswordRepo.findAllByPeopleModelEmail(request.getEmail());
 
 
-        if (ltForgot.size() > 0) {
-            forgotPassword = ltForgot.iterator().next();
+        if (ltForgot.size() <= 0) {
+            throw new Exception("No valid OTP with this email.");
         }
 
+        ForgotPasswordModel forgotPassword = ltForgot.iterator().next();
         ZonedDateTime otpDt = forgotPassword.getRequested_time();
         ZonedDateTime otpExpire = otpDt.plusMinutes(Long.parseLong(environment.getProperty("OTP_LIFE")));
         ZoneId zid = ZoneId.of("Asia/Singapore");
