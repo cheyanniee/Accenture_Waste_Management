@@ -4,7 +4,6 @@ import './App.css';
 import { ROLES } from "./helper/Constant";
 
 import Layout from "./components/Layout";
-import Login from "./components/Login";
 import Unauthorized from "./components/Unauthorized";
 import PersistLogin from "./components/PersistLogin";
 import Missing from "./components/Missing";
