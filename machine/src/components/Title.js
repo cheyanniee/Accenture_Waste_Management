@@ -2,6 +2,20 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useLogout from "../hooks/useLogout";
 
+/*
+    Purpose:
+        - Maintain consistency for all pages
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 const Title = () => {
   const navigate = useNavigate();
   const logout = useLogout();
