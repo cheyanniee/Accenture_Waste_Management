@@ -9,16 +9,16 @@ import Title from "../components/Title";
 
 /*
     Purpose:
-        Allow user to choose an action after logging in.
+        - Allow user to choose an action after logging in.
 
     Restriction:
-        Only those with ROLES.User will be able to access this page.
+        - Only those with ROLES.User will be able to access this page.
 
     Endpoints:
-        NIL
+        - NIL
 
     Author:
-        Cheyanne Lim
+        - Cheyanne Lim
 */
 
 const UserAction = () => {
