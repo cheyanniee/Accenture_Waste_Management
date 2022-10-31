@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
-import { MACHINE_ENDPOINTS } from "../helper/Constant";
+import { MACHINE_ENDPOINTS, twoDigits } from "../helper/Constant";
 
 const Locations = () => {
   const [machineList, setMachineList] = useState([]);
@@ -11,28 +11,32 @@ const Locations = () => {
   useEffect(() => {
     const getMachines = async () => {
       try {
-        const response = await axios.get(
-          MACHINE_ENDPOINTS.GetAll
-        );
-        response?.data.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+        const response = await axios.get(MACHINE_ENDPOINTS.GetAll);
+        response?.data.sort((a, b) => (a.id > b.id ? 1 : b.id > a.id ? -1 : 0));
         console.log("Machines: ", response?.data);
 
-        var newData = [];
+        let newData = [];
         response?.data.map((machine) => {
-            const percentage = (machine.currentLoad / machine.capacity) * 100;
-            machine.percentage = percentage.toFixed().toString() + "%";
+          const percentage = (machine.currentLoad / machine.capacity) * 100;
+          machine.percentage = percentage.toFixed().toString() + "%";
 
-            const fullAddress = machine.machinelocation.address
-                + ((machine.unitNumber) ? " #" + machine.unitNumber : " ")
-                + " Singapore " + machine.machinelocation.postcode;
-            machine.fullAddress = fullAddress;
-            newData.push(machine);
+          const fullAddress =
+            machine.machinelocation.address +
+            (machine.unitNumber ? " #" + twoDigits(machine.unitNumber) : " ") +
+            " Singapore " +
+            machine.machinelocation.postcode;
+          machine.fullAddress = fullAddress;
+          newData.push(machine);
         });
         setMachineList(newData);
         setFilterList(newData);
-        setRegionList(
-          [...new Set(newData.map((machine) => machine.machinelocation.districtModel.region))]
-        );
+        setRegionList([
+          ...new Set(
+            newData.map(
+              (machine) => machine.machinelocation.districtModel.region
+            )
+          ),
+        ]);
         console.log("Add %: ", newData);
       } catch (error) {
         console.log("Error: ", error);
@@ -43,7 +47,11 @@ const Locations = () => {
 
   const handleFilter = (region) => {
     console.log("my region is: ", region);
-    setFilterList(machineList.filter((machine) => machine.machinelocation.districtModel.region === region));
+    setFilterList(
+      machineList.filter(
+        (machine) => machine.machinelocation.districtModel.region === region
+      )
+    );
   };
 
   const clearFilter = () => {
@@ -62,9 +70,7 @@ const Locations = () => {
               <i className="bx bx-gift h3 mt-1" />
             </div>
             <div className="service-heading col-10 col-lg-9 text-start float-end light-300">
-              <h2 className="h3 pb-4 typo-space-line">
-                Machine Locations
-              </h2>
+              <h2 className="h3 pb-4 typo-space-line">Machine Locations</h2>
             </div>
           </div>
           <p className="service-footer col-10 offset-2 col-lg-9 offset-lg-3 text-start pb-3 text-muted px-2">
@@ -123,15 +129,9 @@ const Locations = () => {
                       <span className="btn btn-outline-light rounded-pill mb-lg-3 px-lg-4 light-300">
                         {name}
                       </span>
-                      <p className="card-text">
-                        {fullAddress}
-                      </p>
-                      <p className="card-text">
-                        Status: {status}
-                      </p>
-                      <p className="card-text">
-                        Storage: {percentage}
-                      </p>
+                      <p className="card-text">{fullAddress}</p>
+                      <p className="card-text">Status: {status}</p>
+                      <p className="card-text">Storage: {percentage}</p>
                     </div>
                   </div>
                 </Link>
