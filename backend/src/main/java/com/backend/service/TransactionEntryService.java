@@ -60,24 +60,26 @@ public class TransactionEntryService {
         //find transaction first, if not create one then get by its the current id.
 
         TransactionModel transactionModel = transactionService.getTransaction(transactionEntryRequest.getTransactionId());
+     //   TransactionModel transactionModel = transactionService.getLastTransaction();
 
         TransactionEntryModel transactionEntryNew = TransactionEntryModel.builder()
                 .transactionModel(transactionModel)
                 //.transactionModel(transactionModel)
-                //.batteryModel(batteryRepo.getBatteryByType(transactionEntryRequest.getBatteryType()).orElseThrow(() -> new CustomException("No such battery type exist")))
+                .batteryModel(batteryRepo.getBatteryByType(transactionEntryRequest.getBatteryType()).orElseThrow(() -> new CustomException("No such battery type exist")))
                // .rateModel(rateRepo.getRateByCategory(transactionEntryRequest.getBatteryType()).orElseThrow(() -> new CustomException("No such rate type exist")))
                 .quantity(transactionEntryRequest.getQuantity())
                 .build();
 
         String type = transactionEntryRequest.getBatteryType();
 
+        //comment out this part after LF puts up the new table
         //determine which table to compare by using Choose - exchange or recycle
-        if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
-            transactionEntryNew.setBatteryModel(batteryRepo.getBatteryByType(type).orElseThrow(() -> new CustomException("No such battery type exist")));
-        }
-        if (transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
-            transactionEntryNew.setRateModel(rateRepo.getRateByType(type).orElseThrow(() -> new CustomException("No such rate type exist")));
-        }
+//        if (transactionModel.getChoose().equals(TransactionModel.Choose.recycle)){
+//            transactionEntryNew.setBatteryModel(batteryRepo.getBatteryByType(type).orElseThrow(() -> new CustomException("No such battery type exist")));
+//        }
+//        if (transactionModel.getChoose().equals(TransactionModel.Choose.exchange)){
+//            transactionEntryNew.setRateModel(rateRepo.getRateByType(type).orElseThrow(() -> new CustomException("No such rate type exist")));
+//        }
 
         transactionEntryRepo.save(transactionEntryNew);
 
@@ -107,6 +109,9 @@ public class TransactionEntryService {
         }
         transactionEntryRepo.save(transactionEntryModel);
     }
+
+
+
 
 
 }

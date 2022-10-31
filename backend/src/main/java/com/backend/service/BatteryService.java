@@ -33,7 +33,8 @@ public class BatteryService {
 
         BatteryModel batteryModel = BatteryModel.builder()
                 .type(batteryRequest.getType())
-                .valuePerWeight(batteryRequest.getValuePerWeight())
+                .recylePoint(batteryRequest.getRecyclePoint())
+                .exchangePoint(batteryRequest.getExchangePoint())
                 .lastUpdate(dtCreate)
                 .build();
 
@@ -46,8 +47,12 @@ public class BatteryService {
             battery.setType(batteryRequest.getType());
         }
 
-        if (batteryRequest.getValuePerWeight() != null && batteryRequest.getValuePerWeight() != 0) {
-            battery.setValuePerWeight(batteryRequest.getValuePerWeight());
+        if (batteryRequest.getExchangePoint() != null && batteryRequest.getExchangePoint() != 0) {
+            battery.setExchangePoint(batteryRequest.getExchangePoint());
+        }
+
+        if (batteryRequest.getRecyclePoint() != null && batteryRequest.getRecyclePoint() != 0) {
+            battery.setRecylePoint(batteryRequest.getRecyclePoint());
         }
 
         ZoneId zid = ZoneId.of("Asia/Singapore");

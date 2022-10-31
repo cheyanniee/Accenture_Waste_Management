@@ -19,7 +19,8 @@ public class BatteryModel {
     Integer id;
 
     String type;
-    Float valuePerWeight;
+    Float recylePoint;
+    Float exchangePoint;
     ZonedDateTime lastUpdate;
 
 }

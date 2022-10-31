@@ -57,6 +57,7 @@ public class TransactionController {
         PeopleModel.Role roleTemp = peopleService.getRoleByToken(token);
         if (roleTemp.equals(PeopleModel.Role.user) || roleTemp.equals(PeopleModel.Role.admin)){
             try{
+               // TransactionModel transactionModel = transactionService.createTempTransactionWithParams(token, TransactionModel.Choose.recycle);
                 TransactionModel transactionModel = transactionService.createTempTransactionWithReturn();
                 transactionModel.setPeopleModel(peopleService.getPeopleById(peopleService.getIdByToken(token)));
                 transactionModel.setChoose(TransactionModel.Choose.recycle);
@@ -89,7 +90,8 @@ public class TransactionController {
     }
 
     @PostMapping("create/yes") //create a transaction and eventually update balance (from Machine, but need another API)
-    public ResponseEntity<?> confirmTransaction (@RequestBody ConfirmTransactionRequest confirmTransactionRequest)  {
+    public ResponseEntity<?> confirmTransaction (@RequestBody ConfirmTransactionRequest confirmTransactionRequest,
+                                                 @RequestHeader String token)  {
         try{
 
             Long transactionId = confirmTransactionRequest.getTransactionId();
@@ -99,7 +101,7 @@ public class TransactionController {
                     .machineId(confirmTransactionRequest.getMachineId())
                     .chooseType(confirmTransactionRequest.getChooseType())
                     .build();
-            transactionService.updateTransactionByYesExchange(transactionRequest, transactionId);
+            transactionService.updateTransactionByYesExchange(transactionRequest, transactionId, token);
             return ResponseEntity.ok(new GeneralResponse("Transaction done, balance updated."));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
