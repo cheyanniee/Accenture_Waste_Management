@@ -175,11 +175,11 @@ export const userDetailsSchema = yup.object().shape({
     .max(1000000, "Postal code must be at exactly 6 digits"),
   floor: yup
     .number()
-    .positive()
+    .moreThan(-1)
     .integer(),
   unit: yup
     .number()
-    .positive()
+    .moreThan(-1)
     .integer(),
   unitNumber: yup.string(),
 });

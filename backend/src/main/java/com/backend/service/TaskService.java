@@ -37,6 +37,7 @@ public class TaskService {
     MachineService machineService;
 
     private static final String NO_RIGHTS = "User do not have enough access rights to perform this operation!";
+    private static final String ASIA_SINGAPORE = "Asia/Singapore";
 
     // Listing all Tasks
     public List<TaskModel> listAllTask() {
@@ -47,7 +48,7 @@ public class TaskService {
     public boolean createTask(String collectorEmail, Integer machineId, PeopleModel admin) throws CustomException {
         MachineModel machine = machineService.getMachineById(machineId);
         TaskModel newTask = TaskModel.builder()
-                .assignedTime(ZonedDateTime.now(ZoneId.of("Asia/Singapore")))
+                .assignedTime(ZonedDateTime.now(ZoneId.of(ASIA_SINGAPORE)))
                 .collector(getCollectorByEmail(collectorEmail))
                 .admin(admin)
                 .machine(machine)
@@ -102,7 +103,7 @@ public class TaskService {
 
     public boolean updateDeliveredTaskByCollectorId(Long taskId, String token) throws CustomException {
         // if update failed, throws exception
-        if (taskRepo.updateDeliveredTaskByCollectorId(ZonedDateTime.now(ZoneId.of("Asia/Singapore")), taskId,
+        if (taskRepo.updateDeliveredTaskByCollectorId(ZonedDateTime.now(ZoneId.of(ASIA_SINGAPORE)), taskId,
                 peopleService.getIdByToken(token)) == 0)
             throw new CustomException("No task delivered");
 
@@ -113,7 +114,7 @@ public class TaskService {
         getAdminOrCollectorByToken(token);
 
         // update Task table on time collected
-        if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of("Asia/Singapore")), taskId) == 0)
+        if (taskRepo.updateCollectedTime(ZonedDateTime.now(ZoneId.of(ASIA_SINGAPORE)), taskId) == 0)
             throw new CustomException("Task update collected fails!");
         TaskModel task = getTaskById(taskId);
 
