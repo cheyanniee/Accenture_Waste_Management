@@ -1,3 +1,17 @@
+/*
+    Purpose:
+        - Save all endpoints and constants for easy access and change.
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - All
+
+    Author:
+        - Cheyanne Lim
+*/
+
 //export const BASE_URL = "http://localhost:8080";
 export const BASE_URL = "https://localhost";
 
@@ -49,24 +63,8 @@ export const LOCATION_ENDPOINTS = {
   GetDistrict: "/dev/v1/location/getdistrict?postcode=",
 }
 
-
 export const ROLES = {
   User: "user",
   Collector: "collector",
   Admin: "admin",
 };
-
-export const FAULTY_MACHINE = "FAULTY";
-
-export const MACHINE_STATUS = [
-  "NORMAL",
-  FAULTY_MACHINE,
-];
-
-export const REGIONS = [
-  "Northeast",
-  "Central",
-  "West",
-  "East",
-  "North",
-];
