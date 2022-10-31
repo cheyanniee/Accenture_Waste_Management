@@ -6,21 +6,28 @@ import com.backend.request.MachineRequest;
 import com.backend.response.GeneralResponse;
 import com.backend.service.LocationService;
 import com.backend.service.MachineService;
-
-import java.util.List;
-
-import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
+
+import javax.mail.MessagingException;
+import java.util.List;
+
+//Purpose:
+//    - Create URLs to register new location
+//    - Create URLs to retrieve district object from district table based on postcode
+//    - List all location entries in location table of DB
+//
+//Restrictions:
+//    - Only logged-in user with token has access.
+//
+//Endpoints:
+//      - /dev/v1/location/listall
+//      - /dev/v1/location/register
+//      - /dev/v1/location/getdistrict
+//
+//Author:
+//    - Alex Lim
 
 @RestController
 @RequestMapping("dev/v1/machine")
