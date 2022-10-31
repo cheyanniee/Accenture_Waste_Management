@@ -24,6 +24,20 @@ import CollectExchange from "./pages/CollectExchange";
 import CollectorAction from "./pages/CollectorAction";
 import ConfirmCollection from "./pages/ConfirmCollection";
 
+/*
+    Purpose:
+        - Establish Routes
+
+    Restriction:
+        - Each route's restrictions are specified below
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 
 function App() {
   return (
