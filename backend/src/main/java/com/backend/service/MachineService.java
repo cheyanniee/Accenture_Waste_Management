@@ -11,7 +11,6 @@ import com.backend.request.LocationRequest;
 import com.backend.request.MachineRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +33,9 @@ public class MachineService {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    StorageService storageService;
 
     @Autowired
     private Environment env;
@@ -67,6 +69,7 @@ public class MachineService {
                 .build();
 
         machineRepo.save(newMachine);
+        storageService.createStorage(newMachine);
         return true;
     }
 
