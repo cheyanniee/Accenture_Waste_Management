@@ -17,4 +17,6 @@ public interface ForgotPasswordRepo extends JpaRepository<ForgotPasswordModel, L
 
     List<ForgotPasswordModel> findAllByPeopleModelEmail(String email);
 
+    List<ForgotPasswordModel> findAllByPeopleModelEmailOrderById(String email);
+
 }

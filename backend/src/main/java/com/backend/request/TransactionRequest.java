@@ -1,15 +1,17 @@
 package com.backend.request;
 
-import com.backend.model.MachineModel;
-import com.backend.model.PeopleModel;
-import com.backend.model.TransactionEntryModel;
+
 import com.backend.model.TransactionModel;
 import lombok.*;
-
-import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
+/*
+    Purpose:
+        - Object to be used for sending the necessary fields and data for Transaction-related APIs
+
+    Author:
+        - Lew Xu Hong
+*/
 
 @Getter
 @Setter
@@ -18,11 +20,8 @@ import java.util.List;
 @Builder
 public class TransactionRequest {
 
-   // PeopleModel peopleModel;
-   // MachineModel machineModel;
     Long peopleId;
     Integer machineId;
-   // List<TransactionEntryModel> transactionEntry = new ArrayList<>();
     Float balanceChange;
     ZonedDateTime dateAndTime;
     TransactionModel.Choose chooseType;

@@ -1,6 +1,5 @@
 package com.backend.service;
 
-
 import com.backend.configuration.CustomException;
 import com.backend.model.MachineModel;
 import com.backend.model.StorageModel;
@@ -10,6 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+/*
+    Purpose:
+        - Service methods to be used in Storage-related APIs or assist in other functions
+        - Major functions: updating number of batteries of certain type in storage after transaction (exchange) is confirmed
+
+    Author:
+        - Lew Xu Hong
+*/
 
 @Service
 public class StorageService {
@@ -22,10 +30,10 @@ public class StorageService {
     }
 
     public StorageModel getStorageByMachineId(MachineModel machineModel) throws Exception {
-        return storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(()-> new Exception("Unable to find balance"));
+        return storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(()-> new Exception("Unable to find storage"));
     }
 
-    // create balance alongside people
+    // create StorageModel alongside MachineModel
     public void createStorage (MachineModel machineModel) {
         StorageModel storageModel = StorageModel.builder()
                 .machineModel(machineModel)
@@ -35,6 +43,7 @@ public class StorageService {
         storageRepo.save(storageModel);
     }
 
+    //manually update StorageModel
     public void updateStorage(StorageRequest storageRequest) throws Exception {
         StorageModel storageModel = storageRepo.getStorageByMachineId(storageRequest.getMachineId()).orElseThrow(()->
                 new CustomException("Storage does not exist"));
@@ -47,12 +56,13 @@ public class StorageService {
         storageRepo.save(storageModel);
     }
 
-    //delete storage using machine id
+    //Delete StorageModel using machineId
     public void deleteStorage (MachineModel machineModel) throws Exception {
         StorageModel storageModel = storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(() -> new Exception("Unable to find storage of machine"));
         storageRepo.delete(storageModel);
     }
 
+    //Update the StorageModel when a transaction (exchange) is successful
     public void updateStorageByTransaction (MachineModel machineModel, String type, Integer batteriesExchange) throws Exception{
         StorageModel storageModel = storageRepo.getStorageByMachineId(machineModel.getId()).orElseThrow(() -> new Exception("Unable to find storage of machine"));
         Integer batteriesStored = 0;
@@ -66,10 +76,4 @@ public class StorageService {
         }
         storageRepo.save(storageModel);
     }
-
-
-    //updateMachineStorage after exchange happens
-
-    //check storage
-
 }

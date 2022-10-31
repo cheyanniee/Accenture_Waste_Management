@@ -9,6 +9,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//Purpose:
+//    - Create and manage token Interceptors
+//    - Control access to URL endpoints
+//    - Validate token before access endpoints
+//
+//Author:
+//    - Liu Fang, Xu Hong Lew, Alex Lim
+
 @Configuration
 public class TokenInterceptor implements HandlerInterceptor {
 
@@ -31,8 +39,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         if (currentURL.contains("machine/listall")) {
             return true;
         }
-        if (currentURL.endsWith("forgotpassword/listall") || currentURL.endsWith("forgotpassword/sendotp")
-                || currentURL.endsWith("forgotpassword/reset")) {
+        if (currentURL.endsWith("forgotpassword/sendotp") || currentURL.endsWith("forgotpassword/reset")) {
             return true;
         }
 

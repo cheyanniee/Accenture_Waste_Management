@@ -4,10 +4,16 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/*
+    Purpose:
+        - Entity to match with table in database (Storage)
+
+    Author:
+        - Lew Xu Hong
+*/
 @Entity
 @Table(name="storage")
 @Builder
-//@Data
 @Getter
 @Setter
 @NoArgsConstructor
