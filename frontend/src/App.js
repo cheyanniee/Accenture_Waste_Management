@@ -27,6 +27,20 @@ import UserDetails from "./pages/UserDetails";
 import ResetPassword from "./components/ResetPassword";
 import ResetPasswordNewPass from "./components/ResetPasswordNewPass";
 
+/*
+    Purpose:
+        - Establish Routes
+
+    Restriction:
+        - Each route's restrictions are specified below
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 function App() {
   return (
     <>
