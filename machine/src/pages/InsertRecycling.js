@@ -34,36 +34,31 @@ const InsertRecycling = () => {
             "quantity": 15
         }
 
-        console.log("Inserting Batteries 1: ", params1);
-
-        try {
-            const response = await axios.post(
-                TRANSACTION_ENTRY_ENDPOINTS.Create,
-                params1,
-                config({ token: auth.token })
-            );
-            console.log("Transaction Entry: ", response?.data);
-        } catch (error) {
-            console.log("Error: ", error);
-            navigate("/", { replace: true });
-            return;
-        }
-
         const params2 = {
             "transactionId" : transaction,
             "batteryType": "AAA",
             "quantity": 10
         }
 
-        console.log("Inserting Batteries 2: ", params2);
 
         try {
-            const response = await axios.post(
+            console.log("Inserting Batteries 1: ", params1);
+            
+            const res1 = await axios.post(
+                TRANSACTION_ENTRY_ENDPOINTS.Create,
+                params1,
+                config({ token: auth.token })
+            );
+            console.log("Transaction Entry 1: ", res1?.data);
+            
+            console.log("Inserting Batteries 2: ", params2);
+
+            const res2 = await axios.post(
                 TRANSACTION_ENTRY_ENDPOINTS.Create,
                 params2,
                 config({ token: auth.token })
             );
-            console.log("Transaction Entry: ", response?.data);
+            console.log("Transaction Entry 2: ", res2?.data);
         } catch (error) {
             console.log("Error: ", error);
             navigate("/", { replace: true });
