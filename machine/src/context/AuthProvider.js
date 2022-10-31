@@ -21,8 +21,6 @@ export const AuthProvider = ({ children }) => {
     const [transaction, setTransaction] = useState({});
     const [machineID, setMachineID] = useState({});
 
-    machineID = 14;
-
     /* console.log("Auth Provider:--", auth?.token); */
 
     return (
