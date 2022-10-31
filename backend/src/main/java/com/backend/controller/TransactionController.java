@@ -52,16 +52,26 @@ public class TransactionController {
         }
     }
 
+    @GetMapping("findOne") // view transaction by peopleId
+    public ResponseEntity<?> findTransaction(@RequestHeader String token, @RequestBody Long id)  {
+
+        try{
+            TransactionModel transactionModel = transactionService.getTransaction(id);
+            return ResponseEntity.ok(transactionModel);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
+        }
+    }
     @PostMapping("create/start-r") //create a transaction and eventually update balance (from Machine, but need another API)
     public ResponseEntity<?> createTempTransactionR (@RequestHeader String token)  {
         PeopleModel.Role roleTemp = peopleService.getRoleByToken(token);
         if (roleTemp.equals(PeopleModel.Role.user) || roleTemp.equals(PeopleModel.Role.admin)){
             try{
-               // TransactionModel transactionModel = transactionService.createTempTransactionWithParams(token, TransactionModel.Choose.recycle);
-                TransactionModel transactionModel = transactionService.createTempTransactionWithReturn();
-                transactionModel.setPeopleModel(peopleService.getPeopleById(peopleService.getIdByToken(token)));
-                transactionModel.setChoose(TransactionModel.Choose.recycle);
-                transactionService.saveChooseType(transactionModel);
+                TransactionModel transactionModel = transactionService.createTempTransactionWithParams(token, TransactionModel.Choose.recycle);
+//                TransactionModel transactionModel = transactionService.createTempTransactionWithReturn();
+//                transactionModel.setPeopleModel(peopleService.getPeopleById(peopleService.getIdByToken(token)));
+//                transactionModel.setChoose(TransactionModel.Choose.recycle);
+//                transactionService.saveChooseType(transactionModel);
                 return ResponseEntity.ok(transactionModel); //to get the id of the newly created transactionModel
             }catch (Exception e){
                 return ResponseEntity.badRequest().body(new GeneralResponse(e.getMessage()));
