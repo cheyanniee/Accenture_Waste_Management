@@ -8,6 +8,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/*
+Purpose:
+    - Define services to get district entry by first 2 digit of postcode from database
+    - Define service to List all district entries in database
+
+Author:
+    - Liu Fang
+ */
+
 @Service
 public class DistrictService {
 

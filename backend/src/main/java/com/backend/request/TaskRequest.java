@@ -1,12 +1,16 @@
 package com.backend.request;
 
+import lombok.*;
+
 import java.time.ZonedDateTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+/*
+    Purpose:
+        - Create class to carry data as input for Task controller or services
+
+    Author:
+        - Alex Lim
+*/
 
 @Getter
 @Setter

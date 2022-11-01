@@ -1,16 +1,22 @@
 package com.backend.repo;
 
 import com.backend.model.TaskModel;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
+/*
+    Purpose:
+        - Repository to define JPA queries for task
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+    Author:
+        - Alex Lim
+*/
 
 public interface TaskRepo extends JpaRepository<TaskModel, Long> {
   @Query("SELECT tasks from TaskModel tasks WHERE collector_id=?1")

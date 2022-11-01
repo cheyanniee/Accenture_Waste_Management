@@ -10,6 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Purpose:
+        - Repository to define JPA queries for battery table
+
+    Author:
+        - Liu Fang
+*/
+
 @Repository
 public interface BatteryRepo extends JpaRepository<BatteryModel, Integer>{
 

@@ -9,6 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
+/*
+    Purpose:
+        - Repository to define JPA queries for people
+
+    Author:
+        - Liu Fang, Lew Xu Hong
+*/
+
 public interface PeopleRepo extends JpaRepository<PeopleModel, Long> {
 
     @Query("select people from PeopleModel people where email=?1")

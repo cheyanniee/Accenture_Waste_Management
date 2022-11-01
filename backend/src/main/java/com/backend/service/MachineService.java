@@ -9,15 +9,23 @@ import com.backend.repo.MachineRepo;
 import com.backend.request.EmailRequest;
 import com.backend.request.LocationRequest;
 import com.backend.request.MachineRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.List;
 import java.util.Objects;
 
-import javax.mail.MessagingException;
+/*
+Purpose:
+    - Define service to list all machine entries in machine table
+    - Define service to get machine by machineId
+    - Define service to create, update, delete machine in machine table
+
+Author:
+    - Alex Lim
+ */
 
 @Service
 public class MachineService {

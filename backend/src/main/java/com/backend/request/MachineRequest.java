@@ -8,6 +8,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/*
+    Purpose:
+        - Create class to carry data as input for Machine controller or services
+
+    Author:
+        - Liu Fang
+*/
+
 @Getter
 @Setter
 @NoArgsConstructor

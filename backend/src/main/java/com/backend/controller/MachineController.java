@@ -13,24 +13,27 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.util.List;
 
-//Purpose:
-//    - Create URLs to listall machines, and CRUD operations of machine entry in machine table of DB
-//    - Create URLs to update load and the status of machine
-//
-//Restrictions:
-//    - Only logged-in user can have access to CRUD operations.
-//
-//Endpoints:
-//      - /dev/v1/machine/listall
-//      - /dev/v1/machine/get/{machineId}
-//      - /dev/v1/machine/add
-//      - /dev/v1/machine/update
-//      - /dev/v1/machine/delete/{machineId}
-//      - /dev/v1/machine/update/currentload
-//      - /dev/v1/machine/update/status
-//
-//Author:
-//    - Alex Lim
+/*
+Purpose:
+    - Create URLs to listall machines, and CRUD operations of machine entry in machine table of DB
+    - Create URLs to update load and the status of machine
+
+Restrictions:
+    - Only logged-in user can have access to CRUD operations.
+
+Endpoints:
+      - /dev/v1/machine/listall
+      - /dev/v1/machine/get/{machineId}
+      - /dev/v1/machine/add
+      - /dev/v1/machine/update
+      - /dev/v1/machine/delete/{machineId}
+      - /dev/v1/machine/update/currentload
+      - /dev/v1/machine/update/status
+
+Author:
+    - Alex Lim
+
+ */
 
 @RestController
 @RequestMapping("dev/v1/machine")

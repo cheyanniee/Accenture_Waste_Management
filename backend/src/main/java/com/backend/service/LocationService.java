@@ -10,6 +10,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/*
+Purpose:
+    - Define service to list all location entries in location table
+    - Define service to create new location
+    - Define service to get location data by postcode
+    - Define service to return existing location or create new location based on postcode
+
+Author:
+    - Liu Fang
+ */
+
 @Service
 public class LocationService {
 

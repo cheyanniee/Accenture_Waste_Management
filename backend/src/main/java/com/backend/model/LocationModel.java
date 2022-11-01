@@ -5,6 +5,14 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/*
+Purpose:
+    - Create data model to match with data in location table in DB.
+
+Author:
+    - Liu Fang
+ */
+
 @Entity
 @Table(name = "location")
 @Builder

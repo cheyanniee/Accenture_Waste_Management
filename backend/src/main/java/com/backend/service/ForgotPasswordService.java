@@ -16,6 +16,17 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+/*
+Purpose:
+    - Define service to list all entries in forgot_password table
+    - Define service to create new entry in forgot_password table, and send OTP email
+    - Define service to validate OTP
+    - Define service to reset password after validating OTP
+
+Author:
+    - Liu Fang
+ */
+
 @Service
 public class ForgotPasswordService {
 

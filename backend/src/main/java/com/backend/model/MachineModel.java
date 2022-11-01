@@ -1,13 +1,19 @@
 package com.backend.model;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import lombok.*;
-
-import javax.persistence.*;
-
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
-import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import javax.persistence.*;
+
+/*
+Purpose:
+    - Create data model to match with machine table in DB.
+
+Author:
+    - Alex Lim
+ */
 
 @Entity
 @Table(name = "machine")

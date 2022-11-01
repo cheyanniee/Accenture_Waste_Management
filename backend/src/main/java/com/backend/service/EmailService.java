@@ -11,6 +11,13 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+/*
+Purpose:
+    - Define services to send mail based on emailRequest
+
+Author:
+    - Liu Fang
+ */
 @Service
 public class EmailService {
 
@@ -26,8 +33,6 @@ public class EmailService {
         MimeMessageHelper mimeMessageHelper;
 
 
-        // Setting multipart as true for attachments to
-        // be send
         mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
         mimeMessageHelper.setFrom(sender);
         mimeMessageHelper.setTo(emailRequest.getRecipient());

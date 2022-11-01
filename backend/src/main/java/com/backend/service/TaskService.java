@@ -3,20 +3,28 @@ package com.backend.service;
 import com.backend.configuration.CustomException;
 import com.backend.model.MachineModel;
 import com.backend.model.PeopleModel;
-import com.backend.model.TaskModel;
 import com.backend.model.PeopleModel.Role;
+import com.backend.model.TaskModel;
 import com.backend.repo.MachineRepo;
 import com.backend.repo.PeopleRepo;
 import com.backend.repo.TaskRepo;
 import com.backend.request.TaskRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
+
+/*
+Purpose:
+    - Define service to list all task entries in task table
+    - Define service to get task by collectorId
+    - Define service to create, update, delete task in task table
+
+Author:
+    - Alex Lim
+ */
 
 @Service
 public class TaskService {

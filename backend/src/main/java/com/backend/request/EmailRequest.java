@@ -2,6 +2,14 @@ package com.backend.request;
 
 import lombok.*;
 
+/*
+    Purpose:
+        - Create class to carry data as input for Email controller or services
+
+    Author:
+        - Liu Fang
+*/
+
 @Getter
 @Setter
 @Data

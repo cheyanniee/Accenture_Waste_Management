@@ -9,6 +9,14 @@ import org.hibernate.annotations.TypeDef;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
+/*
+Purpose:
+    - Create data model to match with people table in DB.
+
+Author:
+    - Lew Xu Hong
+ */
+
 @Entity
 @Table(name="people")
 @Builder

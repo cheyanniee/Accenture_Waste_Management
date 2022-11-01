@@ -8,6 +8,14 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Purpose:
+        - Repository to define JPA queries for forgot_password
+
+    Author:
+        - Liu Fang
+*/
+
 public interface ForgotPasswordRepo extends JpaRepository<ForgotPasswordModel, Long>{
 
     @Query("select forgotpasswod from ForgotPasswordModel forgotpasswod where peopleModel=?1")

@@ -5,6 +5,14 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
+/*
+Purpose:
+    - Create data model to match with task table in DB.
+
+Author:
+    - Alex
+ */
+
 @Entity
 @Table(name = "task")
 @Builder

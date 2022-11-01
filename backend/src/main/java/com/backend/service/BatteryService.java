@@ -12,6 +12,16 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
+
+/*
+Purpose:
+    - Define services to Create, Update, Delete battery table in database
+    - Define service to List all battery entries in database
+
+Author:
+    - Liu Fang
+ */
+
 @Service
 public class BatteryService {
 

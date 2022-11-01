@@ -5,6 +5,14 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
+
+/*
+Purpose:
+    - Create data model to match with data in battery table in DB.
+
+Author:
+    - Liu Fang
+ */
 @Entity
 @Table(name = "battery")
 @Builder

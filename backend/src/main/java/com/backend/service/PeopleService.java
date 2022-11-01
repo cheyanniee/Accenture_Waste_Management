@@ -37,13 +37,33 @@ public class PeopleService {
     @Autowired
     Environment environment;
 
+    /*
+    Purpose:
+    - List all people entries in People table
+    Author:
+    - Liu Fang
+     */
     public List<PeopleModel> listPeople() {
         return peopleRepo.findAll();
     }
 
+/*
+    Purpose:
+    - find people by peopleId
+    Author:
+    - Alex Lim
+ */
+
     public Optional<PeopleModel> findPeople(Long id) {
         return peopleRepo.findById(id);
     }
+
+/*
+    Purpose:
+    - create new user
+    Author:
+    - Lew Xu Hong, Liu Fang
+ */
 
     public void createUser(PeopleRequest peopleRequest) throws Exception {
 
@@ -72,7 +92,8 @@ public class PeopleService {
 
         /*
             Purpose:
-            - (explanation here please)
+            - get the location returned from location service based on postcode
+            - create new PeopleModel with this location, and encrypted password
             Author:
             - Liu Fang
         */
@@ -126,11 +147,25 @@ public class PeopleService {
         balanceService.deleteBalance(peopleNew);
     }
 
+/*
+    Purpose:
+    - check if JWT is valid or expired by parsing JWT
+    - return JWT claims by parsing
+    Author:
+    - Liu Fang
+ */
     public Jws<Claims> validateJWT(String token) {
         return Jwts.parser().setSigningKey(environment.getProperty("JWT_SECRET")).parseClaimsJws(token);
         // return true;
     }
 
+    /*
+        Purpose:
+        - validate token after parsing the peopleId from token in TokenInterceptor
+        - Compare the token with this peopleId in DB with the raw token from RequestHeader
+        Author:
+        - Liu Fang
+     */
     public boolean validateToken(String token, Long peopleId) throws Exception {
         PeopleModel user = peopleRepo.findById(peopleId).orElseThrow(
                 () -> new Exception("UserID not found"));
@@ -141,15 +176,34 @@ public class PeopleService {
         }
     }
 
+/*
+Purpose:
+    - get peopleId from claims
+Author:
+    - Liu Fang
+     */
+
     public Long getIdByToken(String token) throws NumberFormatException {
         return Long.valueOf((String) validateJWT(token).getBody().get("jti"));
     }
 
+    /*
+Purpose:
+    - get People role from claims
+Author:
+    - Liu Fang
+     */
     public PeopleModel.Role getRoleByToken(String token) {
         PeopleModel.Role role = PeopleModel.Role.valueOf(validateJWT(token).getBody().get("role").toString());
         return role;
     }
 
+    /*
+Purpose:
+    - validate log in email and password
+Author:
+    - Liu Fang
+     */
     public PeopleModel loginValidate(String email, String password) throws Exception {
         // Optional<PeopleModel> peopleOpt =
         // peopleRepo.getPeopleByEmailAndPassword(email.toLowerCase(), password);
@@ -172,7 +226,12 @@ public class PeopleService {
             throw new Exception("Please provide correct Email and Password.");
         }
     }
-
+/*
+    Purpose:
+            - generate JWT
+    Author:
+            - Liu Fang
+ */
     private String genJWT(PeopleModel people, int hour, int min) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, min);
@@ -188,6 +247,12 @@ public class PeopleService {
                 .compact();
     }
 
+    /*
+    Purpose:
+            - update the token data in people table (after login or logout)
+    Author:
+            - Liu Fang
+ */
     private void updateTokenById(String token, Long peopleId) throws Exception {
         try {
             peopleRepo.updateTokenByPeopleId(token, peopleId);
@@ -196,6 +261,12 @@ public class PeopleService {
         }
     }
 
+    /*
+Purpose:
+        - update the last login time by peopleId
+Author:
+        - Liu Fang
+     */
     private void updateLastLoginById(ZonedDateTime dtLogin, Long peopleId) throws Exception {
         try {
             peopleRepo.updateLastLoginByPeopleId(dtLogin, peopleId);
@@ -204,10 +275,22 @@ public class PeopleService {
         }
     }
 
+    /*
+Purpose:
+    - get people entry by peopleId
+Author:
+    - Liu Fang
+ */
     public PeopleModel getPeopleById(Long peopleId) throws Exception {
         return peopleRepo.findById(peopleId).orElseThrow(() -> new Exception("UserID not found"));
     }
 
+    /*
+Purpose:
+- update people entry by manual input form from request
+Author:
+- Liu Fang
+*/
     public boolean updatePeople(PeopleRequest peopleRequest, String token) throws CustomException {
         PeopleModel people = peopleRepo.findById(getIdByToken(token))
                 .orElseThrow(() -> new CustomException("User is not found!"));// get the data bases on primary key
@@ -252,14 +335,35 @@ public class PeopleService {
         return true;
     }
 
+    /*
+Purpose:
+- logout
+Author:
+- Liu Fang
+*/
     public void logout(Long peopleId) throws Exception {
         updateTokenById("", peopleId);
     }
+
+/*
+Purpose:
+- find People by OfficialId
+Author:
+- Liu Fang
+*/
+
 
     public PeopleModel findPeopleByOfficialId(String officialId) throws CustomException {
         return peopleRepo.getPeopleByOfficialId(officialId)
                 .orElseThrow(() -> new CustomException("No user with this Official ID."));
     }
+
+    /*
+Purpose:
+- find People by Email
+Author:
+- Liu Fang
+*/
 
     public PeopleModel findPeopleByEmail(String email) throws CustomException {
         return peopleRepo.getPeopleByEmail(email).orElseThrow(() -> new CustomException("Email not registered."));

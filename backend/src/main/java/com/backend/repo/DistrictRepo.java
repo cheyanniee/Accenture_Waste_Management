@@ -6,6 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
+/*
+    Purpose:
+        - Repository to define JPA queries for district table
+
+    Author:
+        - Liu Fang
+*/
+
 public interface DistrictRepo extends JpaRepository<DistrictModel, Integer> {
 
     @Query("select district from DistrictModel district where postal_sector=?1")
