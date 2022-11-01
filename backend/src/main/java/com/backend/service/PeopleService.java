@@ -212,6 +212,7 @@ public class PeopleService {
         PeopleModel people = peopleRepo.findById(getIdByToken(token))
                 .orElseThrow(() -> new CustomException("User is not found!"));// get the data bases on primary key
 
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         if (peopleRequest.getFirstName() != null && !peopleRequest.getFirstName().equals("")) {
             people.setFirstName(peopleRequest.getFirstName());
         }
@@ -222,7 +223,7 @@ public class PeopleService {
             people.setEmail(peopleRequest.getEmail());
         }
         if (peopleRequest.getPassword() != null && !peopleRequest.getPassword().equals("")) {
-            people.setPassword(peopleRequest.getPassword());
+            people.setPassword(passwordEncoder.encode(peopleRequest.getPassword()));
         }
         if (peopleRequest.getPhoneNumber() != null && !peopleRequest.getPhoneNumber().equals("")) {
             people.setPhoneNumber(peopleRequest.getPhoneNumber());
