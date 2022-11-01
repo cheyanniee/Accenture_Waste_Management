@@ -4,7 +4,7 @@ import moment from "moment";
 
 import useAuth from "../hooks/useAuth";
 import axios, { config } from "../api/axios";
-import { BALANCE_ENDPOINTS, TRANSACTION_ENDPOINTS, ROLES } from "../helper/Constant";
+import { BALANCE_ENDPOINTS, TRANSACTION_ENDPOINTS, ROLES, ACTION_TYPES } from "../helper/Constant";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -165,17 +165,22 @@ const Points = () => {
               <div className="col-2">Transaction</div>
             </div>
             {data.map((entry) => {
-              const { id, balanceChange, dateAndTime, machineModel, date, time } = entry;
+              const { id, balanceChange, dateAndTime, machineModel, choose, date, time } = entry;
               return (
                 <div key={id} className="row align-items-start mb-2">
                   <div className="col-2">{id}</div>
-                  <div className="col-3">{machineModel ? machineModel.name : ""}</div>
+                  <div className="col-3">{machineModel ? machineModel.name : " "}</div>
                   <div className="col-3">
                       <p>{date ? "Date: " + date : ""}</p>
                       <p>{time ? "Time: " + time : ""}</p>
                   </div>
-                  <div className="col-2">{machineModel ? machineModel.name : ""}</div>
-                  <div className="col-2">{balanceChange}</div>
+                  <div className="col-2">{choose}</div>
+                  <div className="col-2">
+                    {choose === ACTION_TYPES.Recycle
+                      ? balanceChange
+                      : "-" + balanceChange
+                    }
+                  </div>
                 </div>
               );
             })}

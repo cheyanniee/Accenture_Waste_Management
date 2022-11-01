@@ -119,6 +119,10 @@ const BatteryUpdate = () => {
     params.id = (batteryID !== "New")
       ? batteryID : "";
 
+    if (!params.exchangePoint) {
+      params.exchangePoint = 0;
+    }
+
     if (!(params.id) && !(params.type && params.recyclePoint)) {
       setFormErrMsg("Invalid Input");
       return;

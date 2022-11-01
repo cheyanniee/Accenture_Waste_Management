@@ -144,7 +144,8 @@ const ReportMachine = () => {
                 <div className="col-2">ID</div>
                 <div className="col-2">Name</div>
                 <div className="col-2">Region</div>
-                <div className="col-3">Address</div>
+                <div className="col-2">Address</div>
+                <div className="col-1">%</div>
                 <div className="col-2">Status</div>
                 <div className="col-1">Faulty</div>
               </div>

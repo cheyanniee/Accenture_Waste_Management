@@ -72,6 +72,11 @@ export const ROLES = {
     Admin: "admin",
 };
 
+export const ACTION_TYPES = {
+    Exchange: "exchange",
+    Recycle: "recycle",
+}
+
 export const twoDigits = (unitNumber) => {
     const fullUnit = unitNumber.split("-").reduce((acc, number) => {
         return acc + (number <= 9 ? "0" + number : number) + "-";
