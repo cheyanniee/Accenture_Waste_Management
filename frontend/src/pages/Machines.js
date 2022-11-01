@@ -175,6 +175,11 @@ const Machines = () => {
                 : MACHINE_ENDPOINTS.Update;
         console.log("Endpoint: ", endpoint);
 
+        if (idLabel !== defaultId) {
+            setFloorLabel("");
+            setUnitLabel("");
+        }
+
         const updateFloor =
             values.floor > 0 ? values.floor : values.floor === 0 ? "" : floorLabel;
 

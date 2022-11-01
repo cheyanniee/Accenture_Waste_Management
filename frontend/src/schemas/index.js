@@ -198,7 +198,7 @@ export const userDetailsSchema = yup.object().shape({
 export const registerMachineSchema = yup.object().shape({
     id: yup.string(),
     name: yup.string(),
-    currentLoad: yup.number().positive(),
+    currentLoad: yup.number().moreThan(-1),
     capacity: yup.number().positive(),
     status: yup.string(),
     address: yup.string(),
@@ -209,8 +209,8 @@ export const registerMachineSchema = yup.object().shape({
         .min(10000, "Postal code must be exactly 6 digits")
         .max(1000000, "Postal code must be at exactly 6 digits"),
     unitNumber: yup.string(),
-    floor: yup.number().positive().integer(),
-    unit: yup.number().positive().integer(),
+    floor: yup.number().moreThan(-1).integer(),
+    unit: yup.number().moreThan(-1).integer(),
 });
 
 export const registerBatterySchema = yup.object().shape({

@@ -140,7 +140,7 @@ const ViewTask = () => {
         </div>
         <div className="row align-items-start ">
           <div className=" col-lg-10 m-auto text-left justify-content-center">
-            <div className="row align-items-start text-primary fs-4 mb-3">
+            <div className="">
               {successMsg && <em className="text-success px-2">{successMsg}</em>}
               {errMsg && <em className="text-danger px-2">{errMsg}</em>}
             </div>
