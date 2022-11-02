@@ -9,13 +9,15 @@
     "all": "^0.0.0",
     "axios": "^0.27.2",
     "dotenv": "^16.0.3",
+    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
     "react-simple-keyboard": "^3.4.229",
     "simple-keyboard": "^3.4.179",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

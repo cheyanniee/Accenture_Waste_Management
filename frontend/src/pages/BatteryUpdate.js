@@ -3,12 +3,29 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import moment from "moment";
 
-import axios, { config } from "../api/axios";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
+import axios, { config } from "../api/axios";
 import { BATTERY_ENDPOINTS } from "../helper/Constant";
 import { INITIAL_BATTERY_FORM_VALUES, registerBatterySchema } from "../schemas";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+/*
+    Purpose:
+        - Admins to Update & Create Batteries
+
+    Restriction:
+        - Only those with ROLES.Admin will be able to access this page.
+
+    Endpoints:
+        - BATTERY_ENDPOINTS.GetAll
+        - BATTERY_ENDPOINTS.Create
+        - BATTERY_ENDPOINTS.Update
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const BatteryUpdate = () => {
   const { auth } = useAuth();
@@ -21,7 +38,8 @@ const BatteryUpdate = () => {
 
   const [batteryID, setBatteryID] = useState("New");
   const [batteryType, setBatteryType] = useState("Type");
-  const [batteryPoints, setBatteryPoints] = useState("Points");
+  const [batteryRecycle, setBatteryRecycle] = useState("Recycle");
+  const [batteryExchange, setBatteryExchange] = useState("Exchange");
 
   const fetchData = async () => {
       try {
@@ -56,13 +74,14 @@ const BatteryUpdate = () => {
       : setData([{ type: "No result for " + inputText }]);
   };
 
-  const handleUpdate = (id, type, valuePerWeight) => {
+  const handleUpdate = (id, type, recyclePoint, exchangePoint) => {
     console.log("Task: ", id, moment().format("DD-MM-YYYY HH:mm:ss"));
     resetMsg();
     resetForm();
     setBatteryID(id);
     setBatteryType(type);
-    setBatteryPoints(valuePerWeight);
+    setBatteryRecycle(recyclePoint);
+    setBatteryExchange(exchangePoint);
   };
 
   const resetMsg = () => {
@@ -76,7 +95,8 @@ const BatteryUpdate = () => {
     resetForm();
     setBatteryID("New");
     setBatteryType("Type");
-    setBatteryPoints("Points");
+    setBatteryRecycle("Recycle");
+    setBatteryExchange("Exchange");
   }
 
   const onSubmit = async (values, actions) => {
@@ -99,7 +119,11 @@ const BatteryUpdate = () => {
     params.id = (batteryID !== "New")
       ? batteryID : "";
 
-    if (!(params.id) && !(params.type && params.valuePerWeight)) {
+    if (!params.exchangePoint) {
+      params.exchangePoint = 0;
+    }
+
+    if (!(params.id) && !(params.type && params.recyclePoint)) {
       setFormErrMsg("Invalid Input");
       return;
     }
@@ -150,35 +174,8 @@ const BatteryUpdate = () => {
             </h2>
           </div>
         </div>
-        <div className="row mb-4">
-          <div className="worksingle-content col-lg-10 m-auto text-left justify-content-center">
-            <form className="contact-form row">
-              <div className="col-lg-4">
-                <div className="form-floating">
-                  <input
-                    type="text"
-                    className="form-control form-control-lg light-300"
-                    id="type"
-                    onChange={handleFilter}
-                  />
-                  <label htmlFor="officialId light-300">
-                    Battery Type
-                  </label>
-                  {message && <em className="text-success px-2">{message}</em>}
-                  {errMsg && <em className="text-danger px-2">{errMsg}</em>}
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div className="row align-items-start ">
-          <div className=" col-lg-10 m-auto text-left justify-content-center">
-            <div className="row align-items-start text-primary fs-4 mb-3">
-              <div className="col-2">ID</div>
-              <div className="col-2">Type</div>
-              <div className="col-2">Points</div>
-              <div className="col-2">Update</div>
-            </div>
+                <div className="worksingle-content col-lg-10 m-auto text-left justify-content-center">
+
             <form className="contact-form row" onSubmit={handleSubmit}>
               <div className="col-2 mb-4">
                 <div className="">
@@ -219,26 +216,45 @@ const BatteryUpdate = () => {
                   <input
                     type="number"
                     className={
-                      errors.valuePerWeight && touched.valuePerWeight
+                      errors.recyclePoint && touched.recyclePoint
                         ? "form-control form-control-lg-error light-300-error"
                         : "form-control form-control-lg light-300"
                     }
-                    id="valuePerWeight"
-                    placeholder={batteryPoints}
-                    value={values.valuePerWeight}
+                    id="recyclePoint"
+                    placeholder={batteryRecycle}
+                    value={values.recyclePoint}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.valuePerWeight && touched.valuePerWeight && (
-                    <em className="text-error">{errors.valuePerWeight}</em>
+                  {errors.recyclePoint && touched.recyclePoint && (
+                    <em className="text-error">{errors.recyclePoint}</em>
+                  )}
+                </div>
+              </div>
+              {/* End Input recyclePoint */}
+              <div className="col-2 mb-4">
+                <div className="">
+                  <input
+                    type="number"
+                    className={
+                      errors.exchangePoint && touched.exchangePoint
+                        ? "form-control form-control-lg-error light-300-error"
+                        : "form-control form-control-lg light-300"
+                    }
+                    id="exchangePoint"
+                    placeholder={batteryExchange}
+                    value={values.exchangePoint}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.exchangePoint && touched.exchangePoint && (
+                    <em className="text-error">{errors.exchangePoint}</em>
                   )}
                 </div>
               </div>
               {/* End Input Points */}
+
               <div className="col-2 row align-items-start mb-2">
-                <em className="text-error px-3">{formErrMsg}</em>
-                <em className="text-success px-3">{successMsg}</em>
-                  <div className="col-2">
                     <button
                       disabled={isSubmitting}
                       type="submit"
@@ -246,6 +262,10 @@ const BatteryUpdate = () => {
                     >
                       Submit
                     </button>
+              </div>
+
+              <div className="col-2 row align-items-start mb-2">
+
                     <button
                       type="reset"
                       className="btn btn-secondary rounded-pill text-light light-300"
@@ -253,22 +273,55 @@ const BatteryUpdate = () => {
                     >
                       Reset
                     </button>
-                  </div>
               </div>
           </form>
+                <em className="text-error px-3">{formErrMsg}</em>
+                <em className="text-success px-3">{successMsg}</em>
+          </div>
+        <div className="row mb-4">
+          <div className="worksingle-content col-lg-10 m-auto text-left justify-content-center">
+            <form className="contact-form row">
+              <div className="col-lg-4">
+                <div className="form-floating">
+                  <input
+                    type="text"
+                    className="form-control form-control-lg light-300"
+                    id="type"
+                    onChange={handleFilter}
+                  />
+                  <label htmlFor="officialId light-300">
+                    Battery Type
+                  </label>
+                  {message && <em className="text-success px-2">{message}</em>}
+                  {errMsg && <em className="text-danger px-2">{errMsg}</em>}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div className="row align-items-start ">
+          <div className=" col-lg-10 m-auto text-left justify-content-center">
+            <div className="row align-items-start text-primary fs-4 mb-3">
+              <div className="col-2">ID</div>
+              <div className="col-2">Type</div>
+              <div className="col-2">Recycle</div>
+              <div className="col-2">Exchange</div>
+              <div className="col-2">Update</div>
+            </div>
             {data.map((battery) => {
-              const { id, type, valuePerWeight } = battery;
+              const { id, type, recyclePoint, exchangePoint } = battery;
               return (
                 <div key={id} className="row align-items-start mb-2">
                   <div className="col-2">{id}</div>
                   <div className="col-2">{type}</div>
-                  <div className="col-2">{valuePerWeight}</div>
+                  <div className="col-2">{recyclePoint}</div>
+                  <div className="col-2">{exchangePoint}</div>
                   <div className="col-2">
                     {id && (
                       <Link>
                         <i
                           className="bx bx-pencil bx-sm"
-                          onClick={() => handleUpdate(id, type, valuePerWeight)}
+                          onClick={() => handleUpdate(id, type, recyclePoint, exchangePoint)}
                         />
                       </Link>
                     )}

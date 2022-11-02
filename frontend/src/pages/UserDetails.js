@@ -4,12 +4,28 @@ import { useFormik } from "formik";
 import moment from "moment";
 import axios from "axios";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
 import { default as myAxios, config } from "../api/axios";
 import { PEOPLE_ENDPOINTS } from "../helper/Constant";
 import { INITIAL_REGISTER_FORM_VALUES, userDetailsSchema } from "../schemas";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+/*
+    Purpose:
+        - View & Update User Details
+
+    Restriction:
+        - Only those with a role will be able to access this page.
+
+    Endpoints:
+        - PEOPLE_ENDPOINTS.UpdateDetails
+        - https://developers.onemap.sg/commonapi/search
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const UserDetails = () => {
   const { auth, setAuth } = useAuth();

@@ -11,6 +11,20 @@ import useAuth from "../hooks/useAuth";
 import useInput from "../hooks/useInput";
 import useToggle from "../hooks/useToggle";
 
+/*
+    Purpose:
+        - Allow users to log in.
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - PEOPLE_ENDPOINTS.Login
+
+    Author:
+        - Cheyanne Lim
+*/
+
 const Login = () => {
   const { setAuth } = useAuth();
 

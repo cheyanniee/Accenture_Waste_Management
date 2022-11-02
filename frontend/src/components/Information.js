@@ -1,5 +1,19 @@
 import { Link } from "react-router-dom";
 
+/*
+    Purpose:
+        - Information Carousel for Home Page
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Alex Lim
+*/
+
 const Information = () => {
   return (
     <div className="banner-wrapper bg-light">

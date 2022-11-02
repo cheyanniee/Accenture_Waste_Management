@@ -6,7 +6,23 @@ import axios, { config } from "../api/axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import useAuth from "../hooks/useAuth";
-import { PEOPLE_ENDPOINTS, MACHINE_ENDPOINTS, TASK_ENDPOINTS, ROLES } from "../helper/Constant";
+import { TASK_ENDPOINTS, ROLES } from "../helper/Constant";
+
+/*
+    Purpose:
+        - View Task & Mark Completed / Delivered
+
+    Restriction:
+        - Only those with ROLES.Collector will be able to access this page.
+
+    Endpoints:
+        - TASK_ENDPOINTS.GetByID
+        - TASK_ENDPOINTS.Collected
+        - TASK_ENDPOINTS.Delivered
+
+    Author:
+        - Cheyanne Lim
+*/
 
 const ViewTask = () => {
   const { auth } = useAuth();
@@ -124,7 +140,7 @@ const ViewTask = () => {
         </div>
         <div className="row align-items-start ">
           <div className=" col-lg-10 m-auto text-left justify-content-center">
-            <div className="row align-items-start text-primary fs-4 mb-3">
+            <div className="">
               {successMsg && <em className="text-success px-2">{successMsg}</em>}
               {errMsg && <em className="text-danger px-2">{errMsg}</em>}
             </div>

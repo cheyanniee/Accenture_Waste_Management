@@ -1,19 +1,34 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import { ROLES } from "../helper/Constant";
 import useAuth from "../hooks/useAuth";
 import useLogout from "../hooks/useLogout";
 
+/*
+    Purpose:
+        - Allow users to easily access pages.
+
+    Restriction:
+        - Only appropriate pages will be displayed to each role.
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Cheyanne Lim
+*/
+
 const Header = () => {
-  const { auth } = useAuth();
-  const navigate = useNavigate();
-  const logout = useLogout();
-  const signOut = async () => {
-    await logout();
-    navigate("/login", {
-      state: { message: "You have logged out successfully" },
-    });
-  };
+    const { auth } = useAuth();
+    const navigate = useNavigate();
+    const logout = useLogout();
+    const signOut = async () => {
+        await logout();
+        navigate("/login", {
+            state: { message: "You have logged out successfully" },
+        });
+    };
 
   return (
     <nav

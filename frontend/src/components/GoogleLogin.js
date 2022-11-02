@@ -1,8 +1,23 @@
 import React, { useEffect } from "react";
-import Footer from "./Footer";
-import Header from "./Header";
-import jwt_decode from "jwt-decode";
 import { Link } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+
+import Header from "./Header";
+import Footer from "./Footer";
+
+/*
+    Purpose:
+        - Allow Google Login (Future Implementation)
+
+    Restriction:
+        - NIL
+
+    Endpoints:
+        - NIL
+
+    Author:
+        - Alex Lim
+*/
 
 const GoogleLogin = () => {
   const handleCallbackResponse = (response) => {

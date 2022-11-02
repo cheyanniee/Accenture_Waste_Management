@@ -27,7 +27,7 @@ Author:
 public class MachineModel {
 
     public enum Status {
-        FAULTY, NORMAL
+        FAULTY, NORMAL, DELETED
     }
 
     @Id
