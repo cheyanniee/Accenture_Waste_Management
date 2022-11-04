@@ -123,7 +123,7 @@ public class PeopleController {
 
     @PostMapping("update")
     public ResponseEntity<?> updatePeople(@RequestBody PeopleRequest peopleRequest, @RequestHeader String token)
-            throws CustomException {
+            throws Exception {
         peopleService.updatePeople(peopleRequest, token);
         return ResponseEntity.ok(new GeneralResponse(
                 "User " + peopleRequest.getFirstName() + " " + peopleRequest.getLastName() + " update successfully!"));

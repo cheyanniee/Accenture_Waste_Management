@@ -67,6 +67,48 @@ public class PeopleService {
 
     public void createUser(PeopleRequest peopleRequest) throws Exception {
 
+        if (peopleRequest.getFirstName() == null || peopleRequest.getFirstName().equals("")) {
+            throw new Exception("No First Name submitted");
+        }
+
+        if (peopleRequest.getLastName() == null || peopleRequest.getLastName().equals("")) {
+            throw new Exception("No Last Name submitted");
+        }
+
+        if (peopleRequest.getEmail() == null || peopleRequest.getEmail().equals("")) {
+            throw new Exception("No Email submitted.");
+        }
+
+        if (peopleRequest.getPassword() == null || peopleRequest.getPassword().equals("")) {
+            throw new Exception("No Password submitted.");
+        }
+
+        if (peopleRequest.getPhoneNumber() == null || peopleRequest.getPhoneNumber() == 0) {
+            throw new Exception("No Phone Number submitted.");
+        }
+        if (peopleRequest.getDateOfBirth() == null || peopleRequest.getDateOfBirth().equals("")) {
+            throw new Exception("No Date of Birth submitted.");
+        }
+
+        if (peopleRequest.getOfficialId() == null || peopleRequest.getOfficialId().equals("")) {
+            throw new Exception("No Official Id submitted.");
+        }
+
+        if (peopleRequest.getUnitNumber() == null || peopleRequest.getUnitNumber().equals("")) {
+            throw new Exception("No Unit Number submitted.");
+        }
+
+        if (peopleRequest.getPostcode() == null || peopleRequest.getPostcode().equals("")) {
+            throw new Exception("No Postcode submitted.");
+        }
+        if (peopleRequest.getAddress() == null || peopleRequest.getAddress().equals("")) {
+            throw new Exception("No Address submitted.");
+        }
+        if (peopleRequest.getRole() == null) {
+            throw new Exception("No Role submitted.");
+        }
+
+
         Optional<PeopleModel> emailExist = peopleRepo.getPeopleByEmail(peopleRequest.getEmail().toLowerCase());
         if (emailExist.isPresent()) {
             throw new Exception("Email already exists.");
@@ -85,6 +127,7 @@ public class PeopleService {
             Author:
             - Lew Xu Hong
         */
+
         LocationRequest locationRequest = LocationRequest.builder()
                 .address(peopleRequest.getAddress())
                 .postcode(peopleRequest.getPostcode())
@@ -147,13 +190,13 @@ public class PeopleService {
         balanceService.deleteBalance(peopleNew);
     }
 
-/*
-    Purpose:
-    - check if JWT is valid or expired by parsing JWT
-    - return JWT claims by parsing
-    Author:
-    - Liu Fang
- */
+    /*
+        Purpose:
+        - check if JWT is valid or expired by parsing JWT
+        - return JWT claims by parsing
+        Author:
+        - Liu Fang
+     */
     public Jws<Claims> validateJWT(String token) {
         return Jwts.parser().setSigningKey(environment.getProperty("JWT_SECRET")).parseClaimsJws(token);
         // return true;
@@ -226,12 +269,13 @@ Author:
             throw new Exception("Please provide correct Email and Password.");
         }
     }
-/*
-    Purpose:
-            - generate JWT
-    Author:
-            - Liu Fang
- */
+
+    /*
+        Purpose:
+                - generate JWT
+        Author:
+                - Liu Fang
+     */
     private String genJWT(PeopleModel people, int hour, int min) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, min);
@@ -291,7 +335,7 @@ Purpose:
 Author:
 - Liu Fang
 */
-    public boolean updatePeople(PeopleRequest peopleRequest, String token) throws CustomException {
+    public boolean updatePeople(PeopleRequest peopleRequest, String token) throws Exception {
         PeopleModel people = peopleRepo.findById(getIdByToken(token))
                 .orElseThrow(() -> new CustomException("User is not found!"));// get the data bases on primary key
 
@@ -303,19 +347,28 @@ Author:
             people.setLastName(peopleRequest.getLastName());
         }
         if (peopleRequest.getEmail() != null && !peopleRequest.getEmail().equals("")) {
-            people.setEmail(peopleRequest.getEmail());
+            Optional<PeopleModel> emailExist = peopleRepo.getPeopleByEmail(peopleRequest.getEmail().toLowerCase());
+            if (emailExist.isPresent()) {
+                throw new Exception("Email already exists.");
+            }
+            people.setEmail(peopleRequest.getEmail().toLowerCase());
         }
         if (peopleRequest.getPassword() != null && !peopleRequest.getPassword().equals("")) {
             people.setPassword(passwordEncoder.encode(peopleRequest.getPassword()));
         }
-        if (peopleRequest.getPhoneNumber() != null && !peopleRequest.getPhoneNumber().equals("")) {
+        if (peopleRequest.getPhoneNumber() != null && peopleRequest.getPhoneNumber() != 0) {
             people.setPhoneNumber(peopleRequest.getPhoneNumber());
         }
         if (peopleRequest.getDateOfBirth() != null && !peopleRequest.getDateOfBirth().equals("")) {
             people.setDateOfBirth(peopleRequest.getDateOfBirth());
         }
         if (peopleRequest.getOfficialId() != null && !peopleRequest.getOfficialId().equals("")) {
-            people.setOfficialId(peopleRequest.getOfficialId());
+            Optional<PeopleModel> officialIdExist = peopleRepo
+                    .getPeopleByOfficialId(peopleRequest.getOfficialId().toUpperCase());
+            if (officialIdExist.isPresent()) {
+                throw new Exception("Official ID already exists.");
+            }
+            people.setOfficialId(peopleRequest.getOfficialId().toUpperCase());
         }
         if (peopleRequest.getUnitNumber() != null && !peopleRequest.getUnitNumber().equals("")) {
             people.setUnitNumber(peopleRequest.getUnitNumber());
@@ -330,6 +383,10 @@ Author:
                         .build();
                 people.setLocationModel(locationService.bindLocation(locationRequest));
             }
+        }
+
+        if (peopleRequest.getRole() != null) {
+            people.setRole(peopleRequest.getRole());
         }
         peopleRepo.save(people);
         return true;

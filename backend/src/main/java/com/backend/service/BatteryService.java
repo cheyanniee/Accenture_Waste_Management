@@ -38,6 +38,14 @@ public class BatteryService {
             throw new CustomException("Battery type exists.");
         }
 
+        if (batteryRequest.getRecyclePoint() == null || batteryRequest.getRecyclePoint()==0) {
+            batteryRequest.setRecyclePoint(0.0F);
+        }
+
+        if (batteryRequest.getExchangePoint() == null || batteryRequest.getExchangePoint()==0) {
+            batteryRequest.setExchangePoint(0.0F);
+        }
+
         ZoneId zid = ZoneId.of("Asia/Singapore");
         ZonedDateTime dtCreate = ZonedDateTime.now(zid);
 
